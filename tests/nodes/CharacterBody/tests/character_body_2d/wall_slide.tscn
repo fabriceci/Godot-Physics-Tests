@@ -1,0 +1,79 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwyvsbwwwhnma"]
+
+[ext_resource type="PackedScene" uid="uid://na53s2ny2eh4" path="res://tests/nodes/CharacterBody/parts/zero_slides_positive_slides_zero_slide.tscn" id="1_1l8rk"]
+[ext_resource type="PackedScene" uid="uid://hq2ny64tau24" path="res://tests/nodes/CharacterBody/parts/not_on_wall_then_on_wall_then_not_on_wall.tscn" id="2_r5shp"]
+[ext_resource type="PackedScene" uid="uid://ckbwvjp0c4x3q" path="res://tests/nodes/CharacterBody/parts/slide_collision_maximum_penetration.tscn" id="3_ymfbv"]
+
+[sub_resource type="GDScript" id="GDScript_spw5p"]
+script/source = "extends PhysicsUnitTest2D
+
+enum MotionType {
+	IN_DIAGONALLY,
+	IN_AND_OUT_DIAGONALLY,
+	IN_AND_OUT_ORTHOGONALLY
+}
+
+@export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
+@export var body_scale_factor := 1
+@export var expected_max_wall_penetration := 1.0
+@export var motion_type: MotionType
+
+func test_name() -> String:
+	return \"CharacterBody2D wall slide (\" + shape_name(body_shape) + \" - \" + MotionType.keys()[motion_type] + \")\"
+
+func _ready() -> void:
+	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
+		start()
+
+func start() -> void:
+	super() # Setup the camera
+	# Horizontal wall
+	var wall = StaticBody2D.new()
+	wall.collision_layer = collision_layer
+	wall.collision_mask = collision_layer
+	var wall_col = get_collision_shape(Rect2(Vector2(-400, 0), Vector2(800, 100)))
+	wall.add_child(wall_col)
+	wall.position = Vector2(0, -200)
+	add_child(wall)
+
+	# Create character
+	var character = CharacterBody2D.new()
+	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd\")
+	character.collision_layer = collision_layer
+	character.collision_mask = collision_layer
+	character.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	
+	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, body_scale_factor), body_shape)
+	character.add_child(body_col)
+
+	for part in parts:
+		part.start(character)
+
+	# Set up character motion
+	if motion_type == MotionType.IN_DIAGONALLY:
+		character.velocity = Vector2(100, -100)
+	elif motion_type == MotionType.IN_AND_OUT_DIAGONALLY:
+		var tween = get_tree().create_tween()
+		tween.tween_callback(character.set_velocity.bind(Vector2(100,-100)))
+		tween.tween_interval(2.5)
+		tween.tween_callback(character.set_velocity.bind(Vector2(100,100)))
+	elif motion_type == MotionType.IN_AND_OUT_ORTHOGONALLY:
+		var tween = get_tree().create_tween()
+		tween.tween_callback(character.set_velocity.bind(Vector2(0,-100)))
+		tween.tween_interval(4.0)
+		tween.tween_callback(character.set_velocity.bind(Vector2(0,100)))
+
+	add_child(character)
+
+	start_test_with_time_limit(5.0)
+"
+
+[node name="wall_slide" type="Node2D"]
+script = SubResource("GDScript_spw5p")
+collision_layer = 1
+
+[node name="zero_slides_positive_slides_zero_slide" parent="." instance=ExtResource("1_1l8rk")]
+
+[node name="not_on_wall_then_on_wall_then_not_on_wall" parent="." instance=ExtResource("2_r5shp")]
+
+[node name="slide_collision_maximum_penetration" parent="." instance=ExtResource("3_ymfbv")]

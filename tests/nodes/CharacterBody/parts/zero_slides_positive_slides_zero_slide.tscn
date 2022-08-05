@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3 uid="uid://na53s2ny2eh4"]
+
+[sub_resource type="GDScript" id="GDScript_148jy"]
+script/source = "extends Part
+
+enum State {
+	START,
+	ZERO_SLIDES_BEFORE,
+	POSITIVE_SLIDES,
+	ZERO_SLIDES_AFTER,
+	FAIL
+}
+
+var state := State.START
+var character: CharacterBody2D
+
+func is_test_passed() -> bool:
+	return state == State.ZERO_SLIDES_AFTER
+
+func part_name() -> String:
+	return \"The number of slide collisions is first zero then positive and then zero again\"
+
+func start(p_target: Node) -> void:
+	super(p_target)
+	character = p_target
+
+func _physics_process(_delta: float) -> void:
+	var collision_count: int = character.get_slide_collision_count()
+	if state == State.START:
+		text = 'start'
+		if collision_count == 0:
+			state = State.ZERO_SLIDES_BEFORE
+			return
+		else:
+			state = State.FAIL
+			return
+	if state == State.ZERO_SLIDES_BEFORE:
+		text = 'zero slides (before)'
+		if collision_count == 0:
+			return
+		else:
+			state = State.POSITIVE_SLIDES
+			return
+	elif state == State.POSITIVE_SLIDES:
+		text = 'positive slides'
+		if collision_count == 0:
+			state = State.ZERO_SLIDES_AFTER
+			return
+		else:
+			return
+	elif state == State.ZERO_SLIDES_AFTER:
+		text = 'zero slides (after)'
+		if collision_count == 0:
+			return
+		else:
+			state = State.FAIL
+			return
+	elif state == State.FAIL:
+		text = 'fail'
+		return
+"
+
+[node name="zero_slides_positive_slides_zero_slide" type="Node"]
+script = SubResource("GDScript_148jy")

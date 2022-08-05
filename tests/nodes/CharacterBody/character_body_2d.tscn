@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0g34bnwgnoeh"]
+
+[ext_resource type="PackedScene" uid="uid://bwyvsbwwwhnma" path="res://tests/nodes/CharacterBody/tests/character_body_2d/wall_slide.tscn" id="1_7k6qs"]
+
+[sub_resource type="GDScript" id="GDScript_kqk15"]
+script/source = "extends TestScene
+
+func test_name() -> String:
+	return \"CharacterBody2D\"
+"
+
+[node name="Scene" type="Node"]
+script = SubResource("GDScript_kqk15")
+
+[node name="wall_slide_capsule_diagonal_in" parent="." instance=ExtResource("1_7k6qs")]
+
+[node name="wall_slide_capsule_diagonal_in_out" parent="." instance=ExtResource("1_7k6qs")]
+motion_type = 1
+
+[node name="wall_slide_capsule_diagonal_in_out_orthogonally" parent="." instance=ExtResource("1_7k6qs")]
+motion_type = 2
+
+[node name="wall_slide_rectangle_diagonal_in" parent="." instance=ExtResource("1_7k6qs")]
+body_shape = 4
+
+[node name="wall_slide_rectangle_diagonal_in_out" parent="." instance=ExtResource("1_7k6qs")]
+body_shape = 4
+motion_type = 1
+
+[node name="wall_slide_rectangle_diagonal_in_out_ortho" parent="." instance=ExtResource("1_7k6qs")]
+body_shape = 4
+motion_type = 2

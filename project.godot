@@ -1,0 +1,60 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+_global_script_classes=[{
+"base": "Node",
+"class": &"Part",
+"language": &"GDScript",
+"path": "res://base/class/part.gd"
+}, {
+"base": "PhysicsTest2D",
+"class": &"PhysicsPerformanceTest2D",
+"language": &"GDScript",
+"path": "res://base/class/physics_performance_2d.gd"
+}, {
+"base": "Node2D",
+"class": &"PhysicsTest2D",
+"language": &"GDScript",
+"path": "res://base/class/physics_test_2d.gd"
+}, {
+"base": "PhysicsTest2D",
+"class": &"PhysicsUnitTest2D",
+"language": &"GDScript",
+"path": "res://base/class/physics_unit_test_2d.gd"
+}, {
+"base": "Node",
+"class": &"SceneTest",
+"language": &"GDScript",
+"path": "res://base/test_scene.gd"
+}, {
+"base": "Node",
+"class": &"TestScene",
+"language": &"GDScript",
+"path": "res://base/class/test_scene.gd"
+}]
+_global_script_class_icons={
+"Part": "",
+"PhysicsPerformanceTest2D": "",
+"PhysicsTest2D": "",
+"PhysicsUnitTest2D": "",
+"SceneTest": "",
+"TestScene": ""
+}
+
+[application]
+
+config/name="physics-test"
+run/main_scene="res://start.tscn"
+config/features=PackedStringArray("4.0", "Vulkan Clustered")
+config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://base/autoload.gd"
