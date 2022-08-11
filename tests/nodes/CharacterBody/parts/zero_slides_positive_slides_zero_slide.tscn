@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://na53s2ny2eh4"]
 
 [sub_resource type="GDScript" id="GDScript_148jy"]
-script/source = "extends Part
+script/source = "extends Monitor
 
 enum State {
 	START,
@@ -17,7 +17,7 @@ var character: CharacterBody2D
 func is_test_passed() -> bool:
 	return state == State.ZERO_SLIDES_AFTER
 
-func part_name() -> String:
+func monitor_name() -> String:
 	return \"The number of slide collisions is first zero then positive and then zero again\"
 
 func start(p_target: Node) -> void:

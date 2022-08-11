@@ -1,29 +1,19 @@
 class_name TestScene
 extends Node
 
-signal scene_completed
+var runner: TestRunner
 
 func _ready() -> void:
-	handle_child(self)
+	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
+		start()
 
-func handle_child(parent: Node) -> void:
-	for node in parent.get_children():
-		if node is PhysicsTest2D:
-			launch_test(node)
-			await node.completed
-			remove_child(node)
-		# TO DO: handle child in //
-		#elif node.get_child_count() > 0:
-		#	handle_child(node)
-	scene_completed.emit()
+func start() -> void:
+	runner = TestRunner.new(self)
+	runner.completed.connect(self.completed)
+	for child in get_children():
+		if child is PhysicsTest2D:
+			runner.add_test(child)
+	runner.start()
 			
-func launch_test(node: PhysicsTest2D) -> void:
-	node.start()
-	
-func test_name() -> String:
-	@warning_ignore(assert_always_false)
-	assert(false, "ERROR: You must implement test_name()");
-	return ""
-
-func test_description() -> String:
-	return ""
+func completed() -> void:
+	print_rich("[color=orange]--- SCENE TESTS ARE COMPLETED ---[/color]")

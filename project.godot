@@ -10,9 +10,9 @@ config_version=5
 
 _global_script_classes=[{
 "base": "Node",
-"class": &"Part",
+"class": &"Monitor",
 "language": &"GDScript",
-"path": "res://base/class/part.gd"
+"path": "res://base/class/monitor.gd"
 }, {
 "base": "PhysicsTest2D",
 "class": &"PhysicsPerformanceTest2D",
@@ -34,17 +34,23 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://base/test_scene.gd"
 }, {
+"base": "RefCounted",
+"class": &"TestRunner",
+"language": &"GDScript",
+"path": "res://base/class/test_runner.gd"
+}, {
 "base": "Node",
 "class": &"TestScene",
 "language": &"GDScript",
 "path": "res://base/class/test_scene.gd"
 }]
 _global_script_class_icons={
-"Part": "",
+"Monitor": "",
 "PhysicsPerformanceTest2D": "",
 "PhysicsTest2D": "",
 "PhysicsUnitTest2D": "",
 "SceneTest": "",
+"TestRunner": "",
 "TestScene": ""
 }
 

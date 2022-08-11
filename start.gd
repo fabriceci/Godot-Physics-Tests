@@ -1,8 +1,12 @@
 extends Node2D
 
 var request_quit := false
+@export var mode: Global.TEST_MODE = Global.TEST_MODE.REGRESSION
+var runner: TestRunner
 
 func _init():
+	runner = TestRunner.new(self)
+	runner.completed.connect(self.completed)
 	## Get Arguments
 	var arguments = {}
 	for argument in OS.get_cmdline_args():
@@ -12,26 +16,36 @@ func _init():
 		else: # Options without an argument 
 			arguments[argument.lstrip("--")] = ""
 
+func completed() -> void:
+	print_rich("[color=orange]--- ALL TESTS ARE COMPLETED ---[/color]")
+	request_quit = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var main = Directory.new()
+	var test_folder := []
+	if mode == Global.TEST_MODE.REGRESSION:
+		test_folder.append_array(["nodes", "features"])
+	elif mode == Global.TEST_MODE.PERFORMANCE:
+		test_folder.append("nodes")
+		Global.MAXIMUM_PARALLEL_TESTS = 1
+	elif mode == Global.TEST_MODE.QUALITY:
+		test_folder.append("quality")
+		
+
 	var result = {}
-	if main.open("res://tests/") == OK:
-		main.list_dir_begin()
-		var file_name = main.get_next()
-		while file_name != "":
-			find_test(result, file_name)
-			file_name = main.get_next()
+	for folder in test_folder:
+		find_test(result, folder)
 	
 	for key in result:
 		for scene_file in result[key]:
-			var scene: TestScene = load(scene_file).instantiate()
-			print_rich("[color=orange] Testing [b]", scene.test_name().capitalize(), "[/b] (", scene_file, ") [/color]")
-			
-			add_child(scene)
-			await scene.scene_completed
-			remove_child(scene)
-	request_quit = true
+			var scene: TestScene = load(scene_file).instantiate()			
+			for child in scene.get_children():
+				if child is PhysicsTest2D:
+					runner.add_test(child)
+			scene.queue_free()
+	
+	print_rich("[color=orange]--- MODE: [b]%s[/b] → [b]%d[/b] TESTS FOUNDS ---[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
+	runner.start()
 
 func _physics_process(_delta: float) -> void:
 	if request_quit:
@@ -39,7 +53,8 @@ func _physics_process(_delta: float) -> void:
 		await get_tree().physics_frame
 		await get_tree().physics_frame
 		await get_tree().physics_frame
-		get_tree().quit()
+		var error_code = 1 if Global.HAS_ERROR else 0
+		get_tree().quit(error_code)
 
 func find_test(result: Dictionary, folder: String) -> void:
 	var dir = Directory.new()

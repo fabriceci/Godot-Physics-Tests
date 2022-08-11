@@ -8,6 +8,8 @@ var BOTTOM_LEFT := Vector2(-512,300)
 var TOP_RIGHT := Vector2(512,-300)
 var BOTTOM_RIGHT := Vector2(512,300)
 
+var output := ""
+
 @export_flags_2d_physics var collision_layer: int
 
 enum TestCollisionShape {
@@ -39,7 +41,7 @@ func start() -> void:
 		camera.current = true
 		add_child(camera)
 	
-	print_rich("[indent] • Running: %s[/indent]" % [test_name()])
+	output += "[indent] • %s[/indent]\n" % [test_name()]
 
 func test_description() -> String:
 	return ""

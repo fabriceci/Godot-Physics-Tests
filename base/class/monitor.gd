@@ -1,5 +1,5 @@
 extends Node
-class_name Part
+class_name Monitor
 
 var text: String:
 	set(value):
@@ -11,10 +11,7 @@ func _init() -> void:
 func start(_p_target: Node) -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 
-func part_name() -> String:
+func monitor_name() -> String:
 	@warning_ignore(assert_always_false)
-	assert(false, "ERROR: You must implement part_name()")
+	assert(false, "ERROR: You must implement monitor_name()")
 	return ""
-
-func get_score() -> float:
-	return -1.0

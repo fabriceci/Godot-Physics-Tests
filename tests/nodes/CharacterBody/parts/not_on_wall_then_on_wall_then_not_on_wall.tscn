@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://hq2ny64tau24"]
 
 [sub_resource type="GDScript" id="GDScript_xlts8"]
-script/source = "extends Part
+script/source = "extends Monitor
 
 enum State {
 	START,
@@ -17,7 +17,7 @@ var character: CharacterBody2D
 func is_test_passed() -> bool:
 	return state == State.NOT_ON_WALL_AFTER
 
-func part_name() -> String:
+func monitor_name() -> String:
 	return \"The value of is_on_wall() is first false then true and then false again\"
 
 func start(p_target: Node) -> void:

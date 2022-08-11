@@ -22,7 +22,7 @@ func test_name() -> String:
 	return \"CharacterBody2D wall slide (\" + shape_name(body_shape) + \" - \" + MotionType.keys()[motion_type] + \")\"
 
 func _ready() -> void:
-	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
+	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
 		start()
 
 func start() -> void:
@@ -46,8 +46,8 @@ func start() -> void:
 	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, body_scale_factor), body_shape)
 	character.add_child(body_col)
 
-	for part in parts:
-		part.start(character)
+	for monitor in monitors:
+		monitor.start(character)
 
 	# Set up character motion
 	if motion_type == MotionType.IN_DIAGONALLY:

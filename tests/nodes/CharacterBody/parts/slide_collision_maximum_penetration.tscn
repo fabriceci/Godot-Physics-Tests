@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://ckbwvjp0c4x3q"]
 
 [sub_resource type="GDScript" id="GDScript_s1q80"]
-script/source = "extends Part
+script/source = "extends Monitor
 
 @export var tolerance := 0.0
 
@@ -12,7 +12,7 @@ var character: CharacterBody2D
 func is_test_passed() -> bool:
 	return not penetrated
 
-func part_name() -> String:
+func monitor_name() -> String:
 	return \"Maximum penetration <= %f\" % [tolerance]
 
 func start(p_target: Node) -> void:
