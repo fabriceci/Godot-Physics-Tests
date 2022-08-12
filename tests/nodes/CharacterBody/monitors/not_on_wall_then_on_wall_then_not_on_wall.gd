@@ -1,7 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://hq2ny64tau24"]
-
-[sub_resource type="GDScript" id="GDScript_xlts8"]
-script/source = "extends Monitor
+extends Monitor
 
 enum State {
 	START,
@@ -12,20 +9,16 @@ enum State {
 }
 
 var state := State.START
-var character: CharacterBody2D
+var target: CharacterBody2D
 
 func is_test_passed() -> bool:
 	return state == State.NOT_ON_WALL_AFTER
 
 func monitor_name() -> String:
-	return \"The value of is_on_wall() is first false then true and then false again\"
-
-func start(p_target: Node) -> void:
-	super(p_target)
-	character = p_target
+	return "The value of is_on_wall() is first false then true and then false again"
 	
 func _physics_process(_delta: float) -> void:
-	var on_wall: bool = character.is_on_wall()
+	var on_wall: bool = target.is_on_wall()
 	if state == State.START:
 		text = 'start'
 		if not on_wall:
@@ -58,7 +51,3 @@ func _physics_process(_delta: float) -> void:
 	elif state == State.FAIL:
 		text = 'fail'
 		return
-"
-
-[node name="not_on_wall_then_on_wall_then_not_on_wall" type="Node"]
-script = SubResource("GDScript_xlts8")

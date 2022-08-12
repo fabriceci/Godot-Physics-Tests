@@ -1,7 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://na53s2ny2eh4"]
-
-[sub_resource type="GDScript" id="GDScript_148jy"]
-script/source = "extends Monitor
+extends Monitor
 
 enum State {
 	START,
@@ -11,21 +8,17 @@ enum State {
 	FAIL
 }
 
-var state := State.START
-var character: CharacterBody2D
+var state:= State.START
+var target: CharacterBody2D
 
 func is_test_passed() -> bool:
 	return state == State.ZERO_SLIDES_AFTER
 
 func monitor_name() -> String:
-	return \"The number of slide collisions is first zero then positive and then zero again\"
-
-func start(p_target: Node) -> void:
-	super(p_target)
-	character = p_target
+	return "The number of slide collisions is first zero then positive and then zero again"
 
 func _physics_process(_delta: float) -> void:
-	var collision_count: int = character.get_slide_collision_count()
+	var collision_count: int = target.get_slide_collision_count()
 	if state == State.START:
 		text = 'start'
 		if collision_count == 0:
@@ -58,7 +51,3 @@ func _physics_process(_delta: float) -> void:
 	elif state == State.FAIL:
 		text = 'fail'
 		return
-"
-
-[node name="zero_slides_positive_slides_zero_slide" type="Node"]
-script = SubResource("GDScript_148jy")

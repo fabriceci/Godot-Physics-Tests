@@ -10,10 +10,14 @@ var completed_tests := 0
 var scene:Node
 var scroll_container : ScrollContainer
 var container :HFlowContainer
+var status_label: Label
 
 # Called when the node enters the scene tree for the first time.
 func _init(p_scene: Node) -> void:
 	scene = p_scene
+	
+	status_label = Label.new()
+	status_label.position = Vector2(Global.WINDOW_SIZE.x - 50, 0)
 	
 	scroll_container = ScrollContainer.new()
 	scroll_container.custom_minimum_size = Global.WINDOW_SIZE + Vector2(10,0) # +10 for the scrollbar
@@ -29,6 +33,7 @@ func _init(p_scene: Node) -> void:
 
 	scroll_container.add_child(container)
 	scene.add_child(scroll_container)
+	scene.add_child(status_label)
 
 func add_test(node: PhysicsTest2D):
 	list_of_tests.append(node.duplicate())
@@ -62,6 +67,7 @@ func start():
 		ongoing_tests += 1
 		available = Global.MAXIMUM_PARALLEL_TESTS - ongoing_tests
 		remaining_test = total_tests - current_test_index
+		status_label.text = "%d / %d" % [current_test_index, total_tests]
 
 func update_test(node):
 	var texture_rect: Node= node.get_parent().get_parent()

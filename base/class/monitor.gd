@@ -8,7 +8,7 @@ var text: String:
 func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
-func start(_p_target: Node) -> void:
+func start() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 
 func monitor_name() -> String:

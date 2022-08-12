@@ -1,28 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://ckbwvjp0c4x3q"]
+extends Monitor
 
-[sub_resource type="GDScript" id="GDScript_s1q80"]
-script/source = "extends Monitor
-
-@export var tolerance := 0.0
+@export var tolerance := 1.0
 
 var penetrated := false
-
-var character: CharacterBody2D
+var target: CharacterBody2D
 
 func is_test_passed() -> bool:
 	return not penetrated
 
 func monitor_name() -> String:
-	return \"Maximum penetration <= %f\" % [tolerance]
-
-func start(p_target: Node) -> void:
-	super(p_target)
-	character = p_target
+	return "Maximum penetration <= %f" % [tolerance]
 
 func _physics_process(_delta: float) -> void:
 	if not penetrated:
-		for i in character.get_slide_collision_count():
-			var col = character.get_slide_collision(i)
+		for i in target.get_slide_collision_count():
+			var col = target.get_slide_collision(i)
 			var shape_a = col.get_local_shape()
 			var shape_b = col.get_collider_shape()
 			if shape_a is CollisionShape2D and shape_b is CollisionShape2D:
@@ -36,7 +28,3 @@ func _physics_process(_delta: float) -> void:
 		text = 'penetrated'
 	else:
 		text = 'not penetrated'
-"
-
-[node name="slide_collision_maximum_penetration" type="Node"]
-script = SubResource("GDScript_s1q80")

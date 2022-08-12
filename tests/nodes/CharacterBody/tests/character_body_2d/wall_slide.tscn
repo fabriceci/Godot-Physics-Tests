@@ -1,8 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwyvsbwwwhnma"]
-
-[ext_resource type="PackedScene" uid="uid://na53s2ny2eh4" path="res://tests/nodes/CharacterBody/parts/zero_slides_positive_slides_zero_slide.tscn" id="1_1l8rk"]
-[ext_resource type="PackedScene" uid="uid://hq2ny64tau24" path="res://tests/nodes/CharacterBody/parts/not_on_wall_then_on_wall_then_not_on_wall.tscn" id="2_r5shp"]
-[ext_resource type="PackedScene" uid="uid://ckbwvjp0c4x3q" path="res://tests/nodes/CharacterBody/parts/slide_collision_maximum_penetration.tscn" id="3_ymfbv"]
+[gd_scene load_steps=2 format=3 uid="uid://bwyvsbwwwhnma"]
 
 [sub_resource type="GDScript" id="GDScript_spw5p"]
 script/source = "extends PhysicsUnitTest2D
@@ -46,8 +42,14 @@ func start() -> void:
 	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, body_scale_factor), body_shape)
 	character.add_child(body_col)
 
-	for monitor in monitors:
-		monitor.start(character)
+	# Monitor zero slides, then positive number of slides, then zero slides again
+	var zero_slides_positive_slides_zero_slides: Monitor = load(\"res://tests/nodes/CharacterBody/monitors/zero_slides_positive_slides_zero_slide.gd\").new()
+	zero_slides_positive_slides_zero_slides.owner = character
+	# Monitor to be not on the wall, then on the wall, then not on the wall
+	var not_on_wall_then_on_wall_then_not_on_wall: Monitor= load(\"res://tests/nodes/CharacterBody/monitors/not_on_wall_then_on_wall_then_not_on_wall.gd\").new()
+	# Monitor no wall penetration
+	var slide_collision_maximum_penetration: Monitor= load(\"res://tests/nodes/CharacterBody/monitors/slide_collision_maximum_penetration.gd\").new()
+	setup_monitors([zero_slides_positive_slides_zero_slides, not_on_wall_then_on_wall_then_not_on_wall, slide_collision_maximum_penetration], character)
 
 	# Set up character motion
 	if motion_type == MotionType.IN_DIAGONALLY:
@@ -71,9 +73,3 @@ func start() -> void:
 [node name="wall_slide" type="Node2D"]
 script = SubResource("GDScript_spw5p")
 collision_layer = 1
-
-[node name="zero_slides_positive_slides_zero_slide" parent="." instance=ExtResource("1_1l8rk")]
-
-[node name="not_on_wall_then_on_wall_then_not_on_wall" parent="." instance=ExtResource("2_r5shp")]
-
-[node name="slide_collision_maximum_penetration" parent="." instance=ExtResource("3_ymfbv")]

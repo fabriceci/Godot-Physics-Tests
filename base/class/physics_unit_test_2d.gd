@@ -5,10 +5,15 @@ var monitors: Array[Monitor]
 
 func start() -> void:
 	super()
-	# Setup Monitor
-	for child in get_children():
-		if child is Monitor:
-			monitors.append(child)
+
+func setup_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
+	for monitor in p_monitors:
+		monitors.append(monitor)
+		p_owner.add_child(monitor)
+		monitor.owner = p_owner
+		monitor.target = p_owner
+		if p_start:
+			monitor.start()
 
 func start_test_with_time_limit(p_time_limit):
 	get_tree().create_timer(p_time_limit).timeout.connect(self._on_test_completed)
