@@ -17,10 +17,6 @@ enum MotionType {
 func test_name() -> String:
 	return \"CharacterBody2D wall slide (\" + shape_name(body_shape) + \" - \" + MotionType.keys()[motion_type] + \")\"
 
-func _ready() -> void:
-	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
-		start()
-
 func start() -> void:
 	super() # Setup the camera
 	# Horizontal wall
