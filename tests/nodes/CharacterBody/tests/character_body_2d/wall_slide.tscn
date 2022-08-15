@@ -40,7 +40,6 @@ func start() -> void:
 
 	# Monitor zero slides, then positive number of slides, then zero slides again
 	var zero_slides_positive_slides_zero_slides: Monitor = load(\"res://tests/nodes/CharacterBody/monitors/zero_slides_positive_slides_zero_slide.gd\").new()
-	zero_slides_positive_slides_zero_slides.owner = character
 	# Monitor to be not on the wall, then on the wall, then not on the wall
 	var not_on_wall_then_on_wall_then_not_on_wall: Monitor= load(\"res://tests/nodes/CharacterBody/monitors/not_on_wall_then_on_wall_then_not_on_wall.gd\").new()
 	# Monitor no wall penetration

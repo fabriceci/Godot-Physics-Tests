@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0g34bnwgnoeh"]
+[gd_scene load_steps=4 format=3 uid="uid://b0g34bnwgnoeh"]
 
 [ext_resource type="PackedScene" uid="uid://bwyvsbwwwhnma" path="res://tests/nodes/CharacterBody/tests/character_body_2d/wall_slide.tscn" id="1_7k6qs"]
+[ext_resource type="PackedScene" uid="uid://bcvyoyk4gx8hd" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_wall_type_with_pressure.tscn" id="2_eie1l"]
 
 [sub_resource type="GDScript" id="GDScript_kqk15"]
 script/source = "extends TestScene
@@ -30,3 +31,8 @@ motion_type = 1
 [node name="wall_slide_rectangle_diagonal_in_out_ortho" parent="." instance=ExtResource("1_7k6qs")]
 body_shape = 4
 motion_type = 2
+
+[node name="detect_wall_type_with_pressure" parent="." instance=ExtResource("2_eie1l")]
+
+[node name="detect_wall_type_with_pressure2" parent="." instance=ExtResource("2_eie1l")]
+body_shape = 4

@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcvyoyk4gx8hd"]
+
+[sub_resource type="GDScript" id="GDScript_agr36"]
+script/source = "extends PhysicsUnitTest2D
+
+@export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
+@export var body_mode: CharacterBody2D.MotionMode = CharacterBody2D.MOTION_MODE_GROUNDED
+
+@export var expected_max_wall_penetration := 1.0
+
+func test_name() -> String:
+	return \"CharacterBody2D | check surface detection (%s)\" % [shape_name(body_shape)]
+
+func start() -> void:
+	super() # Setup the camera
+
+	add_collision_boundaries(150)
+	
+	# Create character
+	var character = CharacterBody2D.new()
+	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd\")
+	character.motion_mode = body_mode
+	
+	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
+	character.add_child(body_col)
+	
+	add_child(character)
+	
+	# Check all collision type
+	var test_lambda = func(step, target):
+		if step == 0: return target.get_slide_collision_count() == 0
+		elif step == 1: return target.is_on_wall_only()
+		elif step == 2: return target.is_on_wall() and target.is_on_ceiling()
+		elif step == 3: return target.is_on_ceiling_only()
+		elif step == 4: return target.is_on_wall() and target.is_on_ceiling()
+		elif step == 5: return target.is_on_wall_only()
+		elif step == 6: return target.is_on_wall() and target.is_on_floor()
+		elif step == 7: return target.is_on_floor_only()
+	
+	var cbk_lambda = func(step, target, is_transition := false):
+		if step == 0: target.velocity = Vector2(200, 0) # right
+		elif step < 2: target.velocity = Vector2(200, -200) # up right
+		elif step < 4: target.velocity = Vector2(-200, -200) # up left
+		elif step < 6: target.velocity = Vector2(-200, 200) # down left
+		elif step == 6: target.velocity = Vector2(200, 200) # down right
+
+	var contact_monitor: Monitor = load(\"res://base/monitors/generic_step_monitor.gd\").new()
+	contact_monitor.test_name = \"Check detection of wall, floor and ceiling with pressure\"
+	contact_monitor.setup(test_lambda, 8, cbk_lambda)
+	setup_monitors([contact_monitor], character)
+	
+	await contact_monitor.completed
+	_on_test_completed()
+"
+
+[node name="detect_wall_type_with_pressure" type="Node2D"]
+script = SubResource("GDScript_agr36")
