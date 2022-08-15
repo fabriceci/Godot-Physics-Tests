@@ -46,13 +46,15 @@ func start() -> void:
 func test_description() -> String:
 	return ""
 
-func add_walls_and_ground(p_width:= 20):
+func add_collision_boundaries(p_width:= 20, add_ceiling := true):
 	# Left Wall
 	add_child(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, 600))))
 	# Right Wall
 	add_child(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, 600))))
 	# Ground
 	add_child(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(1024, p_width))))
+	if add_ceiling:
+		add_child(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width))))
 
 static func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE) -> StaticBody2D:
 	var body = StaticBody2D.new()

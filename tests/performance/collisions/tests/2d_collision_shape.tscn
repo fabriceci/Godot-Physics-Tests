@@ -3,7 +3,7 @@
 [sub_resource type="GDScript" id="GDScript_po1f6"]
 script/source = "extends PhysicsPerformanceTest2D
 
-@export var maximum_body := 600
+@export var maximum_body := 1000
 @export var test_record_step := 10
 @export var record_from_step := 7
 @export var shape1: PhysicsTest2D.TestCollisionShape = PhysicsTest2D.TestCollisionShape.RECTANGLE
@@ -33,7 +33,7 @@ func start() -> void:
 	label_number.set(\"theme_override_font_sizes/font_size\", 18)
 	add_child(label_number)
 	
-	add_walls_and_ground()
+	add_collision_boundaries(20, false)
 
 	timer = Timer.new()
 	timer.wait_time = 0.2

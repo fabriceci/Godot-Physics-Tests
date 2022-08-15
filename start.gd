@@ -28,6 +28,8 @@ func _ready() -> void:
 	elif mode == Global.TEST_MODE.PERFORMANCE:
 		test_folder.append("nodes")
 		Global.MAXIMUM_PARALLEL_TESTS = 1
+		Global.NUMBER_TEST_PER_ROW = 1
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	elif mode == Global.TEST_MODE.QUALITY:
 		test_folder.append("quality")
 		

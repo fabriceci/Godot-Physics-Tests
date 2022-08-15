@@ -10,9 +10,17 @@ func _ready() -> void:
 func start() -> void:
 	runner = TestRunner.new(self)
 	runner.completed.connect(self.completed)
+	var is_performance := false
 	for child in get_children():
+		if child is PhysicsPerformanceTest2D:
+			is_performance = true
 		if child is PhysicsTest2D:
 			runner.add_test(child)
+	
+	if is_performance:
+		Global.NUMBER_TEST_PER_ROW = 1
+		Global.MAXIMUM_PARALLEL_TESTS = 1
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	runner.start()
 			
 func completed() -> void:
