@@ -112,4 +112,15 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 	assert(false, "No default shape for this shape type")
 
 static func shape_name(p_shape_type : TestCollisionShape) -> String:
-	return TestCollisionShape.keys()[p_shape_type]
+	match p_shape_type:
+		TestCollisionShape.CAPSULE: return "Capsule"
+		TestCollisionShape.CONCAVE_POLYGON: return "Concave Polygon"
+		TestCollisionShape.CONVEX_POLYGON: return "Convex Polygon"
+		TestCollisionShape.COLLISION_POLYGON_2D: return "Collision Polygon 2D"
+		TestCollisionShape.RECTANGLE: return "Rectangle"
+		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
+		TestCollisionShape.CIRCLE: return "Circle"
+		_:
+			@warning_ignore(assert_always_false)
+			assert(false, "TestCollisionShape %d name is not implemented")
+			return "Not implemented"
