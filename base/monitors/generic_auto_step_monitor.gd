@@ -29,7 +29,7 @@ func setup(p_test_lamba, p_total_step, p_cbk_lambda = null, p_maximum_time := 10
 func _physics_process(delta: float) -> void:
 	if cbk_lambda:
 		cbk_lambda.call(current_step, target)
-
+		
 	# Maximum duration
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:

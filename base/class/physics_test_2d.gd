@@ -16,9 +16,10 @@ enum TestCollisionShape {
 	CAPSULE = PhysicsServer2D.SHAPE_CAPSULE,
 	CONCAVE_POLYGON = PhysicsServer2D.SHAPE_CONCAVE_POLYGON,
 	CONVEX_POLYGON = PhysicsServer2D.SHAPE_CONVEX_POLYGON,
-	COLLISION_POLYGON_2D = 100,
+	COLLISION_POLYGON_2D,
 	RECTANGLE = PhysicsServer2D.SHAPE_RECTANGLE,
-	WORLD_BOUNDARY = PhysicsServer2D.SHAPE_WORLD_BOUNDARY
+	WORLD_BOUNDARY = PhysicsServer2D.SHAPE_WORLD_BOUNDARY,
+	CIRCLE = PhysicsServer2D.SHAPE_CIRCLE
 }
 
 func _ready() -> void:
@@ -102,7 +103,7 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 	if p_shape_type == PhysicsServer2D.SHAPE_RECTANGLE:
 		return Rect2(0, 0, 25, 25)
 	if p_shape_type == PhysicsServer2D.SHAPE_CIRCLE:
-		return Vector2(25,25) * p_scale
+		return 25.0 * p_scale
 	if p_shape_type == PhysicsServer2D.SHAPE_CAPSULE:
 		return Vector2(10,40) * p_scale
 	if p_shape_type == PhysicsServer2D.SHAPE_CONVEX_POLYGON or p_shape_type == PhysicsServer2D.SHAPE_CONCAVE_POLYGON or p_shape_type == TestCollisionShape.COLLISION_POLYGON_2D:

@@ -9,7 +9,7 @@ script/source = "extends PhysicsUnitTest2D
 @export var expected_max_wall_penetration := 1.0
 
 func test_name() -> String:
-	return \"CharacterBody2D | check surface detection (%s)\" % [shape_name(body_shape)]
+	return \"CharacterBody2D | check surface detection with pressure (%s)\" % [shape_name(body_shape)]
 
 func start() -> void:
 	super() # Setup the camera
@@ -38,13 +38,13 @@ func start() -> void:
 		elif step == 7: return target.is_on_floor_only()
 	
 	var cbk_lambda = func(step, target, is_transition := false):
-		if step == 0: target.velocity = Vector2(200, 0) # right
-		elif step < 2: target.velocity = Vector2(200, -200) # up right
-		elif step < 4: target.velocity = Vector2(-200, -200) # up left
-		elif step < 6: target.velocity = Vector2(-200, 200) # down left
-		elif step == 6: target.velocity = Vector2(200, 200) # down right
+		if step == 0: target.velocity = Vector2(500, 0) # right
+		elif step < 2: target.velocity = Vector2(500, -500) # up right
+		elif step < 4: target.velocity = Vector2(-500, -500) # up left
+		elif step < 6: target.velocity = Vector2(-500, 500) # down left
+		elif step == 6: target.velocity = Vector2(500, 500) # down right
 
-	var contact_monitor: Monitor = load(\"res://base/monitors/generic_step_monitor.gd\").new()
+	var contact_monitor: Monitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\").new()
 	contact_monitor.test_name = \"Check detection of wall, floor and ceiling with pressure\"
 	contact_monitor.setup(test_lambda, 8, cbk_lambda)
 	setup_monitors([contact_monitor], character)

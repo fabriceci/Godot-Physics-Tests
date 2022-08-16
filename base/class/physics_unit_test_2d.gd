@@ -27,7 +27,7 @@ func _on_test_completed() -> void:
 			var result =  "[color=green]SUCCESS[/color]" if passed else "[color=red]FAILED[/color]"
 			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if monitor.error_message :
-				output += "[color=red][indent][indent] - %s [/indent][/indent][/color]" % [monitor.error_message]
+				output += "[color=red][indent][indent] %s [/indent][/indent][/color]" % [monitor.error_message]
 		elif monitor.has_method("get_score"):
 			output += "[indent][indent] → %s : score [b]%f[/b][/indent][/indent]\n" % [monitor.monitor_name(), monitor.call("get_score")]
 		else:
