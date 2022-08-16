@@ -15,7 +15,7 @@ func test_description() -> String:
 	
 func test_name() -> String:
 	var mode = \"Grounded\" if body_mode == CharacterBody2D.MOTION_MODE_GROUNDED else \"Floating\"
-	return \"CharacterBody2D | check surface detection without pressure | mode: %s, shape: %s\" % [mode, shape_name(body_shape)]
+	return \"CharacterBody2D | check surface detection without pressure [mode: %s, shape: %s]\" % [mode, shape_name(body_shape)]
 
 func start() -> void:
 	super() # Setup the camera
@@ -69,11 +69,8 @@ func start() -> void:
 
 	var contact_monitor: Monitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\").new()
 	contact_monitor.test_name = \"Check detection of wall, floor and ceiling without pressure\"
-	contact_monitor.setup(test_lambda, 8, cbk_lambda)
+	contact_monitor.setup(test_lambda, 9, cbk_lambda)
 	setup_monitors([contact_monitor], character)
-	
-	await contact_monitor.completed
-	_on_test_completed()
 "
 
 [node name="detect_wall_type_without_pressure" type="Node2D"]

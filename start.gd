@@ -17,7 +17,10 @@ func _init():
 			arguments[argument.lstrip("--")] = ""
 
 func completed() -> void:
-	print_rich("[color=orange]--- ALL TESTS ARE COMPLETED ---[/color]")
+	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
+		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
+		print_rich("[indent][color=%s]→ PASSED TESTS: %d/%d[/color][/indent]" % [color, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
+	print_rich("[color=orange] > ALL TESTS ARE COMPLETED[/color]")
 	request_quit = true
 
 # Called when the node enters the scene tree for the first time.
@@ -32,7 +35,6 @@ func _ready() -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	elif mode == Global.TEST_MODE.QUALITY:
 		test_folder.append("quality")
-		
 
 	var result = {}
 	for folder in test_folder:
@@ -46,7 +48,7 @@ func _ready() -> void:
 					runner.add_test(child)
 			scene.queue_free()
 	
-	print_rich("[color=orange]--- MODE: [b]%s[/b] → [b]%d[/b] TESTS FOUNDS ---[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
+	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] TESTS FOUNDS[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
 	runner.start()
 
 func _physics_process(_delta: float) -> void:

@@ -103,9 +103,9 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 	if p_shape_type == PhysicsServer2D.SHAPE_RECTANGLE:
 		return Rect2(0, 0, 25, 25)
 	if p_shape_type == PhysicsServer2D.SHAPE_CIRCLE:
-		return 25.0 * p_scale
+		return 10.0 * p_scale
 	if p_shape_type == PhysicsServer2D.SHAPE_CAPSULE:
-		return Vector2(10,40) * p_scale
+		return Vector2(5,20) * p_scale
 	if p_shape_type == PhysicsServer2D.SHAPE_CONVEX_POLYGON or p_shape_type == PhysicsServer2D.SHAPE_CONCAVE_POLYGON or p_shape_type == TestCollisionShape.COLLISION_POLYGON_2D:
 		return PackedVector2Array([Vector2(0,0) * p_scale, Vector2(0,20) * p_scale, Vector2(20,20) * p_scale, Vector2(20,0) * p_scale, Vector2(0, 0) * p_scale]) 
 	@warning_ignore(assert_always_false)

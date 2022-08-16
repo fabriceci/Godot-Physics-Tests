@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://b6s5oc6neya7u"]
 
-[ext_resource type="PackedScene" uid="uid://bwyvsbwwwhnma" path="res://tests/nodes/CharacterBody/tests/character_body_2d/wall_slide.tscn" id="1_7k6qs"]
 [ext_resource type="PackedScene" uid="uid://bcvyoyk4gx8hd" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_surface_type_with_pressure.tscn" id="2_eie1l"]
+[ext_resource type="PackedScene" uid="uid://bcdgpxcw25lb2" path="res://tests/nodes/CharacterBody/tests/character_body_2d/testing_floor_snap.tscn" id="3_6m7xl"]
 [ext_resource type="PackedScene" uid="uid://dnhgqjtnu71n" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_surface_type_without_pressure.tscn" id="3_b3n6y"]
 
 [sub_resource type="GDScript" id="GDScript_kqk15"]
@@ -13,14 +13,6 @@ func test_name() -> String:
 
 [node name="Scene" type="Node"]
 script = SubResource("GDScript_kqk15")
-
-[node name="wall_slide_capsule_diagonal_in" parent="." instance=ExtResource("1_7k6qs")]
-
-[node name="wall_slide_capsule_diagonal_in_out" parent="." instance=ExtResource("1_7k6qs")]
-motion_type = 1
-
-[node name="wall_slide_capsule_diagonal_in_out_orthogonally" parent="." instance=ExtResource("1_7k6qs")]
-motion_type = 2
 
 [node name="detect_surface_type_with_pressure_cap" parent="." instance=ExtResource("2_eie1l")]
 
@@ -40,3 +32,11 @@ body_shape = 4
 
 [node name="detect_surface_type_without_pressure_circle" parent="." instance=ExtResource("3_b3n6y")]
 body_shape = 3
+
+[node name="testing_floor_snap_cap" parent="." instance=ExtResource("3_6m7xl")]
+body_shape = 5
+
+[node name="testing_floor_snap_circle" parent="." instance=ExtResource("3_6m7xl")]
+body_shape = 3
+
+[node name="testing_floor_snap_square" parent="." instance=ExtResource("3_6m7xl")]

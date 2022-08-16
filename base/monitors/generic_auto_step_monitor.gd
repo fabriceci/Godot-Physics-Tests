@@ -1,10 +1,7 @@
 extends Monitor
 
-var success := true
 var current_step := 0
 var total_step := 0
-var monitor_duration := 0.0
-var monitor_maximum_duration := 10.0
 var test_lambda: Callable
 var cbk_lambda: Callable
 var test_name := "Step monitor"
@@ -13,13 +10,10 @@ var target: CharacterBody2D
 
 var first_iteration = true
 
-func is_test_passed() -> bool:
-	return success
-
 func monitor_name() -> String:
 	return test_name
-
-func setup(p_test_lamba, p_total_step, p_cbk_lambda = null, p_maximum_time := 10.0):
+	
+func setup(p_test_lamba, p_total_step, p_cbk_lambda = null, p_maximum_time := 5.0):
 	test_lambda = p_test_lamba
 	total_step = p_total_step
 	cbk_lambda = p_cbk_lambda
@@ -29,13 +23,6 @@ func setup(p_test_lamba, p_total_step, p_cbk_lambda = null, p_maximum_time := 10
 func _physics_process(delta: float) -> void:
 	if cbk_lambda:
 		cbk_lambda.call(current_step, target)
-		
-	# Maximum duration
-	monitor_duration += delta
-	if monitor_duration > monitor_maximum_duration:
-		error_message = "The maximum duration has been exceeded"
-		success = false
-		return monitor_completed()
 	
 	# If all steps are completed
 	if current_step == total_step - 1:

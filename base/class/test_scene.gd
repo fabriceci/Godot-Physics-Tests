@@ -24,4 +24,11 @@ func start() -> void:
 	runner.start()
 			
 func completed() -> void:
-	print_rich("[color=orange]--- SCENE TESTS ARE COMPLETED ---[/color]")
+	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
+		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
+		print_rich("[indent][color=%s]→ PASSED TESTS: %d/%d[/color][/indent]" % [color, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
+	print_rich("[color=orange] > SCENE TESTS ARE COMPLETED[/color]")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	get_tree().quit()

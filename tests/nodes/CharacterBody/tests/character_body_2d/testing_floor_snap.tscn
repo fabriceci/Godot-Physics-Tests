@@ -1,0 +1,99 @@
+[gd_scene load_steps=2 format=3 uid="uid://bcdgpxcw25lb2"]
+
+[sub_resource type="GDScript" id="GDScript_fmuy2"]
+script/source = "extends PhysicsUnitTest2D
+
+@export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
+
+func test_description() -> String:
+	return \"\"\"
+	Tests whether the body is firmly attached to the ground when a snap is applied,
+	and only when the velocity points downwards.
+	\"\"\"
+
+func test_name() -> String:
+	return \"CharacterBody2D | testing floor snap [shape: %s]\" % [shape_name(body_shape)]
+	
+func start() -> void:
+	super() # Setup the camera
+	var GenericStepMonitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\")
+
+	# C1 start in air, touch the ground until he reach the wall
+	var character1 = create_character(1) # check behaviour without snap
+	add_child(character1)
+	
+	var c1_test_lambda = func(step, target):
+		if step == 0: return not target.is_on_floor()
+		elif step == 1: return target.is_on_floor_only()
+		elif step == 2: return target.is_on_wall()
+		
+	var cbk_lambda = func(step, target, is_transition := false):
+		if is_transition and step == 1:
+			target.velocity.x = 600
+		
+	var c1_monitor: Monitor = GenericStepMonitor.new()
+	c1_monitor.test_name = \"Snapping works as expected (stick to the floor)\"
+	c1_monitor.setup(c1_test_lambda, 3, cbk_lambda)
+	setup_monitors([c1_monitor], character1)
+
+	# C2 without snap it should be not stick to the ground
+	var character2 = create_character(2) # check behaviour with snap
+	character2.position.x -= 50
+	character2.floor_snap_length = 0 # turn off snapping ton confirm different behavior
+	add_child(character2)
+	
+	var c2_test_lambda = func(step, target):
+		if step == 0: return not target.is_on_floor()
+		elif step == 1: return target.is_on_floor_only()
+		elif step == 2: return not target.is_on_wall()
+		elif step == 3: return target.is_on_wall()
+
+	var c2_monitor: Monitor = GenericStepMonitor.new()
+	c2_monitor.test_name = \"Snapping has a different behaviour than without it\"
+	c2_monitor.setup(c2_test_lambda, 4, cbk_lambda)
+	setup_monitors([c2_monitor], character2)
+	
+	# C3 try to jump with
+	var character3 = create_character(3) # check if the body can jump
+	character3.position.x += 50
+	add_child(character3)
+	
+	var c3_test_lambda = func(step, target):
+		if step == 0: return not target.is_on_floor()
+		elif step == 1: return target.is_on_floor_only()
+		elif step == 2: return not target.is_on_floor()
+		elif step == 3: return target.is_on_floor()
+
+	var cbk_jump_lambda = func(step, target, is_transition := false):
+		if is_transition and step == 1:
+			target.velocity.y = -500
+	
+	var c3_monitor: Monitor = GenericStepMonitor.new()
+	c3_monitor.test_name = \"Can jump when snapping is applied\"
+	c3_monitor.setup(c3_test_lambda, 4, cbk_jump_lambda)
+	setup_monitors([c3_monitor], character3)
+
+func create_character(layer: int) -> CharacterBody2D:
+	var character = CharacterBody2D.new()
+	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd\")
+	character.floor_snap_length = 10
+	character.position = Vector2(-350, 50)
+	character.collision_layer = 0
+	character.collision_mask = 0
+	character.set_collision_layer_value(layer, true)
+	character.set_collision_mask_value(layer, true)
+	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
+	character.add_child(body_col)
+	return character
+"
+
+[node name="testing_floor_snap" type="Node2D"]
+script = SubResource("GDScript_fmuy2")
+body_shape = 4
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-513, -301, -432, -301, -432, 196, -194, 196, -34, 83, 35, 83, 182, 196, 423, 196, 423, -301, 509, -301, 516, 303, -513, 301)

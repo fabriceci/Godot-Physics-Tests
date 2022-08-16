@@ -2,6 +2,7 @@ class_name PhysicsUnitTest2D
 extends PhysicsTest2D
 
 var monitors: Array[Monitor]
+var monitor_completed := 0
 
 func start() -> void:
 	super()
@@ -9,22 +10,30 @@ func start() -> void:
 func setup_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:
 		monitors.append(monitor)
+		monitor.completed.connect(self.on_monitor_completed)
 		p_owner.add_child(monitor)
 		monitor.owner = p_owner
 		monitor.target = p_owner
 		if p_start:
 			monitor.start()
 
-func start_test_with_time_limit(p_time_limit):
-	get_tree().create_timer(p_time_limit).timeout.connect(self._on_test_completed)
+#func start_test_with_time_limit(p_time_limit):
+#	get_tree().create_timer(p_time_limit).timeout.connect(self.on_test_completed)
 
-func _on_test_completed() -> void:
+func on_monitor_completed() -> void:
+	monitor_completed += 1
+	if monitor_completed == monitors.size():
+		on_test_completed()
+
+func on_test_completed() -> void:
 	for monitor in monitors:
 		if monitor.has_method("is_test_passed"):
 			var passed:bool = monitor.call("is_test_passed")
-			if not passed:
-				Global.HAS_ERROR = true
-			var result =  "[color=green]SUCCESS[/color]" if passed else "[color=red]FAILED[/color]"
+			if passed:
+				Global.MONITOR_PASSED += 1
+			else:
+				Global.MONITOR_FAILED += 1
+			var result =  "[color=green]✓[/color]" if passed else "[color=red]FAILED[/color]"
 			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if monitor.error_message :
 				output += "[color=red][indent][indent] %s [/indent][/indent][/color]" % [monitor.error_message]
@@ -36,4 +45,10 @@ func _on_test_completed() -> void:
 	print_rich(output)
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
-	queue_free()
+	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		get_tree().quit()
+	else:
+		queue_free()

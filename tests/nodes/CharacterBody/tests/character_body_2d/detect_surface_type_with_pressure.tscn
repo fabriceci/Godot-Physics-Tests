@@ -12,7 +12,7 @@ func test_description() -> String:
 	\"\"\"
 
 func test_name() -> String:
-	return \"CharacterBody2D | check surface detection with pressure | shape: %s\" % [shape_name(body_shape)]
+	return \"CharacterBody2D | check surface detection with pressure [shape: %s]\" % [shape_name(body_shape)]
 
 func start() -> void:
 	super() # Setup the camera
@@ -51,9 +51,6 @@ func start() -> void:
 	contact_monitor.test_name = \"Check detection of wall, floor and ceiling with pressure\"
 	contact_monitor.setup(test_lambda, 8, cbk_lambda)
 	setup_monitors([contact_monitor], character)
-	
-	await contact_monitor.completed
-	_on_test_completed()
 "
 
 [node name="detect_wall_type_with_pressure" type="Node2D"]

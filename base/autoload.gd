@@ -14,3 +14,5 @@ var MAXIMUM_PARALLEL_TESTS := 40
 # Output
 var VERBOSE := false
 var HAS_ERROR := false
+var MONITOR_PASSED := 0
+var MONITOR_FAILED := 0
