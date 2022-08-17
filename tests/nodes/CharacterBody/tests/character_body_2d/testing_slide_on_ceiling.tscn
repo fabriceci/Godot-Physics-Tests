@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bv07oc2jfmlss"]
+[gd_scene load_steps=2 format=3 uid="uid://bsii42ld38rfk"]
 
 [sub_resource type="GDScript" id="GDScript_btxcy"]
 script/source = "extends PhysicsUnitTest2D
@@ -65,6 +65,7 @@ func create_character(layer: int) -> CharacterBody2D:
 	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd\")
 	character.collision_layer = 0
 	character.collision_mask = 0
+	character.position = Vector2(0, -120)
 	character.set_collision_layer_value(layer, true)
 	character.set_collision_mask_value(layer, true)
 	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
@@ -82,4 +83,4 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(133, -300, -118, -80, -118, 0, 133, 0, 133, 113, -200, 113, -200, -300)
+polygon = PackedVector2Array(139, -365, -195, -125, -195, 0, 133, 0, 133, 113, -300, 114, -300, -365)

@@ -22,16 +22,12 @@ func setup(p_test_lamba, p_total_step, p_cbk_lambda = null, p_maximum_time := 5.
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	if cbk_lambda:
-		cbk_lambda.call(current_step, target)
+		cbk_lambda.call(current_step, target, first_iteration)
 	
 	# If all steps are completed
 	if current_step == total_step - 1:
 		success = true
 		return monitor_completed()
-	
-	# Launch the callback for the first step
-	if first_iteration and cbk_lambda:
-		cbk_lambda.call(current_step, target)
 	
 	# Test according to the lambda provided
 	var result = test_lambda.call(current_step, target)
