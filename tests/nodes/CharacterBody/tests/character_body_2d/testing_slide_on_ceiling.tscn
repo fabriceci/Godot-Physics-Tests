@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv07oc2jfmlss"]
+
+[sub_resource type="GDScript" id="GDScript_btxcy"]
+script/source = "extends PhysicsUnitTest2D
+
+@export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
+
+func test_description() -> String:
+	return \"\"\"
+	Testing slide on ceiling, when turn ON, the body will slide on the ceiling (position.x will change),
+	and when it's off, the body should not have this position.x be changed.
+	\"\"\"
+
+func test_name() -> String:
+	return \"CharacterBody2D | testing slide on ceiling [shape: %s]\" % [shape_name(body_shape)]
+	
+func start() -> void:
+	super() # Setup the camera
+	var GenericStepMonitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\")
+
+	# C1 Jump in the ceiling and expect to move in x
+	var character1 = create_character(1)
+	character1.slide_on_ceiling = true
+	character1.floor_max_angle = deg2rad(80)
+	add_child(character1)
+	
+	var c1_test_lambda = func(step, target):
+		if step == 0: return not target.is_on_floor()
+		elif step == 1: return target.is_on_floor()
+		elif step == 2: return not target.is_on_floor() and not target.is_on_ceiling()
+		elif step == 3: return target.is_on_ceiling()
+		elif step == 4: return not is_zero_approx(target.position.x) and target.position.y < 0 # fall
+		elif step == 5: return not is_zero_approx(target.position.x) and target.position.y > 0 # fall
+			
+	var cbk_lambda = func(step, target, is_transition := false):
+		if is_transition and step == 1:
+			target.velocity.y = -1200
+		
+	var c1_monitor: Monitor = GenericStepMonitor.new()
+	c1_monitor.test_name = \"Body will slide on ceiling, move enough to fall of the platform\"
+	c1_monitor.setup(c1_test_lambda, 6, cbk_lambda)
+	setup_monitors([c1_monitor], character1)
+
+	# C2 without slide on ceiling, the body should not move in x
+	var character2 = create_character(2)
+	character2.slide_on_ceiling = false
+	character2.floor_max_angle = deg2rad(80)
+	add_child(character2)
+	
+	var c2_test_lambda = func(step, target):
+		if step == 0: return not target.is_on_floor()
+		elif step == 1: return target.is_on_floor()
+		elif step == 2: return not target.is_on_floor() and not target.is_on_ceiling()
+		elif step == 3: return target.is_on_ceiling()
+		elif step == 4: 
+			return is_zero_approx(target.position.x)
+
+	var c2_monitor: Monitor = GenericStepMonitor.new()
+	c2_monitor.test_name = \"Without silding, the position.x of the body will not change\"
+	c2_monitor.setup(c2_test_lambda, 5, cbk_lambda)
+	setup_monitors([c2_monitor], character2)
+
+func create_character(layer: int) -> CharacterBody2D:
+	var character = CharacterBody2D.new()
+	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd\")
+	character.collision_layer = 0
+	character.collision_mask = 0
+	character.set_collision_layer_value(layer, true)
+	character.set_collision_mask_value(layer, true)
+	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
+	character.add_child(body_col)
+	return character
+"
+
+[node name="testing_slide_on_ceiling" type="Node2D"]
+script = SubResource("GDScript_btxcy")
+body_shape = 4
+collision_layer = 0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(133, -300, -118, -80, -118, 0, 133, 0, 133, 113, -200, 113, -200, -300)
