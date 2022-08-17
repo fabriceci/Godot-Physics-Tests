@@ -57,7 +57,7 @@ func _physics_process(_delta: float) -> void:
 		await get_tree().physics_frame
 		await get_tree().physics_frame
 		await get_tree().physics_frame
-		var error_code = 1 if Global.HAS_ERROR else 0
+		var error_code = 1 if Global.MONITOR_FAILED > 0 else 0
 		get_tree().quit(error_code)
 
 func find_test(result: Dictionary, folder: String) -> void:
