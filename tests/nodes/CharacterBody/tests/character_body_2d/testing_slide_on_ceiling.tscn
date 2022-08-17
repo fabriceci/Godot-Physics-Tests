@@ -52,7 +52,7 @@ func start() -> void:
 		elif step == 4: return is_zero_approx(target.position.x)
 
 	var c2_monitor := create_generic_monitor(character2, c2_test_lambda, cbk_lambda)
-	c2_monitor.test_name = \"Without silding, the position.x of the body will not change\"
+	c2_monitor.test_name = \"Without sliding, the position.x of the body will not change\"
 
 func create_character(layer: int) -> CharacterBody2D:
 	var character = CharacterBody2D.new()

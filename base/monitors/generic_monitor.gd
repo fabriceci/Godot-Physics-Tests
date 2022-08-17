@@ -3,7 +3,7 @@ class_name GenericMonitor
 
 enum STEP_MODE { AUTO, MANUAL }
 
-# AUT MODE: test using [test_lambda] the [current_step]
+# AUTO MODE: test using [test_lambda] the [current_step]
 # -> if [false], check if we need to pass to the next step
 #	-> if the next step is returning [false], the test failed
 #  	-> if the next step is [true], we increase [current_step]
@@ -41,13 +41,14 @@ func setup(p_test_step_lamba,  p_cbk_lambda = null, p_maximum_duration := 5.0, p
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	if cbk_lambda:
-		cbk_lambda.call(current_step, target, first_iteration, self)
 	
 	# If all steps are completed
 	if current_step == total_step - 1:
 		success = true
 		return monitor_completed()
+		
+	if cbk_lambda:
+		cbk_lambda.call(current_step, target, first_iteration, self)
 	
 	# Test according to the lambda provided
 	var result = test_lambda.call(current_step, target)
@@ -57,15 +58,29 @@ func _physics_process(delta: float) -> void:
 		return monitor_completed()
 	first_iteration = false	
 	
-	# If the test is false, we check if we can pass to the next step
-	if not result:
-		var is_next = test_lambda.call(current_step + 1, target)
-		
-		if not is_next:
-			error_message = "Error during the transition from step %d to step %d" % [current_step, current_step + 1]
-			success = false
-			return monitor_completed()
-		else:
-			current_step += 1
-			if cbk_lambda:
-				cbk_lambda.call(current_step, target, true, self)
+	if mode == STEP_MODE.AUTO:
+		# If the test is false, we check if we can pass to the next step
+		if not result:
+			var is_next = test_lambda.call(current_step + 1, target)
+			
+			if not is_next:
+				error_message = "Error during the transition from step %d to step %d" % [current_step, current_step + 1]
+				success = false
+				return monitor_completed()
+			else:
+				current_step += 1
+				if cbk_lambda:
+					cbk_lambda.call(current_step, target, true, self)
+	elif mode == STEP_MODE.MANUAL:
+		error_message = "Error during step %d" % [current_step, current_step + 1]
+		success = false
+		return monitor_completed()
+
+func next_step():
+	assert(mode == STEP_MODE.AUTO, "Manual step change should only be done in manual mode.")
+	current_step += 1
+	if current_step == total_step:
+		success = true
+		return monitor_completed()
+	else:
+		cbk_lambda.call(current_step, target, true, self)

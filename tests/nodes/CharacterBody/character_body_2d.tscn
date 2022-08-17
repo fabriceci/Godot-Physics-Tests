@@ -43,7 +43,9 @@ body_shape = 3
 [node name="testing_floor_snap_rect" parent="." instance=ExtResource("3_6m7xl")]
 
 [node name="testing_slide_on_ceiling_cap" parent="." instance=ExtResource("4_c1exd")]
+body_shape = 5
 
 [node name="testing_slide_on_ceiling_circle" parent="." instance=ExtResource("4_c1exd")]
+body_shape = 3
 
 [node name="testing_slide_on_ceiling_rect" parent="." instance=ExtResource("4_c1exd")]
