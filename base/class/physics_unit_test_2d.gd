@@ -33,7 +33,7 @@ func on_test_completed() -> void:
 				Global.MONITOR_PASSED += 1
 			else:
 				Global.MONITOR_FAILED += 1
-			var result =  "[color=green]✓[/color]" if passed else "[color=red]FAILED[/color]"
+			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if not passed and monitor.error_message != "" :
 				output += "[color=red][indent][indent] %s [/indent][/indent][/color]" % [monitor.error_message]
