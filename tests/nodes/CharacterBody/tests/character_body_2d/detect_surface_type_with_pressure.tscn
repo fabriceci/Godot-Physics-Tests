@@ -40,17 +40,15 @@ func start() -> void:
 			elif step == 6: return target.is_on_wall() and target.is_on_floor()
 			elif step == 7: return target.is_on_floor_only()
 
-	var cbk_lambda = func(step, target, is_transition := false):
+	var cbk_lambda = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if step == 0: target.velocity = Vector2(500, 0) # right
 		elif step < 2: target.velocity = Vector2(500, -500) # up right
 		elif step < 4: target.velocity = Vector2(-500, -500) # up left
 		elif step < 6: target.velocity = Vector2(-500, 500) # down left
 		elif step == 6: target.velocity = Vector2(500, 500) # down right
 
-	var contact_monitor: Monitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\").new()
+	var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda)
 	contact_monitor.test_name = \"Check detection of wall, floor and ceiling with pressure\"
-	contact_monitor.setup(test_lambda, 8, cbk_lambda)
-	setup_monitors([contact_monitor], character)
 "
 
 [node name="detect_wall_type_with_pressure" type="Node2D"]

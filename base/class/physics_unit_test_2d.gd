@@ -7,7 +7,7 @@ var monitor_completed := 0
 func start() -> void:
 	super()
 
-func setup_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
+func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:
 		monitors.append(monitor)
 		monitor.completed.connect(self.on_monitor_completed)
@@ -52,3 +52,9 @@ func on_test_completed() -> void:
 		get_tree().quit()
 	else:
 		queue_free()
+
+func create_generic_monitor(p_target: Node, p_test_step_lamba,  p_cbk_lambda = null, p_maximum_duration := 5.0, p_mode = GenericMonitor.STEP_MODE.AUTO, p_auto_start:= true) -> GenericMonitor:
+	var instance = load("res://base/monitors/generic_monitor.gd").new()
+	register_monitors([instance as Monitor], p_target, p_auto_start)
+	instance.setup(p_test_step_lamba, p_cbk_lambda, p_maximum_duration, p_mode)
+	return instance

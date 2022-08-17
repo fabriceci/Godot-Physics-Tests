@@ -47,15 +47,24 @@ func start() -> void:
 func test_description() -> String:
 	return ""
 
-func add_collision_boundaries(p_width:= 20, add_ceiling := true):
-	# Left Wall
-	add_child(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, 600))))
-	# Right Wall
-	add_child(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, 600))))
-	# Ground
-	add_child(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(1024, p_width))))
-	if add_ceiling:
-		add_child(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width))))
+func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [1,2,3,4,5,6,7,8,9,10,11,12]):
+	var surfaces: Array[StaticBody2D]= []
+	# Left wall
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, 600))))
+	# Right wall
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, 600))))
+	# Bottom Wall
+	surfaces.append(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(1024, p_width))))
+	if p_add_ceiling:
+		surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width))))
+	
+	for wall in surfaces:
+		wall.collision_layer = 0
+		wall.collision_mask = 0
+		for layer in p_layers:
+			wall.set_collision_layer_value(layer, true)
+			wall.set_collision_mask_value(layer, true)
+		add_child(wall)
 
 static func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE) -> StaticBody2D:
 	var body = StaticBody2D.new()

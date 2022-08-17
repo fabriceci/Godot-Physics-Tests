@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://b6s5oc6neya7u"]
 
 [ext_resource type="PackedScene" uid="uid://bcvyoyk4gx8hd" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_surface_type_with_pressure.tscn" id="2_eie1l"]
-[ext_resource type="PackedScene" path="res://tests/nodes/CharacterBody/tests/character_body_2d/testing_floor_snap.tscn" id="3_6m7xl"]
+[ext_resource type="PackedScene" uid="uid://cf750yj6rnrh2" path="res://tests/nodes/CharacterBody/tests/character_body_2d/testing_floor_snap.tscn" id="3_6m7xl"]
 [ext_resource type="PackedScene" uid="uid://dnhgqjtnu71n" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_surface_type_without_pressure.tscn" id="3_b3n6y"]
 [ext_resource type="PackedScene" uid="uid://bsii42ld38rfk" path="res://tests/nodes/CharacterBody/tests/character_body_2d/testing_slide_on_ceiling.tscn" id="4_c1exd"]
 
