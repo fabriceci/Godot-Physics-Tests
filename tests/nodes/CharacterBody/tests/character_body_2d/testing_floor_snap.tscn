@@ -6,7 +6,7 @@ script/source = "extends PhysicsUnitTest2D
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
 
 var spawn_position = Vector2(150, 400)
-var speed = 700
+var speed = 750
 
 func test_description() -> String:
 	return \"\"\"
@@ -93,5 +93,4 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-position = Vector2(512, 300)
-polygon = PackedVector2Array(-513, -301, -432, -301, -432, 196, -194, 196, -34, 83, 35, 83, 182, 196, 423, 196, 423, -301, 509, -301, 516, 303, -513, 301)
+polygon = PackedVector2Array(0, 0, 80, 0, 80, 496, 318, 496, 478, 383, 547, 383, 700, 496, 944, 496, 944, 0, 1024, 0, 1024, 600, 0, 600)
