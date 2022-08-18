@@ -82,7 +82,7 @@ func completed() -> void:
 	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
 		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
 		var status = "FAILED" if Global.MONITOR_FAILED > 0 else "PASSED"
-		print_rich("[color=orange] > COMPLETED IN %.2fs, PASSED TESTS: %d/%d, STATUS: [color=%s]%s[/color]" % [duration, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, color, status])
+		print_rich("[color=orange] > COMPLETED IN %.2fs, PASSED MONITORS: %d/%d, STATUS: [color=%s]%s[/color]" % [duration, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, color, status])
 	else:
 		print_rich("[color=orange] > COMPLETED IN %.2fs[/color]" % [duration])
 	request_quit = true

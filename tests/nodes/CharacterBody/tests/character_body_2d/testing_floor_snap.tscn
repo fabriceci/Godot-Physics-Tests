@@ -79,7 +79,7 @@ func create_character(layer: int) -> CharacterBody2D:
 	character.collision_mask = 0
 	character.set_collision_layer_value(layer, true)
 	character.set_collision_mask_value(layer, true)
-	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
+	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	return character
 "

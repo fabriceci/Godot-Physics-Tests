@@ -25,7 +25,7 @@ func start() -> void:
 	character.motion_mode = CharacterBody2D.MOTION_MODE_GROUNDED
 	character.position = CENTER
 	
-	var body_col: Node2D = get_collision_shape(get_default_shape_definition(body_shape, 2), body_shape)
+	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	
 	add_child(character)

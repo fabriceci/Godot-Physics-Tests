@@ -50,6 +50,15 @@ func setup(p_test_step_lamba,  p_cbk_lambda = null, p_maximum_duration := 5.0, p
 			cpt += 1
 		total_step = cpt
 
+# Overload the method to avoid [error_message] for [ONE_AT_EXPIRATION] mode
+func _process(delta: float) -> void:
+	# Maximum duration
+	monitor_duration += delta
+	if monitor_duration > monitor_maximum_duration:
+		if mode != STEP_MODE.ONE_AT_EXPIRATION:
+			error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
+		return monitor_completed()
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
 	if mode == STEP_MODE.ONE_AT_EXPIRATION:
