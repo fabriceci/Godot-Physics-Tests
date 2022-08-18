@@ -1,0 +1,116 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxrk6vpptw3in"]
+
+[sub_resource type="GDScript" id="GDScript_vjp6m"]
+script/source = "extends PhysicsUnitTest2D
+
+var stack_height := 9
+var max_horizontal_movement := 5.0
+var body_size := Vector2(25, 25)
+var body_spacing := 5
+var body_shape: PhysicsTest2D.TestCollisionShape = PhysicsTest2D.TestCollisionShape.RECTANGLE
+var simulation_duration := 9
+var tolerance := 3.3
+
+func test_description() -> String:
+	return \"\"\"
+	checks the stability of the RigidBody Simulation. The stack should be stable and the RigidBody
+	should sleep after the [simulation_duration]
+	\"\"\"
+	
+func test_name() -> String:
+	return \"RigidDynamicBody | checks the box stack stability\"
+
+func start() -> void:
+	super() # Print test name
+	
+	add_collision_boundaries(20, false)
+
+	var stack = Node2D.new()
+	stack.position = BOTTOM_CENTER - Vector2(0, 20 + body_spacing)
+	
+	var bodies_array : Array[RigidDynamicBody2D] = []
+	var body_idx := 0
+	for i in range(stack_height):
+			
+		var body := RigidDynamicBody2D.new()
+		
+		var body_rect := Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size)
+		var body_col: Node2D = get_collision_shape(body_rect, body_shape)
+		body.add_child(body_col)
+		
+		# Spawn the body
+		body.position = Vector2(0, -(body_size.y + body_spacing) * (i+1))
+		body.name = \"Body%d\" % body_idx
+		bodies_array.append(body)
+		stack.add_child(body)
+		body_idx += 1
+	
+	# 1. Should be sleeping
+	var should_be_sleep = func(p_step, p_target, p_monitor):
+		for body in p_monitor.data[\"bodies\"] as Array[RigidDynamicBody2D]:
+			if not body.sleeping:
+				return false
+		return true
+	
+	var sleep_monitor = create_generic_monitor(stack, should_be_sleep, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	sleep_monitor.data[\"bodies\"] = bodies_array
+	sleep_monitor.test_name = \"The bodies are sleeping\"
+	
+	# 2. Should not move horizontally
+	var should_not_move_in_x: Callable = func(p_step, p_target, p_monitor):
+		for body in p_monitor.data[\"bodies\"] as Array[RigidDynamicBody2D]:
+			if not (body.position.x > -tolerance and body.position.x < tolerance):
+				p_monitor.error_message = \"A body moved by %.1f px\" % [body.position.x]
+				return false
+		return true
+		
+	var horizontal_monitor = create_generic_monitor(stack, should_not_move_in_x, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	horizontal_monitor.data[\"bodies\"] = bodies_array
+	horizontal_monitor.test_name = \"The bodies did not move horizontally more than %.1f px\" % [tolerance]
+	add_child(stack)
+	
+	# 3. Should be sorted vertically
+	var should_be_sorted_vertically = func(p_step, p_target, p_monitor):
+		var child_height = -INF
+		for body in p_monitor.data[\"bodies\"] as Array[RigidDynamicBody2D]:
+			var height = -body.position.y # easier, because the smaller the y, the higher it is (a bit counter intuitive)
+			if height > child_height:
+				child_height = height
+			else:
+				return false
+		return true
+		
+	var sorted_vertically_monitor = create_generic_monitor(stack, should_be_sorted_vertically, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	sorted_vertically_monitor.data[\"bodies\"] = bodies_array
+	sorted_vertically_monitor.test_name = \"The bodies are sorted vertically\"
+	add_child(stack)
+
+	# 4. Only neighboring children overlap
+	var shoud_overlaps_with_neighbours= func(p_step, p_target, p_monitor):
+		var bodies = p_monitor.data[\"bodies\"] as Array[RigidDynamicBody2D]
+		for child_idx in bodies.size():
+			var body := bodies[child_idx]
+			for shape_owner_id in body.get_shape_owners():
+				var shape_owner = body.shape_owner_get_owner(shape_owner_id)
+				for shape_id in body.shape_owner_get_shape_count(shape_owner_id):
+					var shape = body.shape_owner_get_shape(shape_owner_id, shape_id)
+					var parameters := PhysicsShapeQueryParameters2D.new()
+					parameters.transform = body.global_transform * body.shape_owner_get_transform(shape_owner_id)
+					parameters.set_shape(shape)
+					var results = p_target.get_world_2d().direct_space_state.intersect_shape(parameters)
+					for result in results:
+						var sibling_idx = bodies.find(result.collider)
+						if sibling_idx == -1 or sibling_idx == child_idx:
+							continue
+						if abs(child_idx - sibling_idx) > 1: # sibling is not a neighbor
+							return false
+		return true
+		
+	var overlaps_with_neighbours_monitor = create_generic_monitor(stack, shoud_overlaps_with_neighbours, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	overlaps_with_neighbours_monitor.data[\"bodies\"] = bodies_array
+	overlaps_with_neighbours_monitor.test_name = \"Only neighboring children overlap\"
+	
+"
+
+[node name="rectangle_stack" type="Node2D"]
+script = SubResource("GDScript_vjp6m")

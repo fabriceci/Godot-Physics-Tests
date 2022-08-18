@@ -12,9 +12,7 @@ func handle_child(parent: Node) -> void:
 			launch_test(node)
 			await node.completed
 			remove_child(node)
-		# TO DO: handle child in //
-		#elif node.get_child_count() > 0:
-		#	handle_child(node)
+	
 	scene_completed.emit()
 			
 func launch_test(node: PhysicsTest2D) -> void:

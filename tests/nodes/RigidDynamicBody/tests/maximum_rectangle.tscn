@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://3o0nkl6b4h10"]
+
+[sub_resource type="GDScript" id="GDScript_q0og8"]
+script/source = "extends PhysicsUnitTest2D
+
+var body_number := 0
+var timer: Timer
+var body_size := Vector2(25, 25)
+var min_body_expected := 520
+var simulation_duration := 15
+
+var bodies := []
+var total_overlap := 0
+var last_size_checked := 0
+var minimal_distance :float = INF
+var average := 0.0
+var cpt := 0
+
+func test_description() -> String:
+	return \"\"\"
+	checks the maximum number of supported rectangles before the simulation goes crazy.
+	\"\"\"
+	
+func test_name() -> String:
+	return \"RigidDynamicBody | checks  the maximum amount of rectangles before instablity\"
+
+func start() -> void:
+	super() # Print test name
+	
+	add_collision_boundaries(1, false)
+
+	timer = Timer.new()
+	timer.wait_time = 0.2
+	timer.process_callback =Timer.TIMER_PROCESS_PHYSICS
+	timer.timeout.connect(spawn_body)
+	add_child(timer)
+	timer.start()
+	
+	var maximum_bodies_supported = func(p_step, p_target, p_monitor):
+		var bodies := p_target.bodies as Array[RigidDynamicBody2D]
+		for body in bodies:
+			if body.position.y > 650:
+				print(\"failed at \" , bodies.size())
+				if bodies.size() >= min_body_expected:
+					p_monitor.next_step()
+				else:
+					p_monitor.failed()
+	
+		if(p_step == 0): 
+			return true
+	
+	var check_max_stability_monitor = create_generic_monitor(self, maximum_bodies_supported, null, simulation_duration, GenericMonitor.STEP_MODE.MANUAL)
+	check_max_stability_monitor.test_name = \"Handle at least %d bodies\" % [min_body_expected]
+
+func spawn_body() -> void:
+	for i in range(10):
+		var body = _get_rigid_body(TOP_LEFT + Vector2(50 + i * 100, 0))
+		bodies.append(body)
+		add_child(body)
+	
+func _get_rigid_body(p_position: Vector2) -> RigidDynamicBody2D:
+	var body = RigidDynamicBody2D.new()
+	var shape = get_collision_shape(Rect2(Vector2(0, 0), body_size))
+	body.add_child(shape)
+	body.position = p_position
+	return body
+"
+
+[node name="maximum_rectangle" type="Node2D"]
+script = SubResource("GDScript_q0og8")

@@ -17,9 +17,6 @@ func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true
 		if p_start:
 			monitor.start()
 
-#func start_test_with_time_limit(p_time_limit):
-#	get_tree().create_timer(p_time_limit).timeout.connect(self.on_test_completed)
-
 func on_monitor_completed() -> void:
 	monitor_completed += 1
 	if monitor_completed == monitors.size():
@@ -46,9 +43,8 @@ func on_test_completed() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		await get_tree().physics_frame
-		await get_tree().physics_frame
-		await get_tree().physics_frame
+		for i in range(5):
+			await get_tree().physics_frame
 		get_tree().quit()
 	else:
 		queue_free()

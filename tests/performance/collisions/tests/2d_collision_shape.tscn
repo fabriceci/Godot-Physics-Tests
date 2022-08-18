@@ -76,9 +76,9 @@ func spawn_body() -> void:
 	add_child(_get_rigid_body(TOP_LEFT + Vector2(950, 0)))
 	body_number += 10
 	
-func _get_rigid_body(p_position: Vector2, p_size := body_size) -> RigidDynamicBody2D:
+func _get_rigid_body(p_position: Vector2) -> RigidDynamicBody2D:
 	var body = RigidDynamicBody2D.new()
-	var shape = get_collision_shape(Rect2(Vector2(0, 0), p_size))
+	var shape = get_collision_shape(Rect2(Vector2(0, 0), body_size))
 	body.add_child(shape)
 	body.position = p_position
 	return body

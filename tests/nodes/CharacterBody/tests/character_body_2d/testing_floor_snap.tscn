@@ -5,6 +5,9 @@ script/source = "extends PhysicsUnitTest2D
 
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
 
+var spawn_position = Vector2(150, 400)
+var speed = 700
+
 func test_description() -> String:
 	return \"\"\"
 	Tests whether the body is firmly attached to the ground when a snap is applied,
@@ -15,32 +18,33 @@ func test_name() -> String:
 	return \"CharacterBody2D | testing floor snap [shape: %s]\" % [shape_name(body_shape)]
 	
 func start() -> void:
-	super() # Setup the camera
+	super() # Print test name
 	var GenericStepMonitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\")
 
 	# C1 start in air, touch the ground until he reach the wall
-	var character1 = create_character(1) # check behaviour without snap
+	var character1 = create_character(1) # checks behaviour without snap
+	character1.position = spawn_position
 	add_child(character1)
 	
-	var c1_test_lambda = func(step, target):
+	var c1_test_lambda = func(step, target, monitor):
 		if step == 0: return not target.is_on_floor()
 		elif step == 1: return target.is_on_floor_only()
 		elif step == 2: return target.is_on_wall()
 		
 	var cbk_lambda = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if is_transition and step == 1:
-			target.velocity.x = 600
+			target.velocity.x = speed
 		
 	var c1_monitor := create_generic_monitor(character1, c1_test_lambda, cbk_lambda)
 	c1_monitor.test_name = \"Snapping works as expected (stick to the floor)\"
 
 	# C2 without snap it should be not stick to the ground
-	var character2 = create_character(2) # check behaviour with snap
-	character2.position.x -= 50
+	var character2 = create_character(2) # checks behaviour with snap
+	character2.position = spawn_position
 	character2.floor_snap_length = 0 # turn off snapping ton confirm different behavior
 	add_child(character2)
 	
-	var c2_test_lambda = func(step, target):
+	var c2_test_lambda = func(step, target, monitor):
 		if step == 0: return not target.is_on_floor()
 		elif step == 1: return target.is_on_floor_only()
 		elif step == 2: return not target.is_on_wall()
@@ -50,11 +54,11 @@ func start() -> void:
 	c2_monitor.test_name = \"Snapping has a different behaviour than without it\"
 	
 	# C3 try to jump with
-	var character3 = create_character(3) # check if the body can jump
-	character3.position.x += 50
+	var character3 = create_character(3) # checks if the body can jump
+	character3.position = spawn_position
 	add_child(character3)
 	
-	var c3_test_lambda = func(step, target):
+	var c3_test_lambda = func(step, target, monitor):
 		if step == 0: return not target.is_on_floor()
 		elif step == 1: return target.is_on_floor_only()
 		elif step == 2: return not target.is_on_floor()
@@ -90,4 +94,5 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(512, 300)
 polygon = PackedVector2Array(-513, -301, -432, -301, -432, 196, -194, 196, -34, 83, 35, 83, 182, 196, 423, 196, 423, -301, 509, -301, 516, 303, -513, 301)

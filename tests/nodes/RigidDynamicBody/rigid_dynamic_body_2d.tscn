@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdg1q6s6cc1oc"]
+
+[ext_resource type="PackedScene" uid="uid://bxrk6vpptw3in" path="res://tests/nodes/RigidDynamicBody/tests/rectangle_stack.tscn" id="1_cclgc"]
+[ext_resource type="PackedScene" uid="uid://3o0nkl6b4h10" path="res://tests/nodes/RigidDynamicBody/tests/maximum_rectangle.tscn" id="2_p0tuo"]
+
+[sub_resource type="GDScript" id="GDScript_mph5e"]
+script/source = "extends TestScene
+
+func test_name() -> String:
+	return \"RigidDynamicBody2D\"
+"
+
+[node name="rigid_dynamic_body_2d" type="Node2D"]
+script = SubResource("GDScript_mph5e")
+
+[node name="rectangle_stack" parent="." instance=ExtResource("1_cclgc")]
+
+[node name="maximum_rectangle" parent="." instance=ExtResource("2_p0tuo")]

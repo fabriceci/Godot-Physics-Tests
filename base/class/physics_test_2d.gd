@@ -3,10 +3,13 @@ extends Node2D
 
 signal completed
 
-var TOP_LEFT := Vector2(-512,-300)
-var BOTTOM_LEFT := Vector2(-512,300)
-var TOP_RIGHT := Vector2(512,-300)
-var BOTTOM_RIGHT := Vector2(512,300)
+var TOP_LEFT := Vector2(0,0)
+var BOTTOM_LEFT := Vector2(0, Global.WINDOW_SIZE.y)
+var TOP_RIGHT := Vector2(Global.WINDOW_SIZE.x, 0)
+var BOTTOM_RIGHT := Vector2(Global.WINDOW_SIZE.x, Global.WINDOW_SIZE.y)
+var CENTER := Global.WINDOW_SIZE/2
+var BOTTOM_CENTER := Vector2(CENTER.x, Global.WINDOW_SIZE.y)
+var TOP_CENTER := Vector2(CENTER.x, 0)
 
 var output := ""
 
@@ -32,16 +35,6 @@ func test_name() -> String:
 	return ""
 
 func start() -> void:
-	# Setup a Camera and Part
-	var has_camera := false
-	for child in get_children():
-		if child is Camera2D:
-			has_camera = true
-	if not has_camera:
-		var camera := Camera2D.new()
-		camera.current = true
-		add_child(camera)
-	
 	output += "[indent] • %s[/indent]\n" % [test_name()]
 
 func test_description() -> String:
@@ -50,11 +43,11 @@ func test_description() -> String:
 func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [1,2,3,4,5,6,7,8,9,10,11,12]):
 	var surfaces: Array[StaticBody2D]= []
 	# Left wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, 600))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, Global.WINDOW_SIZE.y))))
 	# Right wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, 600))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, Global.WINDOW_SIZE.y))))
 	# Bottom Wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(1024, p_width))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(Global.WINDOW_SIZE.x, p_width))))
 	if p_add_ceiling:
 		surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width))))
 	
