@@ -43,7 +43,7 @@ func on_test_completed() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		for i in range(5):
+		for i in range(10):
 			await get_tree().physics_frame
 		get_tree().quit()
 	else:

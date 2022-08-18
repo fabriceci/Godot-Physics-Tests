@@ -3,6 +3,7 @@ extends Node2D
 var request_quit := false
 @export var mode: Global.TEST_MODE = Global.TEST_MODE.REGRESSION
 var runner: TestRunner
+var start_time := 0.0
 
 func _init():
 	runner = TestRunner.new(self)
@@ -15,14 +16,7 @@ func _init():
 			arguments[key_value[0].lstrip("--")] = key_value[1]
 		else: # Options without an argument 
 			arguments[argument.lstrip("--")] = ""
-
-func completed() -> void:
-	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
-		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
-		print_rich("[indent][color=%s]→ PASSED TESTS: %d/%d[/color][/indent]" % [color, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
-	print_rich("[color=orange] > ALL TESTS ARE COMPLETED[/color]")
-	request_quit = true
-
+	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var test_folder := []
@@ -49,14 +43,14 @@ func _ready() -> void:
 			scene.queue_free()
 	
 	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] TESTS FOUNDS[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
+	start_time = Time.get_unix_time_from_system()
 	runner.start()
 
 func _physics_process(_delta: float) -> void:
 	if request_quit:
 		# Sometimes, it goes out before the printing occurs.
-		await get_tree().physics_frame
-		await get_tree().physics_frame
-		await get_tree().physics_frame
+		for i in range(10):
+			await get_tree().physics_frame
 		var error_code = 1 if Global.MONITOR_FAILED > 0 else 0
 		get_tree().quit(error_code)
 
@@ -82,3 +76,13 @@ func find_test(result: Dictionary, folder: String) -> void:
 				if not test_scene_list.is_empty():
 					result[file_name] = test_scene_list
 			file_name = dir.get_next()
+
+func completed() -> void:
+	var duration = Time.get_unix_time_from_system() - start_time
+	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
+		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
+		var status = "FAILED" if Global.MONITOR_FAILED > 0 else "PASSED"
+		print_rich("[color=orange] > COMPLETED IN %.2fs, PASSED TESTS: %d/%d, STATUS: [color=%s]%s[/color]" % [duration, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, color, status])
+	else:
+		print_rich("[color=orange] > COMPLETED IN %.2fs[/color]" % [duration])
+	request_quit = true

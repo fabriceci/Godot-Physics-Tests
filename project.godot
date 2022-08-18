@@ -34,11 +34,6 @@ _global_script_classes=[{
 "language": &"GDScript",
 "path": "res://base/class/physics_unit_test_2d.gd"
 }, {
-"base": "Node",
-"class": &"SceneTest",
-"language": &"GDScript",
-"path": "res://base/test_scene.gd"
-}, {
 "base": "RefCounted",
 "class": &"TestRunner",
 "language": &"GDScript",
@@ -55,7 +50,6 @@ _global_script_class_icons={
 "PhysicsPerformanceTest2D": "",
 "PhysicsTest2D": "",
 "PhysicsUnitTest2D": "",
-"SceneTest": "",
 "TestRunner": "",
 "TestScene": ""
 }
