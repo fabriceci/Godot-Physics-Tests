@@ -29,21 +29,15 @@ func start() -> void:
 	stack.position = BOTTOM_CENTER - Vector2(0, 20 + body_spacing)
 	
 	var bodies_array : Array[RigidDynamicBody2D] = []
-	var body_idx := 0
 	for i in range(stack_height):
-			
 		var body := RigidDynamicBody2D.new()
-		
-		var body_rect := Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size)
-		var body_col: Node2D = get_collision_shape(body_rect, body_shape)
+		var body_col: Node2D = get_collision_shape(Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size), body_shape)
 		body.add_child(body_col)
 		
 		# Spawn the body
 		body.position = Vector2(0, -(body_size.y + body_spacing) * (i+1))
-		body.name = \"Body%d\" % body_idx
 		bodies_array.append(body)
 		stack.add_child(body)
-		body_idx += 1
 	
 	add_child(stack)
 	
