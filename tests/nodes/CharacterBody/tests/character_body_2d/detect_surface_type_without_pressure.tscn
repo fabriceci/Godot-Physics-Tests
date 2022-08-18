@@ -4,7 +4,7 @@
 script/source = "extends PhysicsUnitTest2D
 
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
-@export var body_mode: CharacterBody2D.MotionMode = CharacterBody2D.MOTION_MODE_GROUNDED
+@export var body_mode := CharacterBody2D.MOTION_MODE_GROUNDED
 
 func test_description() -> String:
 	return \"\"\"

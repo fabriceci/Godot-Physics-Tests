@@ -45,6 +45,8 @@ func start() -> void:
 		stack.add_child(body)
 		body_idx += 1
 	
+	add_child(stack)
+	
 	# 1. Should be sleeping
 	var should_be_sleep = func(p_step, p_target, p_monitor):
 		for body in p_monitor.data[\"bodies\"] as Array[RigidDynamicBody2D]:
@@ -67,7 +69,6 @@ func start() -> void:
 	var horizontal_monitor = create_generic_monitor(stack, should_not_move_in_x, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
 	horizontal_monitor.data[\"bodies\"] = bodies_array
 	horizontal_monitor.test_name = \"The bodies did not move horizontally more than %.1f px\" % [tolerance]
-	add_child(stack)
 	
 	# 3. Should be sorted vertically
 	var should_be_sorted_vertically = func(p_step, p_target, p_monitor):
@@ -83,7 +84,6 @@ func start() -> void:
 	var sorted_vertically_monitor = create_generic_monitor(stack, should_be_sorted_vertically, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
 	sorted_vertically_monitor.data[\"bodies\"] = bodies_array
 	sorted_vertically_monitor.test_name = \"The bodies are sorted vertically\"
-	add_child(stack)
 
 	# 4. Only neighboring children overlap
 	var shoud_overlaps_with_neighbours= func(p_step, p_target, p_monitor):
@@ -91,7 +91,6 @@ func start() -> void:
 		for child_idx in bodies.size():
 			var body := bodies[child_idx]
 			for shape_owner_id in body.get_shape_owners():
-				var shape_owner = body.shape_owner_get_owner(shape_owner_id)
 				for shape_id in body.shape_owner_get_shape_count(shape_owner_id):
 					var shape = body.shape_owner_get_shape(shape_owner_id, shape_id)
 					var parameters := PhysicsShapeQueryParameters2D.new()
@@ -99,6 +98,8 @@ func start() -> void:
 					parameters.set_shape(shape)
 					var results = p_target.get_world_2d().direct_space_state.intersect_shape(parameters)
 					for result in results:
+						if not result.collider is RigidDynamicBody2D: # can be the level
+							continue
 						var sibling_idx = bodies.find(result.collider)
 						if sibling_idx == -1 or sibling_idx == child_idx:
 							continue

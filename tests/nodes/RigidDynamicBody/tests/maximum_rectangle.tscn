@@ -3,18 +3,12 @@
 [sub_resource type="GDScript" id="GDScript_q0og8"]
 script/source = "extends PhysicsUnitTest2D
 
-var body_number := 0
 var timer: Timer
 var body_size := Vector2(25, 25)
 var min_body_expected := 520
 var simulation_duration := 15
 
 var bodies := []
-var total_overlap := 0
-var last_size_checked := 0
-var minimal_distance :float = INF
-var average := 0.0
-var cpt := 0
 
 func test_description() -> String:
 	return \"\"\"
@@ -37,11 +31,11 @@ func start() -> void:
 	timer.start()
 	
 	var maximum_bodies_supported = func(p_step, p_target, p_monitor):
-		var bodies := p_target.bodies as Array[RigidDynamicBody2D]
-		for body in bodies:
+		var _bodies := p_target.bodies as Array[RigidDynamicBody2D]
+		for body in _bodies:
 			if body.position.y > 650:
-				print(\"failed at \" , bodies.size())
-				if bodies.size() >= min_body_expected:
+				print(\"failed at \" , _bodies.size())
+				if _bodies.size() >= min_body_expected:
 					p_monitor.next_step()
 				else:
 					p_monitor.failed()

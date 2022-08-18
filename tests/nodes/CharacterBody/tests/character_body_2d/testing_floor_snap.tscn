@@ -19,7 +19,6 @@ func test_name() -> String:
 	
 func start() -> void:
 	super() # Print test name
-	var GenericStepMonitor = load(\"res://base/monitors/generic_auto_step_monitor.gd\")
 
 	# C1 start in air, touch the ground until he reach the wall
 	var character1 = create_character(1) # checks behaviour without snap
