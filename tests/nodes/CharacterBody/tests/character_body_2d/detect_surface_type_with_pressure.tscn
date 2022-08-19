@@ -6,8 +6,7 @@ script/source = "extends PhysicsUnitTest2D
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
 
 func test_description() -> String:
-	return \"\"\"
-	checks that the surface is detected (wall, ground, ceiling), if the body maintains pressure,
+	return \"\"\"Checks that the surface is detected (wall, ground, ceiling), if the body maintains pressure,
 	we should have 2 surfaces detected in the corners and one otherwise.
 	\"\"\"
 
@@ -15,8 +14,6 @@ func test_name() -> String:
 	return \"CharacterBody2D | checks surface detection with pressure [shape: %s]\" % [shape_name(body_shape)]
 
 func start() -> void:
-	super() # Print test name
-
 	add_collision_boundaries(150)
 	
 	# Create character

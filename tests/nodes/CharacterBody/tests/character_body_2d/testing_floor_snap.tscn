@@ -9,8 +9,7 @@ var spawn_position = Vector2(150, 400)
 var speed = 750
 
 func test_description() -> String:
-	return \"\"\"
-	Tests whether the body is firmly attached to the ground when a snap is applied,
+	return \"\"\"Tests whether the body is firmly attached to the ground when a snap is applied,
 	and only when the velocity points downwards.
 	\"\"\"
 
@@ -18,8 +17,6 @@ func test_name() -> String:
 	return \"CharacterBody2D | testing floor snap [shape: %s]\" % [shape_name(body_shape)]
 	
 func start() -> void:
-	super() # Print test name
-
 	# C1 start in air, touch the ground until he reach the wall
 	var character1 = create_character(1) # checks behaviour without snap
 	character1.position = spawn_position

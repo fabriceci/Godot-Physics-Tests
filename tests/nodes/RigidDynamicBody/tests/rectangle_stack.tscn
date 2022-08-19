@@ -12,8 +12,7 @@ var simulation_duration := 9
 var tolerance := 3.3
 
 func test_description() -> String:
-	return \"\"\"
-	checks the stability of the RigidBody Simulation. The stack should be stable and the RigidBody
+	return \"\"\"Checks the stability of the RigidBody Simulation. The stack should be stable and the RigidBody
 	should sleep after the [simulation_duration]
 	\"\"\"
 	
@@ -21,8 +20,6 @@ func test_name() -> String:
 	return \"RigidDynamicBody | checks the box stack stability\"
 
 func start() -> void:
-	super() # Print test name
-	
 	add_collision_boundaries(20, false)
 
 	var stack = Node2D.new()

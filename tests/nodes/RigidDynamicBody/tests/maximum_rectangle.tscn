@@ -11,16 +11,13 @@ var simulation_duration := 15
 var bodies := []
 
 func test_description() -> String:
-	return \"\"\"
-	checks the maximum number of supported rectangles before the simulation goes crazy.
+	return \"\"\"Checks the maximum number of supported rectangles before the simulation goes crazy.
 	\"\"\"
 	
 func test_name() -> String:
 	return \"RigidDynamicBody | checks the maximum amount of rectangles before instablity\"
 
 func start() -> void:
-	super() # Print test name
-	
 	add_collision_boundaries(1, false)
 
 	timer = Timer.new()

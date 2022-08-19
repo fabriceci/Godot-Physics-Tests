@@ -7,8 +7,7 @@ script/source = "extends PhysicsUnitTest2D
 @export var body_mode := CharacterBody2D.MOTION_MODE_GROUNDED
 
 func test_description() -> String:
-	return \"\"\"
-	checks that the surface is detected (wall, ground, ceiling), without pressure, only one surface
+	return \"\"\"Checks that the surface is detected (wall, ground, ceiling), without pressure, only one surface
 	at a time should be detected, and only when the body touches them, not during the movement.
 	Param body_mode: in Floating mode only wall should be detected.
 	\"\"\"
@@ -18,8 +17,6 @@ func test_name() -> String:
 	return \"CharacterBody2D | checks surface detection without pressure [mode: %s, shape: %s]\" % [mode, shape_name(body_shape)]
 
 func start() -> void:
-	super() # Print test name
-
 	add_collision_boundaries(150)
 	
 	# Create character

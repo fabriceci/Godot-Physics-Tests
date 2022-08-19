@@ -44,6 +44,7 @@ func start() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 
 func test_completed(p_messages:= []) -> void:
+	super()
 	for message in p_messages:
 		print_rich("[indent][indent] → %s [/indent][/indent]" % [message])
 	print_rich("[indent][indent] → Min FPS: %d | Max FPS: %d | Average FPS: %d[/indent][/indent]" % [min_fps, max_fps, round(average_fps/fps_frame)])

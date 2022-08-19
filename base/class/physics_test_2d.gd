@@ -3,13 +3,17 @@ extends Node2D
 
 signal completed
 
-var TOP_LEFT := Vector2(0,0)
-var BOTTOM_LEFT := Vector2(0, Global.WINDOW_SIZE.y)
-var TOP_RIGHT := Vector2(Global.WINDOW_SIZE.x, 0)
-var BOTTOM_RIGHT := Vector2(Global.WINDOW_SIZE.x, Global.WINDOW_SIZE.y)
 var CENTER := Global.WINDOW_SIZE/2
-var BOTTOM_CENTER := Vector2(CENTER.x, Global.WINDOW_SIZE.y)
+var CENTER_LEFT := Vector2(0, CENTER.y)
+var CENTER_RIGHT := Vector2(Global.WINDOW_SIZE.x, 0)
+
+var TOP_LEFT := Vector2(0,0)
 var TOP_CENTER := Vector2(CENTER.x, 0)
+var TOP_RIGHT := Vector2(Global.WINDOW_SIZE.x, 0)
+
+var BOTTOM_LEFT := Vector2(0, Global.WINDOW_SIZE.y)
+var BOTTOM_CENTER := Vector2(CENTER.x, Global.WINDOW_SIZE.y)
+var BOTTOM_RIGHT := Vector2(Global.WINDOW_SIZE.x, Global.WINDOW_SIZE.y)
 
 var output := ""
 
@@ -35,7 +39,11 @@ func test_name() -> String:
 	return ""
 
 func start() -> void:
-	output += "[indent] • %s[/indent]\n" % [test_name()]
+	pass
+
+func test_completed() -> void:
+	Global.NB_TESTS_COMPLETED += 1
+	output += "[indent] %d. [b]%s[/b][/indent]\n" % [Global.NB_TESTS_COMPLETED, test_name()]
 
 func test_description() -> String:
 	return ""

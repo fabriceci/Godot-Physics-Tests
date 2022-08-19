@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://37ghly6rw7v2"]
+
+[ext_resource type="PackedScene" uid="uid://cn8t6ijidyv2k" path="res://tests/nodes/CollisionShape/tests/one_way_collision.tscn" id="1_dop01"]
+
+[sub_resource type="GDScript" id="GDScript_71euj"]
+script/source = "extends TestScene
+"
+
+[node name="collision_shape_2d" type="Node2D"]
+script = SubResource("GDScript_71euj")
+
+[node name="one_way_collision" parent="." instance=ExtResource("1_dop01")]

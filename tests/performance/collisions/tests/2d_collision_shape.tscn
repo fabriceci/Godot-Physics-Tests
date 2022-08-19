@@ -23,8 +23,6 @@ func test_name() -> String:
 	return \"2D shape collisions (%s vs %s)\" % [ PhysicsTest2D.TestCollisionShape.keys()[shape1], PhysicsTest2D.TestCollisionShape.keys()[shape2]]
 
 func start() -> void:
-	super()
-	
 	@warning_ignore(integer_division)
 	next_step = maximum_body/test_record_step
 	step_size = next_step
@@ -41,6 +39,7 @@ func start() -> void:
 	timer.timeout.connect(spawn_body)
 	add_child(timer)
 	timer.start()
+	super() # launch the test
 
 func _physics_process(delta: float) -> void:
 	super(delta)

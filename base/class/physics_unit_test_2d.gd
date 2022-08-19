@@ -4,9 +4,6 @@ extends PhysicsTest2D
 var monitors: Array[Monitor]
 var monitor_completed := 0
 
-func start() -> void:
-	super()
-
 func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:
 		monitors.append(monitor)
@@ -20,9 +17,16 @@ func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true
 func on_monitor_completed() -> void:
 	monitor_completed += 1
 	if monitor_completed == monitors.size():
-		on_test_completed()
+		test_completed()
 
-func on_test_completed() -> void:
+func test_completed() -> void:
+	super()
+	var contain_error = false
+	for monitor in monitors:
+		if not contain_error and not monitor.call("is_test_passed"):
+			contain_error = true
+			output += "\t\t > %s" % [test_description()]
+	
 	for monitor in monitors:
 		if monitor.has_method("is_test_passed"):
 			var passed:bool = monitor.call("is_test_passed")
@@ -30,10 +34,11 @@ func on_test_completed() -> void:
 				Global.MONITOR_PASSED += 1
 			else:
 				Global.MONITOR_FAILED += 1
+
 			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if not passed and monitor.error_message != "" :
-				output += "[color=red][indent][indent] %s [/indent][/indent][/color]" % [monitor.error_message]
+				output += "[color=red][indent][indent] %s [/indent][/indent][/color]\n" % [monitor.error_message]
 		elif monitor.has_method("get_score"):
 			output += "[indent][indent] → %s : score [b]%f[/b][/indent][/indent]\n" % [monitor.monitor_name(), monitor.call("get_score")]
 		else:

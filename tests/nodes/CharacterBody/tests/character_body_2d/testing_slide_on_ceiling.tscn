@@ -8,8 +8,7 @@ var jump_force := -1200
 var spawn_position := Vector2(280, 320)
 
 func test_description() -> String:
-	return \"\"\"
-	Testing slide on ceiling, when turn ON, the body will slide on the ceiling (position.x will change),
+	return \"\"\"Testing slide on ceiling, when turn ON, the body will slide on the ceiling (position.x will change),
 	and when it's off, the body should not have this position.x be changed.
 	\"\"\"
 
@@ -17,8 +16,6 @@ func test_name() -> String:
 	return \"CharacterBody2D | testing slide on ceiling [shape: %s]\" % [shape_name(body_shape)]
 	
 func start() -> void:
-	super() # Print test name
-
 	# C1 Jump in the ceiling and expect to move in x
 	var character1 = create_character(1)
 	character1.slide_on_ceiling = true
