@@ -64,17 +64,13 @@ func find_test(result: Dictionary, folder: String) -> void:
 	
 		while file_name != "":
 			var test_dir =  Directory.new()
-			# Godot BUG ? - [get_current_dir()] don't end with "/" on Windows
-			var add_slash = ""
-			if not dir.get_current_dir().ends_with("/"):
-				add_slash = "/"
-			var dir_path = (dir.get_current_dir() + add_slash + file_name)
+			var dir_path = dir.get_current_dir().plus_file(file_name)
 			if test_dir.open(dir_path) == OK:
 				test_dir.list_dir_begin()
 				var test_file_name = test_dir.get_next()
 				var test_scene_list = []
 				while test_file_name != "":
-					var test_path = test_dir.get_current_dir() + "/" + test_file_name
+					var test_path = test_dir.get_current_dir().plus_file(test_file_name)
 					if test_path.ends_with(".tscn"):
 						test_scene_list.append(test_path)
 					test_file_name = test_dir.get_next()
