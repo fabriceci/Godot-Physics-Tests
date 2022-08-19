@@ -5,7 +5,7 @@ script/source = "extends PhysicsUnitTest2D
 
 var timer: Timer
 var body_size := Vector2(25, 25)
-var min_body_expected := 520
+var min_body_expected := 480
 var simulation_duration := 15
 
 var bodies := []
@@ -34,6 +34,7 @@ func start() -> void:
 		var _bodies := p_target.bodies as Array[RigidDynamicBody2D]
 		for body in _bodies:
 			if body.position.y > 650:
+				p_target.timer.stop()
 				p_monitor.test_name += \" → [color=orange]failed at %d[/color]\" % [_bodies.size()]
 				if _bodies.size() >= min_body_expected:
 					p_monitor.passed()

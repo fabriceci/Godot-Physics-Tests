@@ -36,7 +36,7 @@ func _ready() -> void:
 	
 	for key in result:
 		for scene_file in result[key]:
-			var scene: TestScene = load(scene_file).instantiate()			
+			var scene: TestScene = load(scene_file).instantiate()	
 			for child in scene.get_children():
 				if child is PhysicsTest2D:
 					runner.add_test(child)
@@ -64,7 +64,12 @@ func find_test(result: Dictionary, folder: String) -> void:
 	
 		while file_name != "":
 			var test_dir =  Directory.new()
-			if test_dir.open(dir.get_current_dir() + file_name) == OK:
+			# Godot BUG ? - [get_current_dir()] don't end with "/" on Windows
+			var add_slash = ""
+			if not dir.get_current_dir().ends_with("/"):
+				add_slash = "/"
+			var dir_path = (dir.get_current_dir() + add_slash + file_name)
+			if test_dir.open(dir.get_current_dir() + "/" + file_name) == OK:
 				test_dir.list_dir_begin()
 				var test_file_name = test_dir.get_next()
 				var test_scene_list = []
