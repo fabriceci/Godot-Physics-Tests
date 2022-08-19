@@ -49,8 +49,14 @@ func on_test_completed() -> void:
 	else:
 		queue_free()
 
-func create_generic_monitor(p_target: Node, p_test_step_lamba,  p_cbk_lambda = null, p_maximum_duration := 5.0, p_mode = GenericMonitor.STEP_MODE.AUTO, p_auto_start:= true) -> GenericMonitor:
+func create_generic_monitor(p_target: Node, p_test_step_lamba,  p_cbk_lambda = null, p_maximum_duration := 5.0, p_auto_start:= true,  p_mode = GenericMonitor.STEP_MODE.AUTO) -> GenericMonitor:
 	var instance = load("res://base/monitors/generic_monitor.gd").new()
 	register_monitors([instance as Monitor], p_target, p_auto_start)
 	instance.setup(p_test_step_lamba, p_cbk_lambda, p_maximum_duration, p_mode)
 	return instance
+
+func create_generic_manual_monitor(p_target: Node, p_test_lamba, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericMonitor:
+	return create_generic_monitor(p_target, p_test_lamba, null, p_maximum_duration, p_auto_start, GenericMonitor.STEP_MODE.MANUAL)
+
+func create_generic_expiration_monitor(p_target: Node, p_test_lamba, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericMonitor:
+	return create_generic_monitor(p_target, p_test_lamba, null, p_maximum_duration, p_auto_start, GenericMonitor.STEP_MODE.EXPIRATION)

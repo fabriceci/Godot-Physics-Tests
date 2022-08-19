@@ -34,16 +34,13 @@ func start() -> void:
 		var _bodies := p_target.bodies as Array[RigidDynamicBody2D]
 		for body in _bodies:
 			if body.position.y > 650:
-				print(\"failed at \" , _bodies.size())
+				p_monitor.test_name += \" → [color=orange]failed at %d[/color]\" % [_bodies.size()]
 				if _bodies.size() >= min_body_expected:
-					p_monitor.next_step()
+					p_monitor.passed()
 				else:
 					p_monitor.failed()
 	
-		if(p_step == 0): 
-			return true
-	
-	var check_max_stability_monitor = create_generic_monitor(self, maximum_bodies_supported, null, simulation_duration, GenericMonitor.STEP_MODE.MANUAL)
+	var check_max_stability_monitor = create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = \"Handle at least %d bodies\" % [min_body_expected]
 
 func spawn_body() -> void:

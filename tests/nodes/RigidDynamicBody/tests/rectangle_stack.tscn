@@ -48,7 +48,7 @@ func start() -> void:
 				return false
 		return true
 	
-	var sleep_monitor = create_generic_monitor(stack, should_be_sleep, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var sleep_monitor = create_generic_expiration_monitor(stack, should_be_sleep, simulation_duration)
 	sleep_monitor.data[\"bodies\"] = bodies_array
 	sleep_monitor.test_name = \"The bodies are sleeping\"
 	
@@ -60,7 +60,7 @@ func start() -> void:
 				return false
 		return true
 		
-	var horizontal_monitor = create_generic_monitor(stack, should_not_move_in_x, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var horizontal_monitor = create_generic_expiration_monitor(stack, should_not_move_in_x, simulation_duration)
 	horizontal_monitor.data[\"bodies\"] = bodies_array
 	horizontal_monitor.test_name = \"The bodies did not move horizontally more than %.1f px\" % [tolerance]
 	
@@ -75,7 +75,7 @@ func start() -> void:
 				return false
 		return true
 		
-	var sorted_vertically_monitor = create_generic_monitor(stack, should_be_sorted_vertically, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var sorted_vertically_monitor = create_generic_expiration_monitor(stack, should_be_sorted_vertically, simulation_duration)
 	sorted_vertically_monitor.data[\"bodies\"] = bodies_array
 	sorted_vertically_monitor.test_name = \"The bodies are sorted vertically\"
 
@@ -101,7 +101,7 @@ func start() -> void:
 							return false
 		return true
 		
-	var overlaps_with_neighbours_monitor = create_generic_monitor(stack, shoud_overlaps_with_neighbours, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var overlaps_with_neighbours_monitor = create_generic_expiration_monitor(stack, shoud_overlaps_with_neighbours, simulation_duration)
 	overlaps_with_neighbours_monitor.data[\"bodies\"] = bodies_array
 	overlaps_with_neighbours_monitor.test_name = \"Only neighboring children overlap\"
 	

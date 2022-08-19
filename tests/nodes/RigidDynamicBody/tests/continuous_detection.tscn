@@ -6,6 +6,7 @@ script/source = "extends PhysicsUnitTest2D
 var speed := 25000
 var simulation_duration := 1
 
+
 func test_description() -> String:
 	return \"\"\"
 	Checks if the Continuous Collision Detection (CCD) is working, it must ensure that moving
@@ -56,23 +57,27 @@ func start() -> void:
 		else:
 			return p_target.position.y <= horizontal_wall.position.y # good
 	
-	var x_no_ccd_monitor = create_generic_monitor(rigid_x_ccd_disabled, x_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var x_no_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_disabled, x_lambda, simulation_duration)
 	x_no_ccd_monitor.test_name = \"Rigid moving in x without CCD pass through the wall\"
 
-	var x_ray_ccd_monitor = create_generic_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var x_ray_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, simulation_duration)
 	x_ray_ccd_monitor.test_name = \"Rigid moving in x without CCD Ray does not pass through the wall\"
 	
-	var x_shape_ccd_monitor = create_generic_monitor(rigid_x_ccd_shape, x_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var x_shape_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_shape, x_lambda, simulation_duration)
 	x_shape_ccd_monitor.test_name = \"Rigid moving in x without CCD Cast shape does not pass through the wall\"
 	
-	var y_no_ccd_monitor = create_generic_monitor(rigid_y_ccd_disabled, y_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var y_no_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_disabled, y_lambda, simulation_duration)
 	y_no_ccd_monitor.test_name = \"Rigid moving in y without CCD pass through the wall\"
 
-	var y_ray_ccd_monitor = create_generic_monitor(rigid_y_ccd_ray, y_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var y_ray_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_ray, y_lambda, simulation_duration)
 	y_ray_ccd_monitor.test_name = \"Rigid moving in y without CCD Ray does not pass through the wall\"
 	
-	var y_shape_ccd_monitor = create_generic_monitor(rigid_y_ccd_shape, y_lambda, null, simulation_duration, GenericMonitor.STEP_MODE.ONE_AT_EXPIRATION)
+	var y_shape_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_shape, y_lambda, simulation_duration)
 	y_shape_ccd_monitor.test_name = \"Rigid moving in y without CCD Cast shape does not pass through the wall\"
+	
+	process_mode = Node.PROCESS_MODE_DISABLED # to be able to see something
+	await get_tree().create_timer(.5).timeout
+	process_mode = Node.PROCESS_MODE_INHERIT
 
 func create_rigid_body(p_ccd_mode: RigidDynamicBody2D.CCDMode, p_horizontal := true, p_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CIRCLE) -> RigidDynamicBody2D:
 	
