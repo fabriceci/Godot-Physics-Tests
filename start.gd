@@ -69,7 +69,7 @@ func find_test(result: Dictionary, folder: String) -> void:
 			if not dir.get_current_dir().ends_with("/"):
 				add_slash = "/"
 			var dir_path = (dir.get_current_dir() + add_slash + file_name)
-			if test_dir.open(dir.get_current_dir() + "/" + file_name) == OK:
+			if test_dir.open(dir_path) == OK:
 				test_dir.list_dir_begin()
 				var test_file_name = test_dir.get_next()
 				var test_scene_list = []
@@ -80,6 +80,10 @@ func find_test(result: Dictionary, folder: String) -> void:
 					test_file_name = test_dir.get_next()
 				if not test_scene_list.is_empty():
 					result[file_name] = test_scene_list
+			else:
+				print_rich("[color:red]Failed to open the directory: [/color] % [dir_path]")
+				@warning_ignore(assert_always_false)
+				assert(false, "Failed to read the directory")
 			file_name = dir.get_next()
 
 func completed() -> void:
