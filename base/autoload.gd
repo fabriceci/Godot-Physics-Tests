@@ -16,3 +16,6 @@ var VERBOSE := false
 var NB_TESTS_COMPLETED := 0
 var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
+
+func _ready() -> void:
+	get_tree().debug_collisions_hint = true
