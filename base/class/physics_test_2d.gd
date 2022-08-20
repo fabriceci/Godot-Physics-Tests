@@ -23,10 +23,10 @@ enum TestCollisionShape {
 	CAPSULE = PhysicsServer2D.SHAPE_CAPSULE,
 	CONCAVE_POLYGON = PhysicsServer2D.SHAPE_CONCAVE_POLYGON,
 	CONVEX_POLYGON = PhysicsServer2D.SHAPE_CONVEX_POLYGON,
-	COLLISION_POLYGON_2D,
 	RECTANGLE = PhysicsServer2D.SHAPE_RECTANGLE,
-	WORLD_BOUNDARY = PhysicsServer2D.SHAPE_WORLD_BOUNDARY,
-	CIRCLE = PhysicsServer2D.SHAPE_CIRCLE
+	CIRCLE = PhysicsServer2D.SHAPE_CIRCLE,
+#	WORLD_BOUNDARY = PhysicsServer2D.SHAPE_WORLD_BOUNDARY,
+	CONCAVE_SEGMENT = 100
 }
 
 func _ready() -> void:
@@ -48,16 +48,16 @@ func test_completed() -> void:
 func test_description() -> String:
 	return ""
 
-func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [1,2,3,4,5,6,7,8,9,10,11,12]):
+func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]):
 	var surfaces: Array[StaticBody2D]= []
 	# Left wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, Global.WINDOW_SIZE.y))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, Global.WINDOW_SIZE.y)), TestCollisionShape.RECTANGLE, true))
 	# Right wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, Global.WINDOW_SIZE.y))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_RIGHT - Vector2(p_width,0), Vector2(p_width, Global.WINDOW_SIZE.y)), TestCollisionShape.RECTANGLE, true))
 	# Bottom Wall
-	surfaces.append(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(Global.WINDOW_SIZE.x, p_width))))
+	surfaces.append(get_static_body_with_collision_shape(Rect2(BOTTOM_LEFT - Vector2(0,p_width), Vector2(Global.WINDOW_SIZE.x, p_width)), TestCollisionShape.RECTANGLE, true))
 	if p_add_ceiling:
-		surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width))))
+		surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(1024, p_width)), TestCollisionShape.RECTANGLE, true))
 	
 	for wall in surfaces:
 		wall.collision_layer = 0
@@ -67,60 +67,83 @@ func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [
 			wall.set_collision_mask_value(layer, true)
 		add_child(wall)
 
-static func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE) -> StaticBody2D:
+static func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE, p_top_left_position := false) -> StaticBody2D:
 	var body = StaticBody2D.new()
 	body.position = Vector2(0, 0)
-	var body_col = get_collision_shape(p_shape_definition, p_shape_type)
+	var body_col = get_collision_shape(p_shape_definition, p_shape_type, p_top_left_position)
 	body.add_child(body_col)
 	return body
 	
 # Get CollisionShape2D or CollisionPolygon2D that fits in the rectangle.
-static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE) -> Node2D:
+static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE, p_top_left_position := false) -> Node2D:
+	if p_top_left_position and not p_shape_type in [TestCollisionShape.CIRCLE, TestCollisionShape.RECTANGLE]:
+		@warning_ignore(assert_always_false)
+		assert(false, "Top left position not supported for this shape")
 	var col = null
-	if p_shape_type == PhysicsServer2D.SHAPE_CAPSULE:
+	if p_shape_type == TestCollisionShape.CAPSULE:
 		assert(p_shape_definition is Vector2, "Shape definition for a Capsule must be a Vector2")
 		col = CollisionShape2D.new()
 		col.shape = CapsuleShape2D.new()
 		col.shape.radius = p_shape_definition.x
 		col.shape.height = p_shape_definition.y
-	elif p_shape_type == PhysicsServer2D.SHAPE_CIRCLE:
+	elif p_shape_type == TestCollisionShape.CIRCLE:
 		assert(p_shape_definition is float, "Shape definition for a Circle must be a float")
 		col = CollisionShape2D.new()
 		col.shape = CircleShape2D.new()
 		col.shape.radius = p_shape_definition
-	elif p_shape_type == PhysicsServer2D.SHAPE_CONCAVE_POLYGON:
-		assert(p_shape_definition is PackedVector2Array, "Shape definition for a Concave Polygon must be a PackedVector2Array")
-		col.shape = ConcavePolygonShape2D.new()
-		col.shape.segments = p_shape_definition
-	elif p_shape_type == PhysicsServer2D.SHAPE_CONVEX_POLYGON:
-		assert(p_shape_definition is PackedVector2Array, "Shape definition for a Concave Polygon must be a PackedVector2Array")
-		col.shape = ConvexPolygonShape2D.new()
-		col.shape.segments = p_shape_definition
-	elif p_shape_type == TestCollisionShape.COLLISION_POLYGON_2D:
+		if p_top_left_position:
+			col.position = p_shape_definition.position + Vector2(p_shape_definition, p_shape_definition)
+	elif p_shape_type == TestCollisionShape.CONCAVE_POLYGON:
 		assert(p_shape_definition is PackedVector2Array, "Shape definition for a Concave Polygon must be a PackedVector2Array")
 		col = CollisionPolygon2D.new()
 		col.polygon = p_shape_definition
-		col.build_mode = CollisionPolygon2D.BUILD_SOLIDS
-	elif p_shape_type == PhysicsServer2D.SHAPE_RECTANGLE:
+	elif p_shape_type == TestCollisionShape.CONCAVE_SEGMENT:
+		assert(p_shape_definition is PackedVector2Array, "Shape definition for a Concave Polygon must be a PackedVector2Array")
+		col = CollisionShape2D.new()
+		col.shape = ConcavePolygonShape2D.new()
+		col.shape.segments = p_shape_definition
+	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON:
+		assert(p_shape_definition is PackedVector2Array, "Shape definition for a Concave Polygon must be a PackedVector2Array")
+		col = CollisionPolygon2D.new()
+		col.polygon = p_shape_definition
+	elif p_shape_type == TestCollisionShape.RECTANGLE:
 		assert(p_shape_definition is Rect2, "Shape definition for a Rectangle must be a Rect2")
 		col = CollisionShape2D.new()
 		col.shape = RectangleShape2D.new()
 		col.shape.size = p_shape_definition.size
-		col.position = p_shape_definition.position + 0.5 * p_shape_definition.size # top left position
+		if p_top_left_position:
+			col.position = p_shape_definition.position + 0.5 * p_shape_definition.size
 	return col
 
-static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1):
+static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	return get_collision_shape(get_default_shape_definition(p_shape_type, p_scale), p_shape_type)
 	
-static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1):
-	if p_shape_type == PhysicsServer2D.SHAPE_RECTANGLE:
-		return Rect2(0, 0, 25, 25)
-	if p_shape_type == PhysicsServer2D.SHAPE_CIRCLE:
+static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
+	if p_shape_type == TestCollisionShape.RECTANGLE:
+		return Rect2(0, 0, 25 * p_scale, 25 * p_scale)
+	if p_shape_type == TestCollisionShape.CIRCLE:
 		return 10.0 * p_scale
-	if p_shape_type == PhysicsServer2D.SHAPE_CAPSULE:
-		return Vector2(5,20) * p_scale
-	if p_shape_type == PhysicsServer2D.SHAPE_CONVEX_POLYGON or p_shape_type == PhysicsServer2D.SHAPE_CONCAVE_POLYGON or p_shape_type == TestCollisionShape.COLLISION_POLYGON_2D:
-		return PackedVector2Array([Vector2(0,0) * p_scale, Vector2(0,20) * p_scale, Vector2(20,20) * p_scale, Vector2(20,0) * p_scale, Vector2(0, 0) * p_scale]) 
+	if p_shape_type == TestCollisionShape.CAPSULE:
+		return Vector2(6,20) * p_scale
+	if p_shape_type == TestCollisionShape.CONCAVE_POLYGON:
+		var concave: PackedVector2Array = []
+		for v in concave_array():
+			concave.append(v * p_scale)
+		return concave
+	if p_shape_type == TestCollisionShape.CONCAVE_SEGMENT:
+		var concave: PackedVector2Array = []
+		for v in concave_array():
+			concave.append(v * p_scale)
+			if v != concave_array()[0]:
+				concave.append(v * p_scale)
+		concave.append(concave_array()[0] * p_scale)
+		return concave
+	if p_shape_type == TestCollisionShape.CONVEX_POLYGON:
+		var convex: PackedVector2Array = []
+		for v in convex_array():
+			convex.append(v * p_scale)
+		return convex
+	
 	@warning_ignore(assert_always_false)
 	assert(false, "No default shape for this shape type")
 
@@ -128,12 +151,44 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 	match p_shape_type:
 		TestCollisionShape.CAPSULE: return "Capsule"
 		TestCollisionShape.CONCAVE_POLYGON: return "Concave Polygon"
+		TestCollisionShape.CONCAVE_SEGMENT: return "Concave Segment"
 		TestCollisionShape.CONVEX_POLYGON: return "Convex Polygon"
-		TestCollisionShape.COLLISION_POLYGON_2D: return "Collision Polygon 2D"
 		TestCollisionShape.RECTANGLE: return "Rectangle"
-		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
+#		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
 		TestCollisionShape.CIRCLE: return "Circle"
 		_:
 			@warning_ignore(assert_always_false)
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
+
+static func concave_array():
+	return [
+		Vector2(6.0, -10.0),
+		Vector2(1.0, -1.0),
+		Vector2(10.0, -6.0),
+		Vector2(10.0, 6.0),
+		Vector2(1.0, 1.0),
+		Vector2(6.0, 10.0),
+		Vector2(-6.0, 10.0),
+		Vector2(-1.0, 1.0),
+		Vector2(-10.0, 6.0),
+		Vector2(-10.0, -6.0),
+		Vector2(-1.0, -1.0),
+		Vector2(-6.0, -10.0),
+	]
+
+static func convex_array():
+	return [
+		Vector2(0.0, -11.0),
+		Vector2(5.0, -9.0),
+		Vector2(10.0, -5.0),
+		Vector2(11.0, 0.0),
+		Vector2(10.0, 5.0),
+		Vector2(5.0, 9.0),
+		Vector2(0.0, 11.0),
+		Vector2(-5.0, 9.0),
+		Vector2(-10.0, 5.0),
+		Vector2(-11.0, 0.0),
+		Vector2(-10.0, -5.0),
+		Vector2(-5.0, -9.0),
+]

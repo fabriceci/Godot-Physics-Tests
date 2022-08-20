@@ -86,8 +86,8 @@ script = SubResource("GDScript_fmuy2")
 body_shape = 4
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_layer = 7
-collision_mask = 7
+collision_layer = 65535
+collision_mask = 65535
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 0, 80, 0, 80, 496, 318, 496, 478, 383, 547, 383, 700, 496, 944, 496, 944, 0, 1024, 0, 1024, 600, 0, 600)

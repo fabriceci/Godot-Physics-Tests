@@ -4,9 +4,6 @@
 
 [sub_resource type="GDScript" id="GDScript_dted5"]
 script/source = "extends TestScene
-
-func test_name() -> String:
-	return \"2D Collission test\"	
 "
 
 [node name="Scene" type="Node2D"]

@@ -64,3 +64,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://base/autoload.gd"
+
+[display]
+
+window/size/resizable=false

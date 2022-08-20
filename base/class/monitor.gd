@@ -6,6 +6,7 @@ var monitor_duration := 0.0
 var monitor_maximum_duration := 10.0
 var error_message := ""
 var success := false
+var started := false
 
 var text: String:
 	set(value):
@@ -16,6 +17,7 @@ func _init() -> void:
 
 func start() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
+	started = true
 
 func is_test_passed() -> bool:
 	return success

@@ -34,7 +34,7 @@ func test_completed() -> void:
 				Global.MONITOR_PASSED += 1
 			else:
 				Global.MONITOR_FAILED += 1
-
+			
 			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if not passed and monitor.error_message != "" :
@@ -48,9 +48,7 @@ func test_completed() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		for i in range(10):
-			await get_tree().physics_frame
-		get_tree().quit()
+		Global.exit()
 	else:
 		queue_free()
 

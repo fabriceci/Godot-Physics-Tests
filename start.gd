@@ -1,6 +1,5 @@
 extends Node2D
 
-var request_quit := false
 @export var mode: Global.TEST_MODE = Global.TEST_MODE.REGRESSION
 var runner: TestRunner
 var start_time := 0.0
@@ -42,17 +41,9 @@ func _ready() -> void:
 					runner.add_test(child)
 			scene.queue_free()
 	
-	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] TESTS FOUNDS[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
+	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] SCENES FOUND[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
 	start_time = Time.get_unix_time_from_system()
 	runner.start()
-
-func _physics_process(_delta: float) -> void:
-	if request_quit:
-		# Sometimes, it goes out before the printing occurs.
-		for i in range(10):
-			await get_tree().physics_frame
-		var error_code = 1 if Global.MONITOR_FAILED > 0 else 0
-		get_tree().quit(error_code)
 
 func find_test(result: Dictionary, folder: String) -> void:
 	var dir = Directory.new()
@@ -90,4 +81,6 @@ func completed() -> void:
 		print_rich("[color=orange] > COMPLETED IN %.2fs, PASSED MONITORS: %d/%d, STATUS: [color=%s]%s[/color]" % [duration, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, color, status])
 	else:
 		print_rich("[color=orange] > COMPLETED IN %.2fs[/color]" % [duration])
-	request_quit = true
+
+	var error_code = 1 if Global.MONITOR_FAILED > 0 else 0
+	Global.exit(error_code)

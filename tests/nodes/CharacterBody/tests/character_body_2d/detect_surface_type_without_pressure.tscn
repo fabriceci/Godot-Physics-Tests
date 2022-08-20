@@ -3,33 +3,20 @@
 [sub_resource type="GDScript" id="GDScript_agr36"]
 script/source = "extends PhysicsUnitTest2D
 
-@export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
 @export var body_mode := CharacterBody2D.MOTION_MODE_GROUNDED
 
 func test_description() -> String:
-	return \"\"\"Checks that the surface is detected (wall, ground, ceiling), without pressure, only one surface
-	at a time should be detected, and only when the body touches them, not during the movement.
-	Param body_mode: in Floating mode only wall should be detected.
+	return \"\"\"Checks that the surface is detected (wall, ground, ceiling), without constant preessure,
+	only one surface at a time should be detected, and only when the body touches them, not during the movement.
+	Param [body_mode]: in Floating mode only wall should be detected.
 	\"\"\"
 	
 func test_name() -> String:
 	var mode = \"Grounded\" if body_mode == CharacterBody2D.MOTION_MODE_GROUNDED else \"Floating\"
-	return \"CharacterBody2D | checks surface detection without pressure [mode: %s, shape: %s]\" % [mode, shape_name(body_shape)]
+	return \"CharacterBody2D | checks surface detection when the body don't push against the wall [mode=S]\" % [mode]
 
 func start() -> void:
 	add_collision_boundaries(150)
-	
-	# Create character
-	var character = CharacterBody2D.new()
-	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd\")
-	character.motion_mode = body_mode
-	character.position = CENTER
-	
-	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
-	character.add_child(body_col)
-	character.velocity = Vector2(500,0)
-	
-	add_child(character)
 	
 	# checks all collision type
 	var test_lambda
@@ -64,9 +51,29 @@ func start() -> void:
 		elif step == 3: target.velocity = Vector2(-500, 0) # left
 		elif step == 5: target.velocity = Vector2(0, 500) # down
 		elif step == 7: target.velocity = Vector2(500, 0) # right
-	
-	var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda)
-	contact_monitor.test_name = \"checks detection of wall, floor and ceiling without pressure\"
+
+	var cpt_layer := 1
+	for shape_type in PhysicsTest2D.TestCollisionShape.values():
+		# Create character
+		var character = CharacterBody2D.new()
+		character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd\")
+		character.motion_mode = body_mode
+		character.position = CENTER
+		character.collision_layer = 0
+		character.collision_mask = 0
+		character.set_collision_layer_value(cpt_layer, true)
+		character.set_collision_mask_value(cpt_layer, true)
+		
+		var body_col: Node2D = get_default_collision_shape(shape_type, 2)
+		character.add_child(body_col)
+		character.velocity = Vector2(500,0)
+		
+		add_child(character)
+
+		var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda)
+		contact_monitor.test_name = \"%s detects collisions correctly\" % [shape_name(shape_type)]
+		
+		cpt_layer += 1
 "
 
 [node name="detect_wall_type_without_pressure" type="Node2D"]

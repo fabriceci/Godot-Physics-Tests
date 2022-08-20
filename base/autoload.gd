@@ -18,4 +18,9 @@ var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
 
 func _ready() -> void:
+	get_tree().set_auto_accept_quit(false)
 	get_tree().debug_collisions_hint = true
+
+func exit(p_code := 0) -> void:
+	await get_tree().create_timer(1).timeout # sometimes the application quits before printing everything in the output
+	get_tree().quit(p_code)
