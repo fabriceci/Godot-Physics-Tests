@@ -6,12 +6,11 @@ script/source = "extends PhysicsUnitTest2D
 var simulation_duration := 2 
 
 func test_description() -> String:
-	return \"\"\"Checks if [One Way Collision] works properly, it must only collide on the edge
-	that face up (relative to CollisionPolygon2D's rotation).
-	\"\"\"
+	return \"\"\"Checks that 2D collisions work correctly with all parameters [exclude_parent],
+	[hit_from_inside], [enabled]\"\"\"
 	
 func test_name() -> String:
-	return \"CollisionShape2D | checks if [One Way Collision] works\"
+	return \"CollisionShape2D | testing Raycast2D collision\"
 
 func start() -> void:
 

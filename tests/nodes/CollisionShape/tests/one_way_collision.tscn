@@ -12,10 +12,10 @@ func test_description() -> String:
 	\"\"\"
 	
 func test_name() -> String:
-	return \"CollisionShape2D | checks if [One Way Collision] works\"
+	return \"CollisionShape2D | testing [One Way Collision]\"
 
 func start() -> void:
-	var wall_on_way = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(Global.WINDOW_SIZE.x/2,20)))
+	var wall_on_way = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(Global.WINDOW_SIZE.x/2,20)), TestCollisionShape.RECTANGLE, true)
 	wall_on_way.position = CENTER_LEFT
 	var collision_shape: CollisionShape2D = wall_on_way.get_child(0)
 	collision_shape.one_way_collision = true

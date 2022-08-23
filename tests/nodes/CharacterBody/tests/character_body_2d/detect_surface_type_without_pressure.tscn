@@ -3,7 +3,9 @@
 [sub_resource type="GDScript" id="GDScript_agr36"]
 script/source = "extends PhysicsUnitTest2D
 
-@export var body_mode := CharacterBody2D.MOTION_MODE_GROUNDED
+@export var body_mode : CharacterBody2D.MotionMode = CharacterBody2D.MOTION_MODE_GROUNDED
+var speed := 1500
+var simulation_duration := 2.0
 
 func test_description() -> String:
 	return \"\"\"Checks that the surface is detected (wall, ground, ceiling), without constant preessure,
@@ -13,7 +15,7 @@ func test_description() -> String:
 	
 func test_name() -> String:
 	var mode = \"Grounded\" if body_mode == CharacterBody2D.MOTION_MODE_GROUNDED else \"Floating\"
-	return \"CharacterBody2D | checks surface detection when the body don't push against the wall [mode=S]\" % [mode]
+	return \"CharacterBody2D | testing surface detection when the body don't push against the surface [mode=%s]\" % [mode]
 
 func start() -> void:
 	add_collision_boundaries(150)
@@ -46,11 +48,11 @@ func start() -> void:
 	var cbk_lambda = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if not is_transition: 
 			return
-		if step == 0: target.velocity = Vector2(500, 0) # right
-		elif step == 1: target.velocity = Vector2(0, -500) # up 
-		elif step == 3: target.velocity = Vector2(-500, 0) # left
-		elif step == 5: target.velocity = Vector2(0, 500) # down
-		elif step == 7: target.velocity = Vector2(500, 0) # right
+		if step == 0: target.velocity = Vector2(speed, 0) # right
+		elif step == 1: target.velocity = Vector2(0, -speed) # up 
+		elif step == 3: target.velocity = Vector2(-speed, 0) # left
+		elif step == 5: target.velocity = Vector2(0, speed) # down
+		elif step == 7: target.velocity = Vector2(speed, 0) # right
 
 	var cpt_layer := 1
 	for shape_type in PhysicsTest2D.TestCollisionShape.values():
@@ -66,11 +68,10 @@ func start() -> void:
 		
 		var body_col: Node2D = get_default_collision_shape(shape_type, 2)
 		character.add_child(body_col)
-		character.velocity = Vector2(500,0)
 		
 		add_child(character)
 
-		var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda)
+		var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda, simulation_duration)
 		contact_monitor.test_name = \"%s detects collisions correctly\" % [shape_name(shape_type)]
 		
 		cpt_layer += 1
