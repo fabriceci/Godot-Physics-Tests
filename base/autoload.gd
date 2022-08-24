@@ -17,8 +17,11 @@ var NB_TESTS_COMPLETED := 0
 var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
 
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("ui_cancel"):
+		exit()
+
 func _ready() -> void:
-	get_tree().set_auto_accept_quit(false)
 	get_tree().debug_collisions_hint = true
 
 func exit(p_code := 0) -> void:

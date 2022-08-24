@@ -6,14 +6,13 @@ script/source = "extends PhysicsUnitTest2D
 var speed := 25000
 var simulation_duration := 1
 
-
 func test_description() -> String:
 	return \"\"\"Checks if the Continuous Collision Detection (CCD) is working, it must ensure that moving
 	objects does not go through objects (tunnelling).
 	\"\"\"
 	
 func test_name() -> String:
-	return \"RigidDynamicBody | checks if the Continuous Collision Detection (CCD)\"
+	return \"RigidDynamicBody | testing Continuous Collision Detection (CCD)\"
 
 func start() -> void:
 	var vertical_wall = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y/2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
@@ -77,7 +76,6 @@ func start() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 
 func create_rigid_body(p_ccd_mode: RigidDynamicBody2D.CCDMode, p_horizontal := true, p_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CIRCLE) -> RigidDynamicBody2D:
-	
 	var player = RigidDynamicBody2D.new()
 	player.add_child(get_default_collision_shape(p_shape))
 	player.gravity_scale = 0

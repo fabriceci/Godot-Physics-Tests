@@ -36,7 +36,13 @@ func test_completed() -> void:
 				Global.MONITOR_FAILED += 1
 			
 			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
-			output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
+			if monitor is GenericMonitor and not monitor.auto_steps_name.is_empty():
+				for i in range(1, monitor.total_step + 1):
+					if monitor.auto_steps_name.has(i):
+						var subs_result =  "[color=green]✓[/color]" if (monitor.auto_failure_step == 0 or i < monitor.auto_failure_step) else "[color=red]✗[/color]"
+						output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.auto_steps_name[i], subs_result]
+			else:
+				output += "[indent][indent] → %s : %s[/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if not passed and monitor.error_message != "" :
 				output += "[color=red][indent][indent] %s [/indent][/indent][/color]\n" % [monitor.error_message]
 		elif monitor.has_method("get_score"):
@@ -48,7 +54,10 @@ func test_completed() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		Global.exit()
+		var label := Label.new()
+		label.position = TOP_RIGHT + Vector2(-275,25)
+		label.text = "Test completed, status: %s" % ["SUCCESS" if Global.MONITOR_FAILED == 0 else "FAILED"]
+		add_child(label)
 	else:
 		queue_free()
 

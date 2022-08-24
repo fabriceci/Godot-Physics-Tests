@@ -71,8 +71,8 @@ collision_mask = 65535
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 507, 0, 0, 64, 0, 64, 507, 502, 155, 502, 0, 522, 0, 522, 155, 960, 507, 960, 0, 1024, 0, 1024, 600, 0, 600)
 
-[node name="SpawnBottom" type="Position2D" parent="."]
+[node name="SpawnBottom" type="Marker2D" parent="."]
 position = Vector2(120, 314)
 
-[node name="SpawnTop" type="Position2D" parent="."]
+[node name="SpawnTop" type="Marker2D" parent="."]
 position = Vector2(583, 70)

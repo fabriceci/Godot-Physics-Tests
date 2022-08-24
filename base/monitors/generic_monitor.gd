@@ -23,6 +23,8 @@ var total_step := 0
 var test_lambda: Callable
 var cbk_lambda: Callable
 var test_name := "Generic monitor"
+var auto_steps_name := {} # Dictionnary with the name of sub steps
+var auto_failure_step := 0
 
 var target: Node
 var data := {} # Dictionnary used to pass data to the monitor
@@ -81,6 +83,7 @@ func _physics_process(_delta: float) -> void:
 			var is_next = test_lambda.call(current_auto_step + 1, target, self)
 			
 			if not is_next:
+				auto_failure_step = current_auto_step + 1
 				return failed("Error during the transition from step %d to step %d" % [current_auto_step, current_auto_step + 1])
 			else:
 				current_auto_step += 1

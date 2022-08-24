@@ -17,7 +17,7 @@ func test_description() -> String:
 	\"\"\"
 	
 func test_name() -> String:
-	return \"RigidDynamicBody | checks the box stack stability\"
+	return \"RigidDynamicBody | testing the box stack stability\"
 
 func start() -> void:
 	add_collision_boundaries(20, false)

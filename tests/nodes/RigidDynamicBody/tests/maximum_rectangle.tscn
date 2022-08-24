@@ -5,7 +5,7 @@ script/source = "extends PhysicsUnitTest2D
 
 var timer: Timer
 var body_size := Vector2(25, 25)
-var min_body_expected := 500
+var min_body_expected := 480
 var simulation_duration := 15
 
 var bodies := []
@@ -15,7 +15,7 @@ func test_description() -> String:
 	\"\"\"
 	
 func test_name() -> String:
-	return \"RigidDynamicBody | checks the maximum amount of rectangles before instablity\"
+	return \"RigidDynamicBody | testing if %d rectangles can be handled before instablity\" % [min_body_expected]
 
 func start() -> void:
 	add_collision_boundaries(1, false)
@@ -30,20 +30,20 @@ func start() -> void:
 	var maximum_bodies_supported = func(p_step, p_target, p_monitor):
 		var _bodies := p_target.bodies as Array[RigidDynamicBody2D]
 		for body in _bodies:
-			if body.position.y > 650:
+			if body.position.y > 650 or _bodies.size() >= min_body_expected:
 				p_target.timer.stop()
-				p_monitor.test_name += \" → [color=orange]failed at %d[/color]\" % [_bodies.size()]
 				if _bodies.size() >= min_body_expected:
 					p_monitor.passed()
 				else:
+					p_monitor.test_name += \" → [color=orange]failed at %d[/color]\" % [_bodies.size()]
 					p_monitor.failed()
 	
 	var check_max_stability_monitor = create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = \"Handle at least %d bodies\" % [min_body_expected]
 
 func spawn_body() -> void:
-	for i in range(10):
-		var body = _get_rigid_body(TOP_LEFT + Vector2(50 + i * 100, 0))
+	for i in range(20):
+		var body = _get_rigid_body(TOP_LEFT + Vector2(50 + i * 50, 0))
 		bodies.append(body)
 		add_child(body)
 	
