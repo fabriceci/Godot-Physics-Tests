@@ -1,7 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cf750yj6rnrh2"]
-
-[sub_resource type="GDScript" id="GDScript_fmuy2"]
-script/source = "extends PhysicsUnitTest2D
+extends PhysicsUnitTest2D
 
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CAPSULE
 
@@ -9,12 +6,12 @@ var spawn_position = Vector2(150, 400)
 var speed = 750
 
 func test_description() -> String:
-	return \"\"\"Tests whether the body is firmly attached to the ground when a snap is applied,
+	return """Tests whether the body is firmly attached to the ground when a [floor_snap_length] is applied,
 	and only when the velocity points downwards.
-	\"\"\"
+	"""
 
 func test_name() -> String:
-	return \"CharacterBody2D | testing floor snap [shape: %s]\" % [shape_name(body_shape)]
+	return "CharacterBody2D | testing [floor floor_snap_length] [shape: %s]" % [shape_name(body_shape)]
 	
 func start() -> void:
 	# C1 start in air, touch the ground until he reach the wall
@@ -32,7 +29,7 @@ func start() -> void:
 			target.velocity.x = speed
 		
 	var c1_monitor := create_generic_monitor(character1, c1_test_lambda, cbk_lambda)
-	c1_monitor.test_name = \"Snapping works as expected (stick to the floor)\"
+	c1_monitor.test_name = "Snapping works as expected (stick to the floor)"
 
 	# C2 without snap it should be not stick to the ground
 	var character2 = create_character(2) # checks behaviour with snap
@@ -47,7 +44,7 @@ func start() -> void:
 		elif step == 3: return target.is_on_wall()
 
 	var c2_monitor = create_generic_monitor(character2, c2_test_lambda, cbk_lambda)
-	c2_monitor.test_name = \"Snapping has a different behaviour than without it\"
+	c2_monitor.test_name = "Snapping has a different behaviour than without it"
 	
 	# C3 try to jump with
 	var character3 = create_character(3) # checks if the body can jump
@@ -65,11 +62,11 @@ func start() -> void:
 			target.velocity.y = -500
 	
 	var c3_monitor := create_generic_monitor(character3, c3_test_lambda, cbk_jump_lambda)
-	c3_monitor.test_name = \"Can jump when snapping is applied\"
+	c3_monitor.test_name = "Can jump when snapping is applied"
 
 func create_character(layer: int) -> CharacterBody2D:
 	var character = CharacterBody2D.new()
-	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd\")
+	character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd")
 	character.floor_snap_length = 10
 	character.position = Vector2(-350, 50)
 	character.collision_layer = 0
@@ -79,15 +76,3 @@ func create_character(layer: int) -> CharacterBody2D:
 	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	return character
-"
-
-[node name="testing_floor_snap" type="Node2D"]
-script = SubResource("GDScript_fmuy2")
-body_shape = 4
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_layer = 65535
-collision_mask = 65535
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(0, 0, 80, 0, 80, 496, 318, 496, 478, 383, 547, 383, 700, 496, 944, 496, 944, 0, 1024, 0, 1024, 600, 0, 600)

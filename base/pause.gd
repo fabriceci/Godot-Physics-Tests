@@ -6,6 +6,7 @@ var step_once = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
+	get_tree().paused = paused
 
 func _physics_process(_delta):
 	if Input.is_action_just_pressed('pause'):

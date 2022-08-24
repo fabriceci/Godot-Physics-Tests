@@ -1,7 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsii42ld38rfk"]
-
-[sub_resource type="GDScript" id="GDScript_btxcy"]
-script/source = "extends PhysicsUnitTest2D
+extends PhysicsUnitTest2D
 
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.RECTANGLE
 var jump_force := -2000
@@ -9,12 +6,12 @@ var spawn_position := Vector2(280, 320)
 var max_x_position := 145
 
 func test_description() -> String:
-	return \"\"\"Testing slide on ceiling, when turn ON, the body will slide on the ceiling (position.x will change),
-	and when it's off, the body should not have this position.x be changed.
-	\"\"\"
+	return """Testing [slide_on_ceiling], when ON, the body will slide on the ceiling (position.x will change),
+	and when it's off, the body should not have his position.x be changed.
+	"""
 
 func test_name() -> String:
-	return \"CharacterBody2D | testing slide on ceiling [shape: %s]\" % [shape_name(body_shape)]
+	return "CharacterBody2D | testing slide on ceiling [shape: %s]" % [shape_name(body_shape)]
 	
 func start() -> void:
 	# C1 Jump in the ceiling and expect to move in x
@@ -36,7 +33,7 @@ func start() -> void:
 			p_target.velocity.y = jump_force
 
 	var c1_monitor := create_generic_monitor(character1, c1_test_lambda, cbk_lambda)
-	c1_monitor.test_name = \"Slide enough to go through the platform\"
+	c1_monitor.test_name = "Slide enough to go through the platform"
 
 	# C2 without slide on ceiling, the body should not move in x
 	var character2 = create_character(2)
@@ -52,11 +49,11 @@ func start() -> void:
 		elif step == 4: return is_equal_approx(target.position.x, spawn_position.x)
 
 	var c2_monitor := create_generic_monitor(character2, c2_test_lambda, cbk_lambda)
-	c2_monitor.test_name = \"Without sliding, the x position of the body will not change\"
+	c2_monitor.test_name = "Without sliding, the x position of the body will not change"
 
 func create_character(layer: int) -> CharacterBody2D:
 	var character = CharacterBody2D.new()
-	character.script = load(\"res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd\")
+	character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd")
 	character.collision_layer = 0
 	character.collision_mask = 0
 	character.position = spawn_position
@@ -65,15 +62,3 @@ func create_character(layer: int) -> CharacterBody2D:
 	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	return character
-"
-
-[node name="testing_slide_on_ceiling" type="Node2D"]
-script = SubResource("GDScript_btxcy")
-collision_layer = 0
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_layer = 3
-collision_mask = 3
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(400, 150, 145, 337, 145, 440, 345, 440, 345, 600, 0, 600, 1, 150)

@@ -1,12 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://bf2yp8krm12fg"]
 
+[ext_resource type="Script" path="res://base/class/test_scene_child.gd" id="1_eq855"]
 [ext_resource type="PackedScene" uid="uid://xe8vns68o3ub" path="res://tests/performance/collisions/tests/2d_collision_shape.tscn" id="1_h02rg"]
 
-[sub_resource type="GDScript" id="GDScript_dted5"]
-script/source = "extends TestScene
-"
-
 [node name="Scene" type="Node2D"]
-script = SubResource("GDScript_dted5")
+script = ExtResource("1_eq855")
 
 [node name="Box" parent="." instance=ExtResource("1_h02rg")]

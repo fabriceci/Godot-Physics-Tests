@@ -32,6 +32,13 @@ enum TestCollisionShape {
 func _ready() -> void:
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
 		start()
+	var center_layout = CenterContainer.new()
+	center_layout.size = Vector2(Global.WINDOW_SIZE.x, 40)
+	var text_label = Label.new()
+	text_label.text = test_name()
+	text_label.set("theme_override_font_sizes/font_size", 20)
+	center_layout.add_child(text_label)
+	add_child(center_layout)
 
 func test_name() -> String:
 	@warning_ignore(assert_always_false)

@@ -24,15 +24,9 @@ var test_lambda: Callable
 var cbk_lambda: Callable
 var test_name := "Generic monitor"
 var auto_steps_name := {} # Dictionnary with the name of sub steps
-var auto_failure_step := 0
 
 var target: Node
 var data := {} # Dictionnary used to pass data to the monitor
-
-func is_test_passed() -> bool:
-	if mode != STEP_MODE.EXPIRATION:
-		return success
-	return test_lambda.call(1, target, self)
 	
 func monitor_name() -> String:
 	return test_name
@@ -56,13 +50,14 @@ func _process(delta: float) -> void:
 	if monitor_duration > monitor_maximum_duration:
 		if mode != STEP_MODE.EXPIRATION:
 			error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
+		else:
+			success = test_lambda.call(1, target, self)
 		return monitor_completed()
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-	if mode == STEP_MODE.EXPIRATION:
-		return
-	elif mode == STEP_MODE.AUTO:
+
+	if mode == STEP_MODE.AUTO:
 		# If all steps are completed
 		var last_step = total_step - 1
 		if current_auto_step == last_step:
@@ -70,7 +65,9 @@ func _physics_process(_delta: float) -> void:
 		
 	if cbk_lambda:
 		cbk_lambda.call(current_auto_step, target, first_iteration, self)
-	
+
+	if mode == STEP_MODE.EXPIRATION:
+		return
 	# Test according to the lambda provided
 	var result = test_lambda.call(current_auto_step, target, self)
 	if mode == STEP_MODE.AUTO and first_iteration and not result:
@@ -83,7 +80,6 @@ func _physics_process(_delta: float) -> void:
 			var is_next = test_lambda.call(current_auto_step + 1, target, self)
 			
 			if not is_next:
-				auto_failure_step = current_auto_step + 1
 				return failed("Error during the transition from step %d to step %d" % [current_auto_step, current_auto_step + 1])
 			else:
 				current_auto_step += 1
