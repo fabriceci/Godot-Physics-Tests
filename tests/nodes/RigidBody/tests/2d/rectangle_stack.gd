@@ -1,11 +1,11 @@
 extends PhysicsUnitTest2D
 
-var stack_height := 9
+var stack_height := 10
 var max_horizontal_movement := 5.0
 var body_size := Vector2(25, 25)
-var body_spacing := 5
+var body_spacing := 1
 var body_shape: PhysicsTest2D.TestCollisionShape = PhysicsTest2D.TestCollisionShape.RECTANGLE
-var simulation_duration := 9
+var simulation_duration := 3
 var tolerance := 3.3
 
 func test_description() -> String:
@@ -20,12 +20,12 @@ func start() -> void:
 	add_collision_boundaries(20, false)
 
 	var stack = Node2D.new()
-	stack.position = BOTTOM_CENTER - Vector2(0, 20 + body_spacing)
+	stack.position = BOTTOM_CENTER - Vector2(0, 20 + -body_size.y * 0.5)
 	
 	var bodies_array : Array[RigidBody2D] = []
 	for i in range(stack_height):
 		var body := RigidBody2D.new()
-		var body_col: Node2D = get_collision_shape(Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size), body_shape)
+		var body_col: Node2D = get_collision_shape(Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size), body_shape, true)
 		body.add_child(body_col)
 		
 		# Spawn the body
