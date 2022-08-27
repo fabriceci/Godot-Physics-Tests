@@ -55,7 +55,7 @@ func test_completed() -> void:
 func test_description() -> String:
 	return ""
 
-func add_collision_boundaries(p_width:= 20, p_add_ceiling := true, p_layers := [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]):
+func add_collision_boundaries(p_width:= 20, p_add_ceiling := true,  p_layers := [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]):
 	var surfaces: Array[StaticBody2D]= []
 	# Left wall
 	surfaces.append(get_static_body_with_collision_shape(Rect2(TOP_LEFT, Vector2(p_width, Global.WINDOW_SIZE.y)), TestCollisionShape.RECTANGLE, true))
@@ -129,9 +129,9 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 	if p_shape_type == TestCollisionShape.RECTANGLE:
 		return Rect2(0, 0, 25 * p_scale, 25 * p_scale)
 	if p_shape_type == TestCollisionShape.CIRCLE:
-		return 10.0 * p_scale
+		return 12.5 * p_scale
 	if p_shape_type == TestCollisionShape.CAPSULE:
-		return Vector2(6,20) * p_scale
+		return Vector2(8,25) * p_scale
 	if p_shape_type == TestCollisionShape.CONCAVE_POLYGON:
 		var concave: PackedVector2Array = []
 		for v in concave_array():

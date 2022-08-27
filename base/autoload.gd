@@ -17,6 +17,8 @@ var NB_TESTS_COMPLETED := 0
 var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
 
+var PERFORMANCE_RESULT := {}
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		exit()

@@ -8,7 +8,8 @@ var min_fps := 9999.0
 var average_fps := 0.0
 var fps_frame := 0.0
 
-var warming = true # When you run the scene for the first time, it will start at 1 fps for few frames.
+var warming := true # wait few frame before start monitoring
+var nb_warming_frame = 60 
 
 func _init() -> void:
 	process_mode = PROCESS_MODE_DISABLED
@@ -19,19 +20,25 @@ func _process(_delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	var fps = Engine.get_frames_per_second()
-
-	if warming and fps != 1:
-		warming = false
-	if warming:
+	fps_frame += 1
+	
+	if warming and fps_frame < nb_warming_frame:
 		return
+	if warming:
+		warming = false
+		fps_frame = 0
 
 	average_fps += fps
-	fps_frame += 1
 	
 	if fps > max_fps:
 		max_fps = fps
 	if fps < min_fps:
 		min_fps = fps
+
+func get_fps():
+	if warming:
+		return 60
+	return Engine.get_frames_per_second()
 
 func start() -> void:
 	super()
@@ -43,11 +50,19 @@ func start() -> void:
 	
 	process_mode = Node.PROCESS_MODE_INHERIT
 
-func test_completed(p_messages:= []) -> void:
+func register_result(p_name: String, result: float):
+	if not Global.PERFORMANCE_RESULT.has(get_name()):
+		Global.PERFORMANCE_RESULT[get_name()] = []
+	Global.PERFORMANCE_RESULT[get_name()].append([p_name, min_fps, max_fps, average_fps / fps_frame, result])
+
+func test_completed() -> void:
 	super()
-	for message in p_messages:
-		print_rich("[indent][indent] → %s [/indent][/indent]" % [message])
-	print_rich("[indent][indent] → Min FPS: %d | Max FPS: %d | Average FPS: %d[/indent][/indent]" % [min_fps, max_fps, round(average_fps/fps_frame)])
+	for result in Global.PERFORMANCE_RESULT[get_name()]:
+		output += "[indent][indent][color=orange] → %s : [b]%d[/b][/color] | [color=purple](Min FPS: [b]%d[/b] | Max FPS: [b]%d[/b] | Average FPS: [b]%d[/b])[/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
+	print_rich(output)
 	process_mode = PROCESS_MODE_DISABLED
-	completed.emit()
+	if has_method("clean"):
+		call("clean")
+	await get_tree().create_timer(.5).timeout # wait for fps 
 	queue_free()
+	completed.emit()
