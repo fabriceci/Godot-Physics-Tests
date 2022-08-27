@@ -2,7 +2,7 @@ extends PhysicsUnitTest2D
 
 var timer: Timer
 var body_size := Vector2(25, 25)
-var min_body_expected := 500
+var min_body_expected := 450
 var simulation_duration := 15
 
 var bodies := []
