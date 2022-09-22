@@ -13,13 +13,13 @@ func test_name() -> String:
 func start() -> void:
 	var wall_top = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y/2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
 	wall_top.position = CENTER + Vector2(100, 0)
-	wall_top.rotate(deg2rad(45))
+	wall_top.rotate(deg_to_rad(45))
 	wall_top.set_collision_layer_value(1, true)
 	wall_top.set_collision_layer_value(2, true)
 	
 	var wall_bot = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y/2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
 	wall_bot.position = CENTER + Vector2(100, 0)
-	wall_bot.rotate(deg2rad(135))
+	wall_bot.rotate(deg_to_rad(135))
 	wall_bot.set_collision_layer_value(1, true)
 	wall_bot.set_collision_layer_value(2, true)
 	

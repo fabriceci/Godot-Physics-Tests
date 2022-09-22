@@ -46,22 +46,24 @@ func _ready() -> void:
 	runner.start()
 
 func find_test(result: Dictionary, folder: String) -> void:
-	var dir = Directory.new()
+	
 	var path = "res://tests/" + folder  + "/";
+	var dir = DirAccess.open(path)
 
-	if dir.open(path) == OK:
+	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 	
 		while file_name != "":
-			var test_dir =  Directory.new()
-			var dir_path = dir.get_current_dir().plus_file(file_name)
-			if test_dir.open(dir_path) == OK:
+			var dir_path = dir.get_current_dir().path_join(file_name)
+			var test_dir =  DirAccess.open(dir_path)
+		
+			if test_dir:
 				test_dir.list_dir_begin()
 				var test_file_name = test_dir.get_next()
 				var test_scene_list = []
 				while test_file_name != "":
-					var test_path = test_dir.get_current_dir().plus_file(test_file_name)
+					var test_path = test_dir.get_current_dir().path_join(test_file_name)
 					if test_path.ends_with(".tscn"):
 						test_scene_list.append(test_path)
 					test_file_name = test_dir.get_next()

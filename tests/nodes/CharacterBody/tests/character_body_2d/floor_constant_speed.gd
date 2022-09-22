@@ -50,7 +50,7 @@ func create_character(p_layer: int, p_position: Vector2, p_body_shape := Physics
 	character.collision_layer = 0
 	character.collision_mask = 0
 	character.floor_constant_speed = true
-	character.floor_max_angle = deg2rad(50)
+	character.floor_max_angle = deg_to_rad(50)
 	character.set_collision_layer_value(p_layer, true)
 	character.set_collision_mask_value(p_layer, true)
 	var body_col: Node2D = get_default_collision_shape(p_body_shape, 2)

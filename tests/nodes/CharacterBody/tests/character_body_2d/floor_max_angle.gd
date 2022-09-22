@@ -46,7 +46,7 @@ func create_character(p_position: Vector2, p_angle_degree: int, p_body_shape := 
 	character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd")
 	character.position = p_position
 	character.floor_block_on_wall = false
-	character.floor_max_angle = deg2rad(p_angle_degree)
+	character.floor_max_angle = deg_to_rad(p_angle_degree)
 	character.floor_snap_length = 50
 	var body_col: Node2D = get_default_collision_shape(p_body_shape, 2)
 	character.add_child(body_col)

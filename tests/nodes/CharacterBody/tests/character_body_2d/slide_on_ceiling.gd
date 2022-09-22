@@ -17,7 +17,7 @@ func start() -> void:
 	# C1 Jump in the ceiling and expect to move in x
 	var character1 = create_character(1)
 	character1.slide_on_ceiling = true
-	character1.floor_max_angle = deg2rad(80)
+	character1.floor_max_angle = deg_to_rad(80)
 	add_child(character1)
 	
 	var c1_test_lambda = func(step, target, monitor):
@@ -38,7 +38,7 @@ func start() -> void:
 	# C2 without slide on ceiling, the body should not move in x
 	var character2 = create_character(2)
 	character2.slide_on_ceiling = false
-	character2.floor_max_angle = deg2rad(80)
+	character2.floor_max_angle = deg_to_rad(80)
 	add_child(character2)
 
 	var c2_test_lambda = func(step, target, monitor):

@@ -30,7 +30,7 @@ func start() -> void:
 			wall_on_way.position = center
 			var collision_shape: CollisionShape2D = wall_on_way.get_child(0)
 			collision_shape.one_way_collision = true
-			wall_on_way.rotate(deg2rad(deg))
+			wall_on_way.rotate(deg_to_rad(deg))
 			wall_on_way.set_collision_layer_value(1, true)
 			wall_on_way.set_collision_layer_value(2, true)
 			add_child(wall_on_way)
