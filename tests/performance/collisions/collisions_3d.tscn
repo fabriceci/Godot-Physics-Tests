@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cswc7nhd4nstf"]
+
+[sub_resource type="GDScript" id="GDScript_llby0"]
+script/source = "extends TestScene
+"
+
+[node name="collisions_3d" type="Node3D"]
+script = SubResource("GDScript_llby0")

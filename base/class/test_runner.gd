@@ -35,7 +35,7 @@ func _init(p_scene: Node) -> void:
 	scene.add_child(scroll_container)
 	scene.add_child(status_label)
 
-func add_test(node: PhysicsTest2D):
+func add_test(node):
 	list_of_tests.append(node.duplicate())
 	total_tests += 1
 	

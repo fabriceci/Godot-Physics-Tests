@@ -12,8 +12,9 @@ func start() -> void:
 	runner.completed.connect(self.completed)
 	var is_performance := false
 	for child in get_children():
-		if child is PhysicsPerformanceTest2D:
+		if child is PhysicsPerformanceTest2D or child is PhysicsPerformanceTest3D:
 			is_performance = true
+			runner.add_test(child)
 		if child is PhysicsTest2D:
 			runner.add_test(child)
 	
