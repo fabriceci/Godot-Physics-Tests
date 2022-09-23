@@ -19,7 +19,6 @@ step_recording = 5
 [node name="convex 8v vs convex 250v" parent="." instance=ExtResource("1_myy22")]
 shape2 = 100
 number_bodies_per_step = 2
-delay_for_new_bodies = 3.0
 step_recording = 5
 
 [node name="shape_stack" parent="." instance=ExtResource("2_4iwle")]

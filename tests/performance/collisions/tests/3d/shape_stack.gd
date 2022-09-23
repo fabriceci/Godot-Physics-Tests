@@ -26,9 +26,9 @@ func start() -> void:
 	
 	# Ground
 	var ground_body := StaticBody3D.new()
-	ground_body.position = Vector3(0, 0, 0)
-	var ground_box_shape = get_collision_shape(Vector3(20, 1, 20))
-	ground_body.add_child(ground_box_shape)
+	var col_shape = CollisionShape3D.new()
+	col_shape.shape = WorldBoundaryShape3D.new()
+	ground_body.add_child(col_shape)
 	add_child(ground_body)
 	
 	var stack = Node3D.new()

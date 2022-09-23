@@ -2,7 +2,8 @@ extends PhysicsPerformanceTest3D
 
 enum GroundType {
 	BOX,
-	CONCAVE
+	CONCAVE,
+	WORLD_BOUNDARY
 }
 
 @export var shape1: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
@@ -10,7 +11,7 @@ enum GroundType {
 @export var minimum_fps := 10
 @export var number_bodies_per_step := 5
 @export var delay_for_new_bodies := 0.35
-@export var ground: GroundType = GroundType.CONCAVE
+@export var ground: GroundType = GroundType.WORLD_BOUNDARY
 @export var step_recording := 50
 
 var concave_polygon_ground = preload("res://base/mesh/concave_bac_3d.tres")
@@ -44,6 +45,10 @@ func start() -> void:
 	if ground == GroundType.BOX:
 		var ground_box_shape = get_collision_shape(Vector3(100, 1, 60))
 		ground_body.add_child(ground_box_shape)
+	if ground == GroundType.WORLD_BOUNDARY:
+		var col_shape = CollisionShape3D.new()
+		col_shape.shape = WorldBoundaryShape3D.new()
+		ground_body.add_child(col_shape)
 	else:
 		var col_shape = CollisionShape3D.new()
 		col_shape.shape = concave_polygon_ground
