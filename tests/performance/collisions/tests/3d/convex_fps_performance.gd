@@ -99,6 +99,6 @@ func spawn_body() -> void:
 		var offset = index if even else -index
 		var body = RigidBody3D.new()
 		body.add_child(get_default_collision_shape(shape))
-		body.position = Vector3(offset, 50, 0)
+		body.position = Vector3(offset, 35, 0)
 		bodies.append(body)
 		add_child(body)

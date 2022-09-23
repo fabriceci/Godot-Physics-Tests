@@ -6,7 +6,7 @@
 script = ExtResource("1_k6d6r")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 39.751, 38.4604)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 30.8187, 32.6117)
 current = true
 
 [node name="CsgBox3d" type="CSGBox3D" parent="."]

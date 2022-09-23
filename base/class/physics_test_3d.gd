@@ -88,7 +88,7 @@ func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 
 		return 1 * p_scale
 	if p_shape_type == TestCollisionShape.CAPSULE:
 		return Vector2(1,2) * p_scale
-	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON:
+	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
 		return null
 	
 	@warning_ignore(assert_always_false)
@@ -98,8 +98,9 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 	match p_shape_type:
 		TestCollisionShape.CAPSULE: return "Capsule"
 		TestCollisionShape.CONCAVE_POLYGON: return "Concave Polygon"
-		TestCollisionShape.CONVEX_POLYGON: return "Convex Polygon"
-		TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX: return "High Vertex Convex Polygon"
+		TestCollisionShape.CONVEX_POLYGON: return "Convex 8v"
+		TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX: return "Convex 146v"
+		TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX: return "Convex 2050v"
 		TestCollisionShape.BOX: return "Box"
 #		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
 		TestCollisionShape.SPHERE: return "Sphere"

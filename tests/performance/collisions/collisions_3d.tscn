@@ -9,4 +9,9 @@ script/source = "extends TestScene
 [node name="collisions_3d" type="Node3D"]
 script = SubResource("GDScript_n4cxb")
 
-[node name="convex_fps_performance" parent="." instance=ExtResource("1_myy22")]
+[node name="convex 8v vs convex 8v" parent="." instance=ExtResource("1_myy22")]
+
+[node name="convex 8v vs convex 250v" parent="." instance=ExtResource("1_myy22")]
+shape2 = 100
+number_bodies_per_step = 2
+delay_for_new_bodies = 3.0
