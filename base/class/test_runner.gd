@@ -12,10 +12,12 @@ var scroll_container : ScrollContainer
 var container :HFlowContainer
 var status_label: Label
 
+var is_3d: = false
+
 # Called when the node enters the scene tree for the first time.
-func _init(p_scene: Node) -> void:
+func _init(p_scene: Node, p_is_3d = false) -> void:
 	scene = p_scene
-	
+	is_3d = p_is_3d
 	status_label = Label.new()
 	status_label.position = Vector2(Global.WINDOW_SIZE.x - 50, 0)
 	
@@ -50,7 +52,7 @@ func start():
 		texture_rect.custom_minimum_size = Global.WINDOW_SIZE / Global.NUMBER_TEST_PER_ROW
 
 		var viewport = SubViewport.new()
-		viewport.disable_3d = true
+		viewport.disable_3d = not is_3d
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		viewport.add_child(node)
 		viewport.size =  Global.WINDOW_SIZE

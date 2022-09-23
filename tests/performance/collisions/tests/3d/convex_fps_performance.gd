@@ -10,12 +10,12 @@ enum GroundType {
 @export var minimum_fps := 10
 @export var number_bodies_per_step := 5
 @export var delay_for_new_bodies := 0.35
-@export var ground: GroundType = GroundType.BOX
+@export var ground: GroundType = GroundType.CONCAVE
 @export var step_recording := 50
 
 var concave_polygon_ground = preload("res://base/mesh/concave_bac_3d.tres")
 
-var timer : Timer
+var timer: Timer = Timer.new()
 var bodies = []
 var label_number : Label
 var swap := false
@@ -51,13 +51,17 @@ func start() -> void:
 		ground_body.add_child(col_shape)
 	add_child(ground_body)
 	
-	timer = Timer.new()
 	timer.wait_time = delay_for_new_bodies
-	timer.process_callback =Timer.TIMER_PROCESS_PHYSICS
+	timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
 	timer.timeout.connect(spawn_body)
 	add_child(timer)
 	timer.start()
 	super() # launch the test
+	
+func _get_displayed_text():
+	var text = "Bodies: " + str(bodies.size())
+	text += " - [min fps: %d, bodies per step: %d, delay: %.2f, step recording: %d]" % [minimum_fps, number_bodies_per_step, delay_for_new_bodies, step_recording]
+	return text
 
 func _physics_process(delta: float) -> void:
 	$Camera.current = true
@@ -66,7 +70,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if label_number:
-		label_number.text = "Bodies: " + str(bodies.size())
+		label_number.text = _get_displayed_text()
 	
 	if step_recording != 0:
 		step_frame_cpt += 1

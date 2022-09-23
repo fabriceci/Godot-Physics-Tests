@@ -8,7 +8,7 @@ func _ready() -> void:
 		start()
 
 func start() -> void:
-	runner = TestRunner.new(self)
+	runner = TestRunner.new(self, true)
 	runner.completed.connect(self.completed)
 	var is_performance := false
 	for child in get_children():

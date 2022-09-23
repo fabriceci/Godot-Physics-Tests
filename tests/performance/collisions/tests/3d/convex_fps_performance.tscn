@@ -4,14 +4,10 @@
 
 [node name="convex_fps_performance" type="Node3D"]
 script = ExtResource("1_k6d6r")
-ground = 1
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 39.751, 38.4604)
 current = true
-
-[node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.691576, 0.722304, 0, -0.722304, -0.691576, 80.2379, 474.462, 0)
 
 [node name="CsgBox3d" type="CSGBox3D" parent="."]
 visible = false
