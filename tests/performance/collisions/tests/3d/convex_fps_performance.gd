@@ -8,7 +8,6 @@ enum GroundType {
 @export var shape1: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
 @export var shape2: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
 @export var minimum_fps := 10
-@export var record_ := 1
 @export var number_bodies_per_step := 5
 @export var delay_for_new_bodies := 0.35
 @export var ground: GroundType = GroundType.BOX
