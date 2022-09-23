@@ -76,9 +76,9 @@ func test_completed() -> void:
 	for result in Global.PERFORMANCE_RESULT[get_name()]:
 		output += "[indent][indent][color=orange] → %s : [b]%d[/b][/color] | [color=purple](Min FPS: [b]%d[/b] | Max FPS: [b]%d[/b] | Average FPS: [b]%d[/b])[/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
 	print_rich(output)
-	process_mode = PROCESS_MODE_DISABLED
 	if has_method("clean"):
 		call("clean")
-	await get_tree().create_timer(.5).timeout # wait for fps 
-	queue_free()
+	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
+	queue_free()
+

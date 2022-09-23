@@ -31,7 +31,6 @@ func test_name() -> String:
 	return "Maximum number of bodies before FPS are less than %d (%s vs %s)" % [minimum_fps, PhysicsTest3D.shape_name(shape1), PhysicsTest3D.shape_name(shape2)]
 
 func start() -> void:
-
 	$Camera.current = true
 	
 	label_number = Label.new()
@@ -64,7 +63,6 @@ func _get_displayed_text():
 	return text
 
 func _physics_process(delta: float) -> void:
-	$Camera.current = true
 	super(delta)
 	if _warming:
 		return

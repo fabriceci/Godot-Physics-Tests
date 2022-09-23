@@ -14,10 +14,10 @@ func start() -> void:
 	for child in get_children():
 		if child is PhysicsPerformanceTest2D or child is PhysicsPerformanceTest3D:
 			is_performance = true
+		if child is PhysicsTest2D or child is PhysicsTest3D:
 			runner.add_test(child)
-		if child is PhysicsTest2D:
-			runner.add_test(child)
-	
+			remove_child(child)
+
 	if is_performance:
 		Global.NUMBER_TEST_PER_ROW = 1
 		Global.MAXIMUM_PARALLEL_TESTS = 1
