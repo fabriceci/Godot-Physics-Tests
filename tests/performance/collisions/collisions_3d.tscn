@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cswc7nhd4nstf"]
+[gd_scene load_steps=4 format=3 uid="uid://cswc7nhd4nstf"]
 
 [ext_resource type="PackedScene" uid="uid://f833p245gj24" path="res://tests/performance/collisions/tests/3d/convex_fps_performance.tscn" id="1_myy22"]
+[ext_resource type="PackedScene" uid="uid://cfd8ksml1xdq4" path="res://tests/performance/collisions/tests/3d/shape_stack.tscn" id="2_4iwle"]
 
 [sub_resource type="GDScript" id="GDScript_n4cxb"]
 script/source = "extends TestScene
@@ -11,7 +12,14 @@ script = SubResource("GDScript_n4cxb")
 
 [node name="convex 8v vs convex 8v" parent="." instance=ExtResource("1_myy22")]
 
+[node name="convex 24v vs convex 24v" parent="." instance=ExtResource("1_myy22")]
+number_bodies_per_step = 2
+step_recording = 5
+
 [node name="convex 8v vs convex 250v" parent="." instance=ExtResource("1_myy22")]
 shape2 = 100
 number_bodies_per_step = 2
 delay_for_new_bodies = 3.0
+step_recording = 5
+
+[node name="shape_stack" parent="." instance=ExtResource("2_4iwle")]

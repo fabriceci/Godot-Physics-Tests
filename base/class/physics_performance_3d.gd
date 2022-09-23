@@ -73,8 +73,11 @@ func test_completed() -> void:
 	if not extra_text.is_empty():
 		for s in extra_text:
 			output += "[indent][indent][color=green]%s[/color][/indent][/indent]\n" % [s]
-	for result in Global.PERFORMANCE_RESULT[get_name()]:
-		output += "[indent][indent][color=orange] → %s : [b]%d[/b][/color] | [color=purple](Min FPS: [b]%d[/b] | Max FPS: [b]%d[/b] | Average FPS: [b]%d[/b])[/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
+	if Global.PERFORMANCE_RESULT.has(get_name()):
+		for result in Global.PERFORMANCE_RESULT[get_name()]:
+			output += "[indent][indent][color=orange] → %s : [b]%d[/b][/color] | [color=purple](Min FPS: [b]%d[/b] | Max FPS: [b]%d[/b] | Average FPS: [b]%d[/b])[/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
+	else:
+			output += "[indent][indent][color=orange] Simulation completed[/color][/indent][/indent]\n"
 	print_rich(output)
 	if has_method("clean"):
 		call("clean")

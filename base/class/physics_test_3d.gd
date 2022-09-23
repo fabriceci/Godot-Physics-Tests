@@ -5,6 +5,7 @@ signal completed
 
 var output := ""
 var cached_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_8v_polygon_shape_3d.tres")
+var cached_medium_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_24v_polygon_shape_3d.tres")
 var cached_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_146v_sphere_polygon_3d.tres")
 var cached_ultra_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_2050v_sphere_polygon_3d.tres")
 
@@ -12,6 +13,7 @@ enum TestCollisionShape {
 	CAPSULE = PhysicsServer3D.SHAPE_CAPSULE,
 	CONCAVE_POLYGON = PhysicsServer3D.SHAPE_CONCAVE_POLYGON,
 	CONVEX_POLYGON = PhysicsServer3D.SHAPE_CONVEX_POLYGON,
+	CONVEX_POLYGON_MEDIUM_VERTEX = 99,
 	CONVEX_POLYGON_HIGH_VERTEX = 100,
 	CONVEX_POLYGON_ULTRA_HIGH_VERTEX = 101,
 	BOX = PhysicsServer3D.SHAPE_BOX,
@@ -70,9 +72,16 @@ func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.
 		col = CollisionShape3D.new()
 		col.shape = BoxShape3D.new()
 		col.shape.size = p_shape_definition
+	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX:
+		col = CollisionShape3D.new()
+		col.shape = cached_medium_poly_convex
 	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX:
 		col = CollisionShape3D.new()
 		col.shape = cached_high_poly_convex
+	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
+		col = CollisionShape3D.new()
+		col.shape = cached_ultra_high_poly_convex		
+		
 	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON:
 		col = CollisionShape3D.new()
 		col.shape = cached_poly_convex
@@ -88,7 +97,7 @@ func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 
 		return 1 * p_scale
 	if p_shape_type == TestCollisionShape.CAPSULE:
 		return Vector2(1,2) * p_scale
-	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
+	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX  or p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
 		return null
 	
 	@warning_ignore(assert_always_false)
@@ -99,6 +108,7 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 		TestCollisionShape.CAPSULE: return "Capsule"
 		TestCollisionShape.CONCAVE_POLYGON: return "Concave Polygon"
 		TestCollisionShape.CONVEX_POLYGON: return "Convex 8v"
+		TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX: return "Convex 146v"
 		TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX: return "Convex 146v"
 		TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX: return "Convex 2050v"
 		TestCollisionShape.BOX: return "Box"
@@ -108,4 +118,22 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 			@warning_ignore(assert_always_false)
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
-
+			
+var zoom_factor := 5
+var dragging = false
+func _unhandled_input(event):
+	var camera = get_node("Camera")
+	if camera:
+		if event.is_action_pressed("zoom_in"):
+			create_tween().tween_property(camera, "position:z", camera.position.z + zoom_factor, 0.1)
+		if event.is_action_pressed("zoom_out"):
+			create_tween().tween_property(camera, "position:z", camera.position.z - zoom_factor, 0.1)
+		if event is InputEventMouseButton:
+			if event.is_pressed():
+				dragging = true
+			else:
+				dragging = false
+		elif event is InputEventMouseMotion and dragging:
+			var offset: Vector2 = -event.relative.normalized()
+			camera.position.y -= offset.y * 0.5
+			camera.position.x += offset.x * 0.5
