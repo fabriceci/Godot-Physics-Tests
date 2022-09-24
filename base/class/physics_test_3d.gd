@@ -94,7 +94,7 @@ func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 
 	if p_shape_type == TestCollisionShape.BOX:
 		return Vector3(.5 * p_scale, 1 * p_scale, .5 * p_scale)
 	if p_shape_type == TestCollisionShape.SPHERE:
-		return 1 * p_scale
+		return 0.5 * p_scale
 	if p_shape_type == TestCollisionShape.CAPSULE:
 		return Vector2(1,2) * p_scale
 	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX  or p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
@@ -135,5 +135,5 @@ func _unhandled_input(event):
 				dragging = false
 		elif event is InputEventMouseMotion and dragging:
 			var offset: Vector2 = -event.relative.normalized()
-			camera.position.y -= offset.y * 0.5
-			camera.position.x += offset.x * 0.5
+			camera.position.y -= offset.y * 0.3
+			camera.position.x += offset.x * 0.3
