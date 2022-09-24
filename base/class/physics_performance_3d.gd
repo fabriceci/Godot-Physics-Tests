@@ -1,8 +1,8 @@
 class_name PhysicsPerformanceTest3D
 extends PhysicsTest3D
 
-var NB_FRAME_SMOOTHING = 60
-var WARMING_SKIPPED_FRAMES = 60
+var NB_FRAME_SMOOTHING = 10
+var WARMING_SKIPPED_FRAMES = 120
 var _fps_label : Label
 
 var _max_fps := 0.0

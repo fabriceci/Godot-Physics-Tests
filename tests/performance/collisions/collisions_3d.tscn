@@ -15,11 +15,12 @@ shape2 = 6
 
 [node name="convex 24v vs convex 24v" parent="." instance=ExtResource("1_myy22")]
 number_bodies_per_step = 2
-step_recording = 5
+step_recording = 20
 
 [node name="convex 8v vs convex 250v" parent="." instance=ExtResource("1_myy22")]
 shape2 = 100
 number_bodies_per_step = 2
-step_recording = 5
+delay_for_new_bodies = 2.0
+step_recording = 2
 
 [node name="shape_stack" parent="." instance=ExtResource("2_4iwle")]
