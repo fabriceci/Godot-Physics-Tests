@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://3pkcknwknoom"]
+
+[ext_resource type="Script" path="res://tests/performance/collisions/tests/3d/convex_precision.gd" id="1_q2n7m"]
+[ext_resource type="Shape3D" uid="uid://dbim2p4wnqcij" path="res://base/mesh/convex_1026_sphere_polygon_3d.tres" id="2_2y8hk"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dia5p"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_33rce"]
+
+[node name="convex_precision" type="Node3D"]
+script = ExtResource("1_q2n7m")
+
+[node name="CharacterBody3dRef" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="CharacterBody3dRef"]
+shape = SubResource("SphereShape3D_dia5p")
+
+[node name="CharacterBody3d" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="CharacterBody3d"]
+shape = ExtResource("2_2y8hk")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.33089, 0, 2.56481)
+
+[node name="MeshInstance3d" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_33rce")

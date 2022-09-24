@@ -25,15 +25,12 @@ var step_average: float = 0.0
 var step_frame_cpt := 0
 var step_next = 0
 
-func _init() -> void:
-	step_next = step_recording
-
 func test_name() -> String:
 	return "Maximum number of bodies before FPS are less than %d (%s vs %s)" % [minimum_fps, PhysicsTest3D.shape_name(shape1), PhysicsTest3D.shape_name(shape2)]
 
 func start() -> void:
 	$Camera.current = true
-	
+	step_next = step_recording
 	label_number = Label.new()
 	label_number.position = Vector2(20,60)
 	label_number.set("theme_override_font_sizes/font_size", 18)
@@ -78,10 +75,11 @@ func _physics_process(delta: float) -> void:
 	if step_recording != 0:
 		step_frame_cpt += 1
 		step_average += Engine.get_frames_per_second()
-		
+
 		if bodies.size() >= step_next:
 			extra_text.append("• Step for %d bodies, AVG FPS: %2.f " % [bodies.size(), step_average / step_frame_cpt])
 			step_average = 0
+			step_frame_cpt = 0
 			step_next += step_recording
 	
 	if	get_fps() <= minimum_fps:
