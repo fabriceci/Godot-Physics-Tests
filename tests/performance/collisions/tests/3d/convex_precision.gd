@@ -6,7 +6,9 @@ enum TestType {
 	UP_TO_BOTTOM,
 	BOTTOM_TO_UP,
 	DIAGONAL_TOP_LEFT,
-	DIAGONAL_BOTTOM_UP,
+	DIAGONAL_BOTTOM_LEFT,
+	DIAGONAL_TOP_RIGHT,
+	DIAGONAL_BOTTOM_RIGHT,
 	BOX_SEGMENT_TO_SEGMENT,
 	BOX_SEGMENT_TO_FACE,
 	BOX_VERTEX_TO_FACE,
@@ -14,11 +16,12 @@ enum TestType {
 }
 
 @export var shape_tested: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
-@export var static_shape: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.SPHERE
-@export var type: TestType = TestType.LEFT_TO_RIGHT
+@export var static_shape: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.BOX
+@export var type: TestType = TestType.BOX_VERTEX_TO_VERTEX
 
 var tested_body: CharacterBody3D
 var reference_body: CharacterBody3D
+var static_body: StaticBody3D
 
 #var ref_body
 
@@ -27,24 +30,61 @@ func test_name() -> String:
 	
 func start() -> void:
 	
-	tested_body = $CharacterBody3d
-	reference_body = $CharacterBody3dRef
+	tested_body = create_body(1, shape_tested)
+	reference_body = create_body(2, shape_tested)
 	
 	# static body
-	var static_body = StaticBody3D.new()
+	static_body = StaticBody3D.new()
 	static_body.set_collision_layer_value(1, true)
 	static_body.set_collision_layer_value(2, true)
 	static_body.set_collision_mask_value(1, true)
 	static_body.set_collision_mask_value(2, true)
 	static_body.add_child(get_default_collision_shape(static_shape))
 	add_child(static_body)
-	
-	if type == TestType.LEFT_TO_RIGHT :
-		tested_body.position = Vector3(-2, 0 ,0)
-		tested_body.velocity = Vector3(1.5, 0 ,0)
-		
-		reference_body.position = Vector3(-2, 0 ,0)
-		reference_body.velocity = Vector3(1.5, 0 ,0)
+
+	for body in [tested_body, reference_body]:
+		if type == TestType.LEFT_TO_RIGHT:
+			body.position = Vector3(-2, 0 ,0)
+			body.velocity = Vector3(2, 0 ,0)
+		elif type == TestType.RIGHT_TO_LEFT:
+			body.position = Vector3(2, 0 ,0)
+			body.velocity = Vector3(-2, 0 ,0)
+		elif type == TestType.UP_TO_BOTTOM:
+			body.position = Vector3(0, 2 ,0)
+			body.velocity = Vector3(0, -2 ,0)
+		elif type == TestType.BOTTOM_TO_UP:
+			body.position = Vector3(0, -2 ,0)
+			body.velocity = Vector3(0, 2 ,0)
+		elif type == TestType.DIAGONAL_TOP_LEFT:
+			body.position = Vector3(-1, 1 ,0)
+			body.velocity = Vector3(1, -1 ,0)
+		elif type == TestType.DIAGONAL_BOTTOM_LEFT:
+			body.position = Vector3(-1, -1 ,0)
+			body.velocity = Vector3(1, 1 ,0)
+		elif type == TestType.DIAGONAL_TOP_RIGHT:
+			body.position = Vector3(1, 1 ,0)
+			body.velocity = Vector3(-1, -1 ,0)
+		elif type == TestType.DIAGONAL_BOTTOM_RIGHT:
+			body.position = Vector3(1, -1 ,0)
+			body.velocity = Vector3(-1, 1 ,0)
+		elif type == TestType.BOX_SEGMENT_TO_FACE:
+			body.position = Vector3(-2, 0 ,0)
+			body.velocity = Vector3(2, 0 ,0)
+			body.rotation = Vector3(0, deg_to_rad(45), 0)
+		elif type == TestType.BOX_VERTEX_TO_FACE:
+			body.position = Vector3(-2, 0 ,0)
+			body.velocity = Vector3(2, 0 ,0)
+			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
+		elif type == TestType.BOX_SEGMENT_TO_SEGMENT:
+			body.position = Vector3(-2, 0 ,0)
+			body.velocity = Vector3(2, 0 ,0)
+			body.rotation = Vector3(0, deg_to_rad(45), 0)
+			static_body.rotation = Vector3(0, deg_to_rad(45), 0)
+		elif type == TestType.BOX_VERTEX_TO_VERTEX:
+			body.position = Vector3(-2, 0 ,0)
+			body.velocity = Vector3(2, 0 ,0)
+			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(-45), deg_to_rad(-90))
+			static_body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
 	super()
 
 var ctp := 0
@@ -80,9 +120,10 @@ func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):
 	var _body := CharacterBody3D.new()
 	var _shape = get_default_collision_shape(p_shape)
 	_body.add_child(_shape)
-	for i in range(1, 16):
-		print("range %d" % [i])
+	for i in range(1, 17):
 		_body.set_collision_layer_value(i, false)
 		_body.set_collision_mask_value(i, false)
 	_body.set_collision_layer_value(p_layer, true)
 	_body.set_collision_mask_value(p_layer, true)
+	add_child(_body)
+	return _body

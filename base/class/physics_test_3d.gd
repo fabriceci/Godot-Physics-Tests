@@ -92,7 +92,7 @@ func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1
 	
 func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	if p_shape_type == TestCollisionShape.BOX:
-		return Vector3(.5 * p_scale, 1 * p_scale, .5 * p_scale)
+		return Vector3(1 * p_scale, 1 * p_scale, 1 * p_scale)
 	if p_shape_type == TestCollisionShape.SPHERE:
 		return 0.5 * p_scale
 	if p_shape_type == TestCollisionShape.CAPSULE:
