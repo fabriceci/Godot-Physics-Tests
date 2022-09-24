@@ -68,7 +68,7 @@ func register_result(p_name: String, result: float):
 		Global.PERFORMANCE_RESULT[get_name()] = []
 	Global.PERFORMANCE_RESULT[get_name()].append([p_name, _min_fps, _max_fps, _average_fps / _average_record, result])
 
-func test_completed() -> void:
+func test_completed(delay := 0) -> void:
 	super()
 	if not extra_text.is_empty():
 		for s in extra_text:
@@ -79,9 +79,13 @@ func test_completed() -> void:
 	else:
 			output += "[indent][indent][color=orange] Simulation completed[/color][/indent][/indent]\n"
 	print_rich(output)
+	process_mode = PROCESS_MODE_DISABLED
+	if delay != 0:
+		await get_tree().create_timer(delay).timeout 
+
 	if has_method("clean"):
 		call("clean")
-	process_mode = PROCESS_MODE_DISABLED
+
 	completed.emit()
 	queue_free()
 

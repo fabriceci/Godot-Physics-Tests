@@ -95,11 +95,17 @@ var ref_result := []
 
 func _physics_process(delta: float) -> void:
 	if tested_done and tested_done:
+		
+		$Draw.normal = tested_result[1]
+		$Draw.point = tested_result[0]
+		$Draw.camera = $Camera
+		
+		
 		var pos_diff: Vector3 = tested_result[0] - ref_result[0]
 		var normal_diff: Vector3 = tested_result[1] - ref_result[1]
 		extra_text.append("Position obtained: %v, expected %v, diff %v, diff length %f" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()])
 		extra_text.append("Normal obtained: %v, expected %v, diff %v, diff length %f " % [tested_result[1], ref_result[1], normal_diff, normal_diff.length()])
-		test_completed()
+		test_completed(1)
 		return
 	ctp += 1
 	var collide: KinematicCollision3D = tested_body.move_and_collide(tested_body.velocity * delta)
