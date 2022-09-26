@@ -48,7 +48,6 @@ func draw_triangle(p_pos, p_dir, p_size, p_color):
 
 [node name="collision_precision" type="Node3D"]
 script = ExtResource("1_gax0b")
-type = 2
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)

@@ -17,7 +17,7 @@ enum TestType {
 
 @export var shape_tested: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
 @export var static_shape: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.BOX
-@export var type: TestType = TestType.BOX_VERTEX_TO_VERTEX
+@export var type: TestType = TestType.LEFT_TO_RIGHT
 @export var control_value := 0.0
 
 var simulation_duration := 4
@@ -80,17 +80,17 @@ func start() -> void:
 			body.position = Vector3(0, -2 ,0)
 			body.velocity = Vector3(0, 2 ,0)
 		elif type == TestType.DIAGONAL_TOP_LEFT:
-			body.position = Vector3(-1.1, 1.1 ,0)
-			body.velocity = Vector3(1, -1 ,0)
+			body.position = Vector3(-2, 2 ,0)
+			body.velocity = Vector3(2, -2 ,0)
 		elif type == TestType.DIAGONAL_BOTTOM_LEFT:
-			body.position = Vector3(-1, -1 ,0)
-			body.velocity = Vector3(1, 1 ,0)
+			body.position = Vector3(-2, -2 ,0)
+			body.velocity = Vector3(2, 2 ,0)
 		elif type == TestType.DIAGONAL_TOP_RIGHT:
-			body.position = Vector3(1, 1 ,0)
-			body.velocity = Vector3(-1, -1 ,0)
+			body.position = Vector3(2, 2 ,0)
+			body.velocity = Vector3(-2, -2 ,0)
 		elif type == TestType.DIAGONAL_BOTTOM_RIGHT:
-			body.position = Vector3(1, -1 ,0)
-			body.velocity = Vector3(-1, 1 ,0)
+			body.position = Vector3(1.2, -1.2 ,0)
+			body.velocity = Vector3(-2, 2, 0)
 		elif type == TestType.BOX_SEGMENT_TO_FACE:
 			body.position = Vector3(-2, 0 ,0)
 			body.velocity = Vector3(2, 0 ,0)
@@ -122,31 +122,25 @@ func start() -> void:
 			$Draw.camera = $Camera
 			
 			
-			# var pos_diff: Vector3 = ref_result[0] - tested_result[0]
-			# var pos_length := pos_diff.length()
+
 			var normal_dot: float = ref_result[1].dot(tested_result[1])
 			
-			#output += "[indent][indent][color=purple]Position obtained: %v, expected %v, diff %v (length %f)[/color][/indent][/indent]\n" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()]
-
+#			var pos_diff: Vector3 = ref_result[0] - tested_result[0]
+#			var pos_length := pos_diff.length()
+#			output += "[indent][indent][color=purple]Position obtained: %v, expected %v, diff %v (length %f)[/color][/indent][/indent]\n" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()]
+#			output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f,[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot]
 			var failed = false
+			
 			var ref = get_reference()
-			#if is_equal_approx(ref[0], pos_length):
-			#	pass
-			#elif pos_length < ref[0]:
-			#	output += "[indent][indent][color=green]Collision point improvement[/color][/indent][/indent]\n"
-			#elif pos_length > ref[0]:
-			#	output += "[indent][indent][color=red]Collision point regression[/color][/indent][/indent]\n"
-			#	failed = true
-				
-			if not is_equal_approx(ref[0], normal_dot):
-				output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot]
+
+			if not is_equal_approx(ref[1], normal_dot):
+				output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f, ref dot %f[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot, ref[1]]
 				if normal_dot > ref[1]:
 					output += "[indent][indent][color=green]Normal improvement[/color][/indent][/indent]\n"
 				elif normal_dot < ref[1]:
 					output += "[indent][indent][color=red]Normal regression[/color][/indent][/indent]\n"
 					failed = true
 			if failed:
-			
 				p_monitor.failed()
 			else:
 				p_monitor.passed()
@@ -186,12 +180,15 @@ func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):
 
 func get_reference():
 	
-	if PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON and static_shape == PhysicsTest3D.TestCollisionShape.BOX:
+	if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON and static_shape == PhysicsTest3D.TestCollisionShape.BOX:
 		return [0.0, 1.0]
+		
+	if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.BOX and type == TestType.BOX_VERTEX_TO_VERTEX:
+		return [0.000007, 0.816325]
 	
 	if type == 	TestType.LEFT_TO_RIGHT:
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
-			return [0.000014, 0.999571]
+			return [0.000014, 0.997726]
 		
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
 			return [0.0, 1.0]
@@ -217,5 +214,6 @@ func get_reference():
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
 			return [0.0, 1.000000]
 	
+	print("No reference for %s vs %s with type %s" % [shape_name(shape_tested), shape_name(static_shape),TestType.keys()[type]])
 	@warning_ignore(assert_always_false)
 	assert(false)

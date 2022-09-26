@@ -1,6 +1,6 @@
 extends Node
 
-var paused = true
+var paused = false
 var step_once = false
 
 # Called when the node enters the scene tree for the first time.

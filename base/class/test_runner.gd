@@ -52,7 +52,11 @@ func start():
 		texture_rect.custom_minimum_size = Global.WINDOW_SIZE / Global.NUMBER_TEST_PER_ROW
 
 		var viewport = SubViewport.new()
+		if is_3d:
+			viewport.own_world_3d = true
+		
 		viewport.disable_3d = not is_3d
+
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 		viewport.add_child(node)
 		viewport.size =  Global.WINDOW_SIZE
