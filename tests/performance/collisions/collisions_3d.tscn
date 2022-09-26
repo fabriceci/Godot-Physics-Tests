@@ -24,5 +24,3 @@ delay_for_new_bodies = 2.0
 step_recording = 2
 
 [node name="shape_stack" parent="." instance=ExtResource("2_4iwle")]
-
-[node name="SubViewport" type="SubViewport" parent="."]

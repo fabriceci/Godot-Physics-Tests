@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bs884rv61i0xg"]
+[gd_scene load_steps=4 format=3 uid="uid://bs884rv61i0xg"]
 
 [ext_resource type="PackedScene" uid="uid://bioauuuhvoo03" path="res://tests/nodes/CollisionShape/tests/3d/collision_precision.tscn" id="1_25700"]
+[ext_resource type="PackedScene" uid="uid://cg72r5vu1t53" path="res://tests/nodes/CollisionShape/tests/3d/convex_collision_detection.tscn" id="1_ohyv1"]
 
 [sub_resource type="GDScript" id="GDScript_tacvx"]
 script/source = "extends TestScene
@@ -8,6 +9,8 @@ script/source = "extends TestScene
 
 [node name="collision_shape_3d" type="Node3D"]
 script = SubResource("GDScript_tacvx")
+
+[node name="convex_collision_detection" parent="." instance=ExtResource("1_ohyv1")]
 
 [node name="collision_precision_box_left_right" parent="." instance=ExtResource("1_25700")]
 

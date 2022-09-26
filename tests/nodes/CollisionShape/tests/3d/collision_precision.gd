@@ -40,7 +40,6 @@ var ref_done := false
 var ref_result := []
 
 func start() -> void:
-	
 	tested_body = create_body(1, shape_tested)
 	if (shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON or shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX):
 		reference_body = create_body(2, PhysicsTest3D.TestCollisionShape.BOX)
@@ -109,8 +108,6 @@ func start() -> void:
 			body.velocity = Vector3(2, 0 ,0)
 			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(-45), deg_to_rad(-90))
 			static_body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
-	
-
 
 	var maximum_bodies_supported = func(p_step, p_target, p_monitor):
 		if tested_done and ref_done:
@@ -120,8 +117,6 @@ func start() -> void:
 			$Draw.ref_normal = ref_result[1]
 			$Draw.ref_point = ref_result[0]
 			$Draw.camera = $Camera
-			
-			
 
 			var normal_dot: float = ref_result[1].dot(tested_result[1])
 			
