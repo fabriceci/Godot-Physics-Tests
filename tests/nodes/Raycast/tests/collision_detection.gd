@@ -45,6 +45,8 @@ func start() -> void:
 	var offset := (Global.WINDOW_SIZE.x - 200) / (PhysicsTest2D.TestCollisionShape.values().size() -1)
 	var cpt := 0
 	for shape_type in PhysicsTest2D.TestCollisionShape.values():
+		if shape_type == PhysicsTest2D.TestCollisionShape.WORLD_BOUNDARY or shape_type == PhysicsTest2D.TestCollisionShape.CONCAVE_SEGMENT:
+			continue
 		var body = create_rigid_body(Vector2(100 + offset * cpt, CENTER.y), shape_type)
 		var monitor = create_generic_expiration_monitor(body, ray_lambda, null, simulation_duration)
 		monitor.test_name = "Testing Raycast collision with %s" % [shape_name(shape_type)]

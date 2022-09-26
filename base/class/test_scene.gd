@@ -16,6 +16,8 @@ func start() -> void:
 			is_performance = true
 		if child is PhysicsTest2D or child is PhysicsTest3D:
 			runner.add_test(child)
+	for child in get_children():
+		if child is PhysicsTest2D or child is PhysicsTest3D:
 			remove_child(child)
 
 	if is_performance:

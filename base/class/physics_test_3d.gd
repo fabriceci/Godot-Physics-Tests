@@ -4,8 +4,8 @@ extends Node3D
 signal completed
 
 var output := ""
-var cached_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_8v_polygon_shape_3d.tres")
-var cached_medium_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_24v_polygon_shape_3d.tres")
+var cached_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_8v_box_polygon_shape_3d.tres")
+var cached_medium_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_32v_box_polygon_shape_3d.tres")
 var cached_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_146v_sphere_polygon_3d.tres")
 var cached_ultra_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_2050v_sphere_polygon_3d.tres")
 

@@ -36,6 +36,8 @@ func start() -> void:
 		var type = "ascending" if i== 0 else "descenting"
 		var cpt := 1
 		for shape_type in PhysicsTest2D.TestCollisionShape.values():
+			if shape_type == PhysicsTest2D.TestCollisionShape.WORLD_BOUNDARY or shape_type == PhysicsTest2D.TestCollisionShape.CONCAVE_SEGMENT:
+				continue
 			var body := create_character(cpt, spawn_position, shape_type)
 			add_child(body)
 			var monitor := create_generic_monitor(body, test_lambda, cbk_lambda)

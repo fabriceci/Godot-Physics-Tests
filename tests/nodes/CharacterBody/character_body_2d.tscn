@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://dl8jh1yybnmc7"]
 
 [ext_resource type="Script" path="res://base/class/test_scene_child.gd" id="1_dma0p"]
 [ext_resource type="PackedScene" uid="uid://bcvyoyk4gx8hd" path="res://tests/nodes/CharacterBody/tests/character_body_2d/detect_surface_type_with_pressure.tscn" id="2_eie1l"]

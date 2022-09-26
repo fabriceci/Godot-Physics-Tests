@@ -1,6 +1,6 @@
 extends PhysicsUnitTest2D
 
-@export var body_mode: CharacterBody2D.MotionMode = CharacterBody2D.MOTION_MODE_GROUNDED
+@export var body_mode: CharacterBody2D.MotionMode = CharacterBody2D.MotionMode.MOTION_MODE_GROUNDED
 var speed := 1500
 var simulation_duration := 2.0
 
@@ -53,6 +53,8 @@ func start() -> void:
 
 	var cpt_layer := 1
 	for shape_type in PhysicsTest2D.TestCollisionShape.values():
+		if shape_type == PhysicsTest2D.TestCollisionShape.WORLD_BOUNDARY or shape_type == PhysicsTest2D.TestCollisionShape.CONCAVE_SEGMENT:
+			continue
 		# Create character
 		var character = CharacterBody2D.new()
 		character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd")

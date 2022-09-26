@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dg31isk545s6p"]
+[gd_scene load_steps=4 format=3 uid="uid://c6prk86pe8y63"]
 
-[ext_resource type="PackedScene" uid="uid://kkmuywts6xs7" path="res://tests/nodes/CollisionShape/tests/rigid_one_way_collision.tscn" id="1_dop01"]
+[ext_resource type="PackedScene" path="res://tests/nodes/CollisionShape/tests/2d/rigid_one_way_collision.tscn" id="1_dop01"]
 [ext_resource type="Script" path="res://base/class/test_scene_child.gd" id="1_leel8"]
-[ext_resource type="PackedScene" uid="uid://bxicox80ktfu2" path="res://tests/nodes/CollisionShape/tests/character_one_way_collision.tscn" id="2_krm28"]
+[ext_resource type="PackedScene" path="res://tests/nodes/CollisionShape/tests/2d/character_one_way_collision.tscn" id="2_krm28"]
 
 [node name="collision_shape_2d" type="Node2D"]
 script = ExtResource("1_leel8")
