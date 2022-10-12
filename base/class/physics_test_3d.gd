@@ -109,7 +109,7 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 		TestCollisionShape.CONCAVE_POLYGON: return "Concave Polygon"
 		TestCollisionShape.CONVEX_POLYGON: return "Convex 8v"
 		TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX: return "Convex 146v"
-		TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX: return "Convex 146v"
+		TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX: return "Convex 1026v"
 		TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX: return "Convex 2050v"
 		TestCollisionShape.BOX: return "Box"
 #		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"

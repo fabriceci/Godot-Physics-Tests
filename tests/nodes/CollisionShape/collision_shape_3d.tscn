@@ -14,14 +14,20 @@ script = SubResource("GDScript_tacvx")
 
 [node name="collision_precision_box_left_right" parent="." instance=ExtResource("1_25700")]
 
+[node name="collision_precision_box_right_left" parent="." instance=ExtResource("1_25700")]
+type = 1
+
 [node name="collision_precision_box_up_down" parent="." instance=ExtResource("1_25700")]
 type = 2
+
+[node name="collision_precision_box_down_up" parent="." instance=ExtResource("1_25700")]
+type = 3
 
 [node name="collision_precision_box_topleft" parent="." instance=ExtResource("1_25700")]
 type = 6
 
-[node name="collision_precision_box_down_up" parent="." instance=ExtResource("1_25700")]
-type = 3
+[node name="collision_precision_box_downright" parent="." instance=ExtResource("1_25700")]
+type = 7
 
 [node name="collision_precision_box_segment_segment" parent="." instance=ExtResource("1_25700")]
 type = 8

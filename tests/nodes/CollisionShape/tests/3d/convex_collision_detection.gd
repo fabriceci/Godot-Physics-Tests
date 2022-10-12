@@ -43,14 +43,24 @@ func start() -> void:
 		static_body.rotation.y += rot_cpt_x
 		
 		var t_collide = false
+		var t_normal = Vector3.ZERO
 		var r_collide = false
+		var r_normal = Vector3.ZERO
 
-		if reference_body.move_and_collide(Vector3.ZERO, true):
+
+		var ref_collide := reference_body.move_and_collide(Vector3.ZERO, true)
+		if ref_collide:
 			r_collide = true
-		if tested_body.move_and_collide(Vector3.ZERO, true):
+			r_normal = ref_collide.get_normal()
+		
+		var tested_collide := tested_body.move_and_collide(Vector3.ZERO, true)
+		if tested_collide:
 			t_collide = true
+			t_normal = ref_collide.get_normal()
 		
 		if t_collide != r_collide:
+			test_failed = true
+		if not r_normal.is_equal_approx(t_normal):
 			test_failed = true
 			
 	var test_lambda: Callable = func(p_step, p_target, p_monitor):
