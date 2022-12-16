@@ -61,7 +61,7 @@ func start() -> void:
 			
 			deg += 1
 	
-	var lambda: Callable = func(p_step, p_target, p_monitor):
+	var lambda: Callable = func(p_target, p_monitor):
 		var error_cpt := 0
 		for body in bodies as Array[RigidBody2D]:
 			var idx = bodies.find(body)

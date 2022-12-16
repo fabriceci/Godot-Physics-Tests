@@ -14,7 +14,7 @@ func test_name() -> String:
 
 func start() -> void:
 	label_number = Label.new()
-	label_number.position = TOP_LEFT + Vector2(20,50)
+	label_number.position = TOP_LEFT + Vector2(20,60)
 	label_number.set("theme_override_font_sizes/font_size", 18)
 	add_child(label_number)
 	
@@ -29,7 +29,6 @@ func start() -> void:
 	super() # launch the test
 
 func _physics_process(delta: float) -> void:
-	super(delta)
 	label_number.text = "Bodies: " + str(bodies.size())
 	
 	for body in bodies:
@@ -53,7 +52,7 @@ func spawn_body() -> void:
 	
 func _get_rigid_body(p_position: Vector2, p_shape: PhysicsTest2D.TestCollisionShape) -> RigidBody2D:
 	var body = RigidBody2D.new()
-	var shape = get_default_collision_shape(p_shape)
+	var shape = PhysicsTest2D.get_default_collision_shape(p_shape)
 	body.add_child(shape)
 	body.position = p_position
 	return body

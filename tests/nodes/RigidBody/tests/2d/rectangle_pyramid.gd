@@ -22,14 +22,14 @@ func start() -> void:
 	add_collision_boundaries(size_boundary, false)
 	create_pyramid()
 
-	var test_sleep: Callable = func(p_step, p_target, p_monitor):
+	var test_sleep: Callable = func(p_target, p_monitor):
 		for body_parent in bodies as Array[Node2D]:
 			var body: RigidBody2D = body_parent.get_child(0)
 			if not body.sleeping:
 				return false
 		return true
 	
-	var test_head_position: Callable = func(p_step, p_target, p_monitor):
+	var test_head_position: Callable = func(p_target, p_monitor):
 		var last_cube_parent: Node2D = bodies[bodies.size() - 1]
 		var end_simulation_pos := Vector2(last_cube_parent.get_child(0).position.x, last_cube_parent.position.y)
 		if end_simulation_pos.x < top_last_position.x - tolerance.x or end_simulation_pos.x > top_last_position.x + tolerance.x:

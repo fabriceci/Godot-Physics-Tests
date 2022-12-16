@@ -41,7 +41,7 @@ func start() -> void:
 	add_child(stack)
 
 	# 1. Should be sleeping
-	var should_be_sleep = func(p_step, p_target, p_monitor):
+	var should_be_sleep = func(p_target, p_monitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not body.sleeping:
 				return false
@@ -51,7 +51,7 @@ func start() -> void:
 	sleep_monitor.test_name = "The bodies are sleeping"
 	
 	# 2. Should not move horizontally
-	var should_not_move_in_x: Callable = func(p_step, p_target, p_monitor):
+	var should_not_move_in_x: Callable = func(p_target, p_monitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not (body.position.x > -tolerance and body.position.x < tolerance):
 				p_monitor.error_message = "A body moved by %.2f px" % [body.position.x]
@@ -62,7 +62,7 @@ func start() -> void:
 	horizontal_monitor.test_name = "The bodies did not move horizontally more than %.1f px" % [tolerance]
 	
 	# 3. Should be sorted vertically
-	var should_be_sorted_vertically = func(p_step, p_target, p_monitor):
+	var should_be_sorted_vertically = func(p_target, p_monitor):
 		var child_height = -INF
 		for body in bodies_array as Array[RigidBody2D]:
 			var height = body.position.y # easier, because the smaller the y, the higher it is (a bit counter intuitive)
@@ -76,7 +76,7 @@ func start() -> void:
 	sorted_vertically_monitor.test_name = "The bodies are sorted vertically"
 	
 	# 4. Only neighboring children overlap
-	var shoud_overlaps_with_neighbours= func(p_step, p_target, p_monitor):
+	var shoud_overlaps_with_neighbours= func(p_target, p_monitor):
 		var bodies = bodies_array as Array[RigidBody3D]
 		for child_idx in bodies.size():
 			var body := bodies[child_idx]

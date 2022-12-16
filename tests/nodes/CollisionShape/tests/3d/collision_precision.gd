@@ -28,7 +28,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "CollisionShape3D | testing precision moving [%s] on static [%s] mouvement [%s]" % [shape_name(shape_tested).to_upper(), shape_name(static_shape).to_upper(), TestType.keys()[type]]
+	return "CollisionShape3D | testing precision moving [%s] on static [%s] mouvement [%s]" % [PhysicsUnitTest3D.shape_name(shape_tested).to_upper(), PhysicsUnitTest3D.shape_name(static_shape).to_upper(), TestType.keys()[type]]
 
 var tested_body: CharacterBody3D
 var reference_body: CharacterBody3D
@@ -109,7 +109,7 @@ func start() -> void:
 			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(-45), deg_to_rad(-90))
 			static_body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
 
-	var maximum_bodies_supported = func(p_step, p_target, p_monitor):
+	var maximum_bodies_supported = func(p_target, p_monitor):
 		if tested_done and ref_done:
 			
 			$Draw.normal = tested_result[1]
@@ -209,6 +209,6 @@ func get_reference():
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
 			return [0.0, 1.000000]
 	
-	print("No reference for %s vs %s with type %s" % [shape_name(shape_tested), shape_name(static_shape),TestType.keys()[type]])
+	print("No reference for %s vs %s with type %s" % [PhysicsUnitTest3D.shape_name(shape_tested), PhysicsUnitTest3D.shape_name(static_shape),TestType.keys()[type]])
 	@warning_ignore(assert_always_false)
 	assert(false)

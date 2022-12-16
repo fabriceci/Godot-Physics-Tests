@@ -25,7 +25,7 @@ func start() -> void:
 			elif step == 6: return target.is_on_wall() and target.is_on_floor()
 			elif step == 7: return target.is_on_floor_only()
 	
-	var cbk_lambda = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
+	var physics_step_cbk = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if step == 0: target.velocity = Vector2(speed, 0) # right
 		elif step < 2: target.velocity = Vector2(speed, -speed) # up right
 		elif step < 4: target.velocity = Vector2(-speed, -speed) # up left
@@ -51,7 +51,7 @@ func start() -> void:
 		
 		add_child(character)
 
-		var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda, simulation_duration)
+		var contact_monitor := create_generic_step_monitor(character, test_lambda, physics_step_cbk, simulation_duration)
 		contact_monitor.test_name = "%s detects collisions correctly" % [shape_name(shape_type)]
 		
 		cpt_layer += 1

@@ -34,7 +34,7 @@ func start() -> void:
 		elif p_step == 2: return body.linear_velocity.is_equal_approx(Vector2.ZERO) and not body.sleeping and body.get_colliding_bodies().size() == 0
 		elif p_step == 3: return body.sleeping
 
-	var contact_monitor := create_generic_monitor(self, contact_lambda, null, simulation_duration)
+	var contact_monitor := create_generic_step_monitor(self, contact_lambda, null, simulation_duration)
 	contact_monitor.auto_steps_name[1] = "Collisions are reported"
 	contact_monitor.auto_steps_name[2] = "No collision is reported when the body is not moving"
 	contact_monitor.auto_steps_name[3] = "The body sleep"
@@ -47,7 +47,7 @@ func start() -> void:
 		elif step == 1: return body_no_contact.get_colliding_bodies().size() == 0 and not body_no_contact.linear_velocity.is_equal_approx(Vector2.ZERO) # Moving
 		elif step == 2: return body_no_contact.get_colliding_bodies().size() == 0 and  body_no_contact.linear_velocity.is_equal_approx(Vector2.ZERO)  # After the wall hit
 
-	var no_contact_monitor := create_generic_monitor(self, lambda_no_contact)
+	var no_contact_monitor := create_generic_step_monitor(self, lambda_no_contact)
 	no_contact_monitor.test_name = "No contact reported when [contacts_reported] is 0"
 
 func create_rigid_body(p_layer := 1, p_report_contact := 20) -> RigidBody2D:

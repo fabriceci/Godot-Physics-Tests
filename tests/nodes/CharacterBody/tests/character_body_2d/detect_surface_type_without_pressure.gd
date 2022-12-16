@@ -42,7 +42,7 @@ func start() -> void:
 			elif p_step == 7: return p_target.is_on_wall_only() and p_target.get_slide_collision_count() == 1 # hit the floor
 			elif p_step == 8: return p_target.get_slide_collision_count() == 0 # move right
 	
-	var cbk_lambda = func(p_step: int, p_target: CharacterBody2D, p_is_transition: bool, p_monitor: Monitor):
+	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, p_is_transition: bool, p_monitor: Monitor):
 		if not p_is_transition: 
 			return
 		if p_step == 0: p_target.velocity = Vector2(speed, 0) # right
@@ -70,7 +70,7 @@ func start() -> void:
 		
 		add_child(character)
 
-		var contact_monitor := create_generic_monitor(character, test_lambda, cbk_lambda, simulation_duration)
+		var contact_monitor := create_generic_step_monitor(character, test_lambda, physics_step_cbk, simulation_duration)
 		contact_monitor.test_name = "%s detects collisions correctly" % [shape_name(shape_type)]
 		
 		cpt_layer += 1

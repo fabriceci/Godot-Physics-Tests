@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsqnhw3pojva0"]
+
+[ext_resource type="Script" path="res://tests/nodes/RigidBody/tests/3d/continuous_detection.gd" id="1_0j003"]
+
+[sub_resource type="Environment" id="Environment_k3io4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nntpe"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eg120"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fbuc5"]
+radius = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_vmmcg"]
+radius = 0.2
+height = 0.4
+
+[node name="continuous_detection" type="Node3D"]
+script = ExtResource("1_0j003")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11.7809)
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k3io4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.337013, 0.9415, 0, -0.9415, 0.337013, 0, 4.22902, 0)
+
+[node name="HorizontalStaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HorizontalStaticBody3D"]
+shape = SubResource("BoxShape3D_nntpe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HorizontalStaticBody3D"]
+mesh = SubResource("BoxMesh_eg120")
+
+[node name="HorizontalRigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.996, 0)
+continuous_cd = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HorizontalRigidBody3D"]
+shape = SubResource("SphereShape3D_fbuc5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HorizontalRigidBody3D"]
+mesh = SubResource("SphereMesh_vmmcg")
+
+[node name="VerticalStaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8, -5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VerticalStaticBody3D"]
+shape = SubResource("BoxShape3D_nntpe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VerticalStaticBody3D"]
+mesh = SubResource("BoxMesh_eg120")
+
+[node name="VerticalRigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 8, 0)
+continuous_cd = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VerticalRigidBody3D"]
+shape = SubResource("SphereShape3D_fbuc5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VerticalRigidBody3D"]
+mesh = SubResource("SphereMesh_vmmcg")

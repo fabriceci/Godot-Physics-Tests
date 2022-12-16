@@ -38,13 +38,13 @@ func start() -> void:
 	var rigid_y_ccd_shape = create_rigid_body(RigidBody2D.CCD_MODE_CAST_SHAPE, false)
 	rigid_y_ccd_shape.position = Vector2(vertical_wall.position.x + 250, 50)
 	
-	var x_lambda = func(p_step, p_target, p_monitor):
+	var x_lambda = func(p_target, p_monitor):
 		if p_target.continuous_cd == RigidBody2D.CCD_MODE_DISABLED:
 			return p_target.position.x > vertical_wall.position.x # bad
 		else:
 			return p_target.position.x <= vertical_wall.position.x # good
 
-	var y_lambda = func(p_step, p_target, p_monitor):
+	var y_lambda = func(p_target, p_monitor):
 		if p_target.continuous_cd == RigidBody2D.CCD_MODE_DISABLED:
 			return p_target.position.y > horizontal_wall.position.y # bad
 		else:
@@ -54,19 +54,19 @@ func start() -> void:
 	x_no_ccd_monitor.test_name = "Rigid moving in x without CCD pass through the wall"
 
 	var x_ray_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration)
-	x_ray_ccd_monitor.test_name = "Rigid moving in x without CCD Ray does not pass through the wall"
+	x_ray_ccd_monitor.test_name = "Rigid moving in x with CCD Ray does not pass through the wall"
 	
 	var x_shape_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_shape, x_lambda, null, simulation_duration)
-	x_shape_ccd_monitor.test_name = "Rigid moving in x without CCD Cast shape does not pass through the wall"
+	x_shape_ccd_monitor.test_name = "Rigid moving in x with CCD Cast shape does not pass through the wall"
 	
 	var y_no_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_disabled, y_lambda, null, simulation_duration)
 	y_no_ccd_monitor.test_name = "Rigid moving in y without CCD pass through the wall"
 
 	var y_ray_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_ray, y_lambda, null, simulation_duration)
-	y_ray_ccd_monitor.test_name = "Rigid moving in y without CCD Ray does not pass through the wall"
+	y_ray_ccd_monitor.test_name = "Rigid moving in y with CCD Ray does not pass through the wall"
 	
 	var y_shape_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_shape, y_lambda, null, simulation_duration)
-	y_shape_ccd_monitor.test_name = "Rigid moving in y without CCD Cast shape does not pass through the wall"
+	y_shape_ccd_monitor.test_name = "Rigid moving in y with CCD Cast shape does not pass through the wall"
 	
 	process_mode = Node.PROCESS_MODE_DISABLED # to be able to see something
 	await get_tree().create_timer(.5).timeout

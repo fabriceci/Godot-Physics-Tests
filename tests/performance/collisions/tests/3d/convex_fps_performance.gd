@@ -64,8 +64,7 @@ func _get_displayed_text():
 	text += " - [min fps: %d, bodies per step: %d, delay: %.2f, step recording: %d]" % [minimum_fps, number_bodies_per_step, delay_for_new_bodies, step_recording]
 	return text
 
-func _physics_process(delta: float) -> void:
-	super(delta)
+func _physics_process(_delta: float) -> void:
 	if _warming:
 		return
 
@@ -74,7 +73,7 @@ func _physics_process(delta: float) -> void:
 	
 	if step_recording != 0:
 		step_frame_cpt += 1
-		step_average += Engine.get_frames_per_second()
+		step_average += get_fps()
 
 		if bodies.size() >= step_next:
 			extra_text.append("• Step for %d bodies, AVG FPS: %2.f " % [bodies.size(), step_average / step_frame_cpt])

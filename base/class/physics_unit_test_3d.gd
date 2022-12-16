@@ -39,12 +39,12 @@ func test_completed() -> void:
 				Global.MONITOR_FAILED += 1
 			
 			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
-			if monitor is GenericMonitor and not monitor.auto_steps_name.is_empty():
+			if monitor is GenericStepMonitor and not monitor.auto_steps_name.is_empty():
 				for i in range(1, monitor.total_step + 1):
-					if i > monitor.current_auto_step + 1:
+					if i > monitor.current_step + 1:
 						continue
 					if monitor.auto_steps_name.has(i):
-						var subs_result =  "[color=green]✓[/color]" if ( i <= monitor.current_auto_step) else "[color=red]✗[/color]"
+						var subs_result =  "[color=green]✓[/color]" if ( i <= monitor.current_step) else "[color=red]✗[/color]"
 						output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.auto_steps_name[i], subs_result]
 			else:
 				output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.monitor_name(), result]
@@ -66,14 +66,20 @@ func test_completed() -> void:
 	else:
 		queue_free()
 
-func create_generic_monitor(p_target: Node, p_test_step_lamba: Callable,  p_cbk_lambda = null, p_maximum_duration := 5.0, p_auto_start:= true,  p_mode := GenericMonitor.STEP_MODE.AUTO) -> GenericMonitor:
-	var instance = load("res://base/monitors/generic_monitor.gd").new()
+func create_generic_step_monitor(p_target: Node, p_test_lambda: Callable,  p_physics_step_cbk = null, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericStepMonitor:
+	var instance: GenericStepMonitor = load("res://base/monitors/generic_step_monitor.gd").new()
 	register_monitors([instance as Monitor], p_target, p_auto_start)
-	instance.setup(p_test_step_lamba, p_cbk_lambda, p_maximum_duration, p_mode)
+	instance.setup(p_test_lambda, p_physics_step_cbk, p_maximum_duration)
 	return instance
 
-func create_generic_manual_monitor(p_target: Node, p_test_lamba: Callable , p_maximum_duration := 5.0, p_cbk_lambda = null, p_auto_start:= true) -> GenericMonitor:
-	return create_generic_monitor(p_target, p_test_lamba, p_cbk_lambda, p_maximum_duration, p_auto_start, GenericMonitor.STEP_MODE.MANUAL)
+func create_generic_manual_monitor(p_target: Node, p_test_lambda: Callable, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericManualMonitor:
+	var instance: GenericManualMonitor = load("res://base/monitors/generic_manual_monitor.gd").new()
+	register_monitors([instance as Monitor], p_target, p_auto_start)
+	instance.setup(p_test_lambda, p_maximum_duration)
+	return instance
 
-func create_generic_expiration_monitor(p_target: Node, p_test_lamba: Callable , p_cbk_lambda  = null, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericMonitor:
-	return create_generic_monitor(p_target, p_test_lamba, p_cbk_lambda, p_maximum_duration, p_auto_start, GenericMonitor.STEP_MODE.EXPIRATION)
+func create_generic_expiration_monitor(p_target: Node, p_test_lambda: Callable, p_physics_step_cbk = null, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericExpirationMonitor:
+	var instance: GenericExpirationMonitor = load("res://base/monitors/generic_expiration_monitor.gd").new()
+	register_monitors([instance as Monitor], p_target, p_auto_start)
+	instance.setup(p_test_lambda, p_physics_step_cbk, p_maximum_duration)
+	return instance

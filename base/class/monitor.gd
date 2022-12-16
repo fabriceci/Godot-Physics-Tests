@@ -37,4 +37,13 @@ func monitor_name() -> String:
 func monitor_completed() -> void:
 	completed.emit()
 	process_mode = PROCESS_MODE_DISABLED
+	
+func failed(p_message = ""):
+	error_message = p_message
+	success = false
+	monitor_completed()
+
+func passed():
+	success = true
+	monitor_completed()
 

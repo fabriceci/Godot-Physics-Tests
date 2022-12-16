@@ -30,7 +30,7 @@ func start() -> void:
 	static_body.set_collision_mask_value(2, true)
 	static_body.rotation.z = deg_to_rad(45)
 	
-	var callback_lambda = func(p_step: int, p_target, p_is_transition: bool, p_monitor: Monitor):
+	var callback_lambda = func(p_target, p_monitor: Monitor):
 		tested_body.rotation.x += rot_cpt_x
 		reference_body.rotation.x += rot_cpt_x
 		tested_body.rotation.y += rot_cpt_x / 2
@@ -63,7 +63,7 @@ func start() -> void:
 		if not r_normal.is_equal_approx(t_normal):
 			test_failed = true
 			
-	var test_lambda: Callable = func(p_step, p_target, p_monitor):
+	var test_lambda: Callable = func(p_target, p_monitor):
 		return not test_failed
 
 	var collision_monitor = create_generic_expiration_monitor(self, test_lambda, callback_lambda, simulation_duration)

@@ -24,7 +24,7 @@ func start() -> void:
 	var deg := 0
 	for y in range(12):
 		for x in range(30):
-			var wall_on_way = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(20,20)), TestCollisionShape.RECTANGLE)
+			var wall_on_way = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(20,20)), TestCollisionShape.RECTANGLE)
 			var center = Vector2(28 + offset_x * x , 36 + offset_y * y)
 			platforms_center_pos.append(center)
 			wall_on_way.position = center
@@ -44,7 +44,7 @@ func start() -> void:
 			labels.append(label)
 			
 			var rigid = RigidBody2D.new()
-			rigid.add_child(get_default_collision_shape(body_shape, 0.5))
+			rigid.add_child(PhysicsTest2D.get_default_collision_shape(body_shape, 0.5))
 			rigid.gravity_scale = 0
 			rigid.add_constant_force(Vector2(speed, 0))
 			rigid.position = center + Vector2(-20, 0)
@@ -61,7 +61,7 @@ func start() -> void:
 			
 			deg += 1
 	
-	var lambda: Callable = func(p_step, p_target, p_monitor):
+	var lambda: Callable = func(p_target, p_monitor):
 		var error_cpt := 0
 		for body in bodies as Array[RigidBody2D]:
 			var idx = bodies.find(body)

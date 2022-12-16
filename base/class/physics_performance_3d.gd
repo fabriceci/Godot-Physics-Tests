@@ -1,7 +1,10 @@
 class_name PhysicsPerformanceTest3D
 extends PhysicsTest3D
 
-var NB_FRAME_SMOOTHING = 10
+var _current_fps := 60.0
+var _prev_tick_ms := -1.0
+
+var NB_FRAME_SMOOTHING = 4
 var WARMING_SKIPPED_FRAMES = 180
 var _fps_label : Label
 
@@ -9,7 +12,7 @@ var _max_fps := 0.0
 var _min_fps := 9999.0
 var _average_fps := 0.0
 var _average_record := 0
-var _smoothed_fps := 20.0
+var _smoothed_fps := 60.0
 
 var _frame_cpt := 0
 var _fps_buffer := 0.0
@@ -22,22 +25,29 @@ func _init() -> void:
 	process_mode = PROCESS_MODE_DISABLED
 
 func _process(_delta: float) -> void:
-	if _fps_label:
-		_fps_label.text = str(Engine.get_frames_per_second()) + " FPS"
-
-func _physics_process(_delta: float) -> void:
-
-	_frame_cpt += 1
 	
+	_frame_cpt += 1
+		
+	# Skip Frames
 	if _warming and _frame_cpt == WARMING_SKIPPED_FRAMES:
-		_frame_cpt = 1
 		_warming = false
 	
 	if _warming:
 		return
-	
-	_fps_buffer += Engine.get_frames_per_second()
 		
+	# Start Computing FPS
+	if _prev_tick_ms == -1.0:
+		_prev_tick_ms = Time.get_ticks_usec()
+		_frame_cpt = 0
+		return
+	
+	var new_tick: float = Time.get_ticks_usec()
+	_current_fps = 1000000.0 / (new_tick - _prev_tick_ms)
+	_prev_tick_ms = new_tick
+	
+	# Smooth FPS and compute average
+	_fps_buffer += _current_fps
+
 	if _frame_cpt == NB_FRAME_SMOOTHING:
 		_smoothed_fps = _fps_buffer / _frame_cpt
 		_frame_cpt = 0
@@ -49,6 +59,9 @@ func _physics_process(_delta: float) -> void:
 			_max_fps = _smoothed_fps
 		if _smoothed_fps < _min_fps:
 			_min_fps = _smoothed_fps
+
+	if _fps_label:
+		_fps_label.text = "%d FPS" % [_current_fps] 
 
 func get_fps():
 	return _smoothed_fps

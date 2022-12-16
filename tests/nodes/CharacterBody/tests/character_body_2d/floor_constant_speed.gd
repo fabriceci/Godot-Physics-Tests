@@ -17,7 +17,7 @@ func start() -> void:
 		elif step == 1: return target.is_on_floor_only()
 		elif step == 2: return target.is_on_wall()
 		
-	var cbk_lambda = func(step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
+	var physics_step_cbk = func(step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if is_transition and step == 1:
 			p_target.velocity.x = speed
 			p_monitor.data["speed"] = 0.0
@@ -40,7 +40,7 @@ func start() -> void:
 				continue
 			var body := create_character(cpt, spawn_position, shape_type)
 			add_child(body)
-			var monitor := create_generic_monitor(body, test_lambda, cbk_lambda)
+			var monitor := create_generic_step_monitor(body, test_lambda, physics_step_cbk)
 			monitor.test_name = "speed is constant when %s with %s"  % [type, shape_name(shape_type)]
 			cpt += 1
 

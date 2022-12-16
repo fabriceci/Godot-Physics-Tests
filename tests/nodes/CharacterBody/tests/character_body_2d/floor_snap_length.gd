@@ -24,11 +24,11 @@ func start() -> void:
 		elif step == 1: return target.is_on_floor_only()
 		elif step == 2: return target.is_on_wall()
 		
-	var cbk_lambda = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
+	var physics_step_cbk = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
 		if is_transition and step == 1:
 			target.velocity.x = speed
 		
-	var c1_monitor := create_generic_monitor(character1, c1_test_lambda, cbk_lambda)
+	var c1_monitor := create_generic_step_monitor(character1, c1_test_lambda, physics_step_cbk)
 	c1_monitor.test_name = "Snapping works as expected (stick to the floor)"
 
 	# C2 without snap it should be not stick to the ground
@@ -43,7 +43,7 @@ func start() -> void:
 		elif step == 2: return not target.is_on_wall()
 		elif step == 3: return target.is_on_wall()
 
-	var c2_monitor = create_generic_monitor(character2, c2_test_lambda, cbk_lambda)
+	var c2_monitor = create_generic_step_monitor(character2, c2_test_lambda, physics_step_cbk)
 	c2_monitor.test_name = "Snapping has a different behaviour than without it"
 	
 	# C3 try to jump with
@@ -61,7 +61,7 @@ func start() -> void:
 		if is_transition and step == 1:
 			target.velocity.y = -500
 	
-	var c3_monitor := create_generic_monitor(character3, c3_test_lambda, cbk_jump_lambda)
+	var c3_monitor := create_generic_step_monitor(character3, c3_test_lambda, cbk_jump_lambda)
 	c3_monitor.test_name = "Can jump when snapping is applied"
 
 func create_character(layer: int) -> CharacterBody2D:

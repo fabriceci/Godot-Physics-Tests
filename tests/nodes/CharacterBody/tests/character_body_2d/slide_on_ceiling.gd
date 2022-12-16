@@ -28,11 +28,11 @@ func start() -> void:
 		elif step == 4: return target.position.x < 450
 		elif step == 5: return target.position.x >= 450
 	
-	var cbk_lambda = func(p_step, p_target, p_is_transition := false, p_monitor = null):
+	var physics_step_cbk = func(p_step, p_target, p_is_transition := false, p_monitor = null):
 		if p_is_transition and p_step == 1:
 			p_target.velocity.y = jump_force
 
-	var c1_monitor := create_generic_monitor(character1, c1_test_lambda, cbk_lambda)
+	var c1_monitor := create_generic_step_monitor(character1, c1_test_lambda, physics_step_cbk)
 	c1_monitor.test_name = "Slide enough to go through the platform"
 
 	# C2 without slide on ceiling, the body should not move in x
@@ -48,7 +48,7 @@ func start() -> void:
 		elif step == 3: return target.is_on_ceiling()
 		elif step == 4: return is_equal_approx(target.position.x, spawn_position.x)
 
-	var c2_monitor := create_generic_monitor(character2, c2_test_lambda, cbk_lambda)
+	var c2_monitor := create_generic_step_monitor(character2, c2_test_lambda, physics_step_cbk)
 	c2_monitor.test_name = "Without sliding, the x position of the body will not change"
 
 func create_character(layer: int) -> CharacterBody2D:

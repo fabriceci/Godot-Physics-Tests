@@ -11,7 +11,7 @@ func test_name() -> String:
 
 func start() -> void:
 
-	var ray_lambda = func(p_step, p_target, p_monitor):
+	var ray_lambda = func(p_target, p_monitor: Monitor):
 		# Child 0 is the Shape, from 1 it is Raycast2D 
 		var is_concave_segment =  p_target.get_child(0) is CollisionShape2D and p_target.get_child(0).shape is ConcavePolygonShape2D
 		var ray1 = p_target.get_child(1) # from up 

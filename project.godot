@@ -10,9 +10,19 @@ config_version=5
 
 _global_script_classes=[{
 "base": "Monitor",
-"class": &"GenericMonitor",
+"class": &"GenericExpirationMonitor",
 "language": &"GDScript",
-"path": "res://base/monitors/generic_monitor.gd"
+"path": "res://base/monitors/generic_expiration_monitor.gd"
+}, {
+"base": "Monitor",
+"class": &"GenericManualMonitor",
+"language": &"GDScript",
+"path": "res://base/monitors/generic_manual_monitor.gd"
+}, {
+"base": "Monitor",
+"class": &"GenericStepMonitor",
+"language": &"GDScript",
+"path": "res://base/monitors/generic_step_monitor.gd"
 }, {
 "base": "Node",
 "class": &"Monitor",
@@ -60,7 +70,9 @@ _global_script_classes=[{
 "path": "res://base/class/test_scene.gd"
 }]
 _global_script_class_icons={
-"GenericMonitor": "",
+"GenericExpirationMonitor": "",
+"GenericManualMonitor": "",
+"GenericStepMonitor": "",
 "Monitor": "",
 "PhysicsPerformanceTest2D": "",
 "PhysicsPerformanceTest3D": "",
@@ -77,6 +89,7 @@ _global_script_class_icons={
 config/name="physics-test"
 run/main_scene="res://start.tscn"
 config/features=PackedStringArray("4.0")
+run/low_processor_mode_sleep_usec=1
 config/icon="res://icon.png"
 
 [autoload]
