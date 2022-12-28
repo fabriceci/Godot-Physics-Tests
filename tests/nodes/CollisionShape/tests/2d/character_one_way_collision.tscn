@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://cbd4dqylsy8kx"]
 
 [ext_resource type="Script" path="res://tests/nodes/CollisionShape/tests/2d/character_one_way_collision.gd" id="1_rjuqy"]
 

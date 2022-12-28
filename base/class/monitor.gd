@@ -2,6 +2,9 @@ extends Node
 class_name Monitor
 signal completed
 
+var multi_test_names: Array[String] = []
+var multi_test_result: Dictionary = {}
+var multi_test_current := 0
 var monitor_duration := 0.0
 var monitor_maximum_duration := 10.0
 var error_message := ""
@@ -47,3 +50,6 @@ func passed():
 	success = true
 	monitor_completed()
 
+func add_test_result(p_result: bool):
+	multi_test_result[multi_test_current] = p_result
+	multi_test_current += 1

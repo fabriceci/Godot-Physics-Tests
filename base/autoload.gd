@@ -16,6 +16,7 @@ var VERBOSE := false
 var NB_TESTS_COMPLETED := 0
 var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
+var TEST_PASSED := 0
 
 var PERFORMANCE_RESULT := {}
 

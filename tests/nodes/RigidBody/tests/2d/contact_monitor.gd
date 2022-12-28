@@ -5,7 +5,7 @@ var simulation_duration := 1.0
 var speed := 50000
 
 func test_description() -> String:
-	return """Checks if the contact is corretly reported when [contact_monitor] is turn ON"""
+	return """Checks if the contact is correctly reported when [contact_monitor] is turn ON"""
 	
 func test_name() -> String:
 	return "RigidBody | testing [contact_monitor]"
@@ -29,15 +29,18 @@ func start() -> void:
 	var body = create_rigid_body(1)
 	body.position = CENTER - Vector2(100, 0)
 	var contact_lambda = func(p_step, p_target, p_monitor):
-		if p_step == 0: return body.get_colliding_bodies().size() == 0 
-		elif p_step == 1: return body.get_colliding_bodies().size() == 2
-		elif p_step == 2: return body.linear_velocity.is_equal_approx(Vector2.ZERO) and not body.sleeping and body.get_colliding_bodies().size() == 0
-		elif p_step == 3: return body.sleeping
+		var colliding_bodies = body.get_colliding_bodies().size() 
+		if p_step == 0: 
+			return body.get_colliding_bodies().size() == 0 
+		elif p_step == 1:
+			
+			return body.get_colliding_bodies().size() > 0 and not body.sleeping
+		elif p_step == 2: 
+			return body.sleeping
 
 	var contact_monitor := create_generic_step_monitor(self, contact_lambda, null, simulation_duration)
-	contact_monitor.auto_steps_name[1] = "Collisions are reported"
-	contact_monitor.auto_steps_name[2] = "No collision is reported when the body is not moving"
-	contact_monitor.auto_steps_name[3] = "The body sleep"
+	contact_monitor.add_test(1, "Collisions are reported")
+	contact_monitor.add_test(2, "The body sleep")
 
 	var body_no_contact := create_rigid_body(2, 0)
 	body_no_contact.position = CENTER - Vector2(200, 0)

@@ -33,21 +33,23 @@ func test_completed() -> void:
 	for monitor in monitors:
 		if monitor.has_method("is_test_passed"):
 			var passed:bool = monitor.call("is_test_passed")
-			#var number_tests = 1 if monitor.auto_steps_name.is_empty() else monitor.total_step
-			if passed:
-				Global.MONITOR_PASSED += 1
+			# multi_test_case
+			if not monitor.multi_test_names.is_empty():
+				for i in range(0, monitor.multi_test_names.size()):
+					var sub_test_result = monitor.multi_test_result.get(i, false)
+					if sub_test_result:
+						Global.MONITOR_PASSED += 1
+					else:
+						Global.MONITOR_FAILED += 1
+					var subs_result = "[color=red]✗[/color]" if not sub_test_result else "[color=green]✓[/color]"
+					output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.multi_test_names[i], subs_result]
 			else:
-				Global.MONITOR_FAILED += 1
-			
-			var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
-			if monitor is GenericStepMonitor and not monitor.auto_steps_name.is_empty():
-				for i in range(1, monitor.total_step + 1):
-					if i > monitor.current_step + 1:
-						continue
-					if monitor.auto_steps_name.has(i):
-						var subs_result =  "[color=green]✓[/color]" if ( i <= monitor.current_step) else "[color=red]✗[/color]"
-						output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.auto_steps_name[i], subs_result]
-			else:
+				if passed:
+					Global.MONITOR_PASSED += 1
+				else:
+					Global.MONITOR_FAILED += 1
+				
+				var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 				output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.monitor_name(), result]
 			if not passed and monitor.error_message != "" :
 				output += "[color=red][indent][indent][indent] %s [/indent][/indent][/indent][/color]\n" % [monitor.error_message]

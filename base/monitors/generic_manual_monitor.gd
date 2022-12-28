@@ -7,9 +7,7 @@ class_name GenericManualMonitor
 # Callback
 # var physics_step_cbk = func(p_target, p_monitor: Monitor):
 # var test_lambda = func(target, p_monitor: Monitor):
-
 var first_iteration = true
-var current_step := 0
 var test_lambda: Callable
 var test_name := "Generic Manual Monitor"
 
@@ -35,3 +33,6 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	test_lambda.call(target, self)
 	first_iteration = false	
+
+func add_test(p_name: String):
+	multi_test_names.append(p_name)

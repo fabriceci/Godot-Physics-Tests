@@ -12,13 +12,13 @@ class_name GenericStepMonitor
 # var physics_step_cbk = func(step: int, p_target, is_transition: bool, p_monitor: Monitor):
 # var test_lambda = func(step: int, target, p_monitor: Monitor):
 
+var multi_test_auto_step = []
 var first_iteration = true
 var current_step := 0
 var total_step := 0
 var test_lambda: Callable
 var physics_step_cbk = null
 var test_name := "Auto Step Monitor"
-var auto_steps_name := {} # Dictionnary with the name of sub steps
 
 var target: Node
 var data := {} # Dictionnary used to pass data to the monitor
@@ -71,3 +71,15 @@ func _physics_process(_delta: float) -> void:
 			current_step += 1
 			if physics_step_cbk:
 				physics_step_cbk.call(current_step, target, true, self)
+
+
+func add_test(p_step_should_reach:int, p_name: String):
+	multi_test_names.append(p_name)
+	multi_test_auto_step.append(p_step_should_reach)
+	
+func monitor_completed() -> void:
+	if multi_test_auto_step.size() > 0:
+		for i in range(0, multi_test_auto_step.size()):
+			var result = current_step >= multi_test_auto_step[i]
+			add_test_result(result)
+	super()

@@ -5,7 +5,7 @@ signal completed
 
 var CENTER := Global.WINDOW_SIZE/2
 var CENTER_LEFT := Vector2(0, CENTER.y)
-var CENTER_RIGHT := Vector2(Global.WINDOW_SIZE.x, 0)
+var CENTER_RIGHT := Vector2(Global.WINDOW_SIZE.x, CENTER.y)
 
 var TOP_LEFT := Vector2(0,0)
 var TOP_CENTER := Vector2(CENTER.x, 0)
