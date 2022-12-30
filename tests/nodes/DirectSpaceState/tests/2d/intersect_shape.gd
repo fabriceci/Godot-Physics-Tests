@@ -3,11 +3,11 @@ extends PhysicsUnitTest2D
 var simulation_duration := 10
 
 func test_description() -> String:
-	return """Checks all the [PhysicsPointQueryParameters2D] of [intersect_point]
+	return """Checks all the [PhysicsShapeQueryParameters2D] of [intersect_shape]
 	"""
 	
 func test_name() -> String:
-	return "CollisionShape2D | testing [intersect_point] from [get_world_2d().direct_space_state]"
+	return "CollisionShape2D | testing [intersect_shape] from [get_world_2d().direct_space_state]"
 	
 func start() -> void:
 
@@ -16,31 +16,130 @@ func start() -> void:
 	
 	# Add Body on the RIGHT
 	var body := add_body(CENTER_RIGHT)
-	
-	# Add two body in the center
-	var area_center := add_area(CENTER)
-	var body_center := add_body(CENTER)
-	
-	# Add Canvas Layer
-	var canvas := CanvasLayer.new()
-	canvas.layer = 2
-	canvas.add_child(add_area(TOP_CENTER, false))
-	add_child(canvas)
+	body.set_collision_layer_value(2, true)
+	body.set_collision_mask_value(2, true)
+	var body2 := add_body(BOTTOM_RIGHT)
 	
 	var d_space := get_world_2d().direct_space_state
+	var shape_rid = PhysicsServer2D.circle_shape_create()
+	var radius = 5
+	PhysicsServer2D.shape_set_data(shape_rid, radius)
+
 	var checks_point = func(p_target, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 		
 		if true: # limit the scope
-			p_monitor.add_test("Don't collide at 1px left from the body")
-			var body_query := PhysicsPointQueryParameters2D.new()
-			body_query.position = CENTER_RIGHT - (Vector2(51,0)) # Rectangle is 100px wide
+			p_monitor.add_test("Can collide with Body")
+			var body_query := PhysicsShapeQueryParameters2D.new()
 			body_query.collide_with_bodies = true
-			var collide = true if d_space.intersect_point(body_query) else false
+			body_query.shape_rid = shape_rid
+			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			var collide = true if d_space.intersect_shape(body_query) else false
+			p_monitor.add_test_result(collide)
+		
+		if true: # limit the scope
+			p_monitor.add_test("Can  not collide with Body")
+			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.collide_with_bodies = false
+			body_query.shape_rid = shape_rid
+			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			var collide = true if d_space.intersect_shape(body_query) else false
 			p_monitor.add_test_result(not collide)
 
+		if true:
+			p_monitor.add_test("Can collide with Area")
+			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.shape_rid = shape_rid
+			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.collide_with_areas = true
+			var collide = true if d_space.intersect_shape(area_query) else false
+			p_monitor.add_test_result(collide)
+		
+		if true:
+			p_monitor.add_test("Can not collide with Area")
+			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.shape_rid = shape_rid
+			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.collide_with_areas = false
+			var collide = true if d_space.intersect_shape(area_query) else false
+			p_monitor.add_test_result(not collide)
+
+		if true:
+			p_monitor.add_test("Can exclude multiple RID")
+			var exclude_rid_query := PhysicsShapeQueryParameters2D.new()
+			exclude_rid_query.transform = Transform2D(0, TOP_RIGHT)
+			exclude_rid_query.collide_with_bodies = true
+			exclude_rid_query.shape_rid = shape_rid
+			exclude_rid_query.motion = Vector2(BOTTOM_CENTER.x / 0.016, 0)
+			exclude_rid_query.exclude = [body.get_rid(), body2.get_rid()]
+			var result := d_space.intersect_shape(exclude_rid_query)
+			p_monitor.add_test_result(result.size() == 2)
 			
+		if true:
+			p_monitor.add_test("Can limit multiple collision")
+			var exclude_rid_query := PhysicsShapeQueryParameters2D.new()
+			exclude_rid_query.transform = Transform2D(0, TOP_RIGHT)
+			exclude_rid_query.collide_with_bodies = true
+			exclude_rid_query.shape_rid = shape_rid
+			exclude_rid_query.motion = Vector2(BOTTOM_CENTER.x / 0.016, 0)
+			exclude_rid_query.exclude = [body.get_rid(), body2.get_rid()]
+			var result := d_space.intersect_shape(exclude_rid_query, 1)
+			p_monitor.add_test_result(result.size() == 1)
+			
+		# Can exclude a RID
+		if true:
+			p_monitor.add_test("Can exclude a Body by RID")
+			var exclude_rid_query := PhysicsShapeQueryParameters2D.new()
+			exclude_rid_query.collide_with_bodies = true
+			exclude_rid_query.shape_rid = shape_rid
+			exclude_rid_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			exclude_rid_query.exclude = [body.get_rid()]
+			var collide = true if d_space.intersect_shape(exclude_rid_query) else false
+			p_monitor.add_test_result(not collide)
+
+		if true:
+			p_monitor.add_test("Can exclude an Area by RID")
+			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.shape_rid = shape_rid
+			area_query.collide_with_areas = true
+			area_query.exclude = [area.get_rid()]
+			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			var collide = true if d_space.intersect_shape(area_query) else false
+			p_monitor.add_test_result(not collide)
+			
+		if true:
+			p_monitor.add_test("Can exclude multiple RID")
+			var exclude_rid_query := PhysicsShapeQueryParameters2D.new()
+			exclude_rid_query.transform = Transform2D(0, TOP_RIGHT)
+			exclude_rid_query.collide_with_bodies = true
+			exclude_rid_query.shape_rid = shape_rid
+			exclude_rid_query.motion = Vector2(BOTTOM_CENTER.x / 0.016, 0)
+			exclude_rid_query.exclude = [body.get_rid(), body2.get_rid()]
+			var collide = true if d_space.intersect_shape(exclude_rid_query) else false
+			p_monitor.add_test_result(not collide)
+			
+		if true:
+			p_monitor.add_test("Don't report collision in the wrong collision layer")
+			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.shape_rid = shape_rid
+			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.collide_with_areas = true
+			area_query.collision_mask = pow(2, 2-1) # second layer
+			var collide = true if d_space.intersect_shape(area_query) else false
+			p_monitor.add_test_result(not collide)
+
+		if true:
+			p_monitor.add_test("Report collision in good collision layer")
+			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.shape_rid = shape_rid
+			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			body_query.collide_with_bodies = true
+			body_query.collision_mask = pow(2, 2-1) # second layer
+			var collide = true if d_space.intersect_shape(body_query) else false
+			p_monitor.add_test_result(collide)
+			
+		PhysicsServer2D.free_rid(shape_rid)
 		p_monitor.monitor_completed()
 
 	var check_max_stability_monitor := create_generic_manual_monitor(self, checks_point, simulation_duration)

@@ -44,14 +44,14 @@ func start() -> void:
 			body_query.collide_with_bodies = false
 			var collide = true if d_space.intersect_ray(body_query) else false
 			p_monitor.add_test_result(not collide)
-
+		
 		if true:
 			p_monitor.add_test("Can collide with Area")
 			var area_query := PhysicsRayQueryParameters2D.create(CENTER, CENTER_LEFT)
 			area_query.collide_with_areas = true
 			var collide = true if d_space.intersect_ray(area_query) else false
 			p_monitor.add_test_result(collide)
-
+		
 		if true:
 			p_monitor.add_test("Can not collide with Area")
 			var area_query := PhysicsRayQueryParameters2D.create(CENTER, CENTER_LEFT)
@@ -109,6 +109,7 @@ func start() -> void:
 			area_query.collision_mask = pow(2, 2-1) # second layer
 			var collide = true if d_space.intersect_ray(area_query) else false
 			p_monitor.add_test_result(not collide)
+
 		if true:
 			p_monitor.add_test("Report collision in good collision layer")
 			var body_query := PhysicsRayQueryParameters2D.create(CENTER, CENTER_RIGHT)
