@@ -11,6 +11,8 @@ func test_name() -> String:
 	
 func start() -> void:
 
+	var mid_screen_width := Global.WINDOW_SIZE.x/2
+
 	# Add Area on the LEFT
 	var area := add_area(CENTER_LEFT)
 	
@@ -21,9 +23,9 @@ func start() -> void:
 	var body2 := add_body(BOTTOM_RIGHT)
 	
 	var d_space := get_world_2d().direct_space_state
-	var shape_rid = PhysicsServer2D.circle_shape_create()
-	var radius = 5
-	PhysicsServer2D.shape_set_data(shape_rid, radius)
+	var shape_rid = PhysicsServer2D.rectangle_shape_create()
+	var size = Vector2(20,20)
+	PhysicsServer2D.shape_set_data(shape_rid, size)
 
 	var checks_point = func(p_target, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
@@ -32,26 +34,29 @@ func start() -> void:
 		if true: # limit the scope
 			p_monitor.add_test("Can collide with Body")
 			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.transform = Transform2D(0, CENTER)
 			body_query.collide_with_bodies = true
 			body_query.shape_rid = shape_rid
-			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			var collide = true if d_space.intersect_shape(body_query) else false
 			p_monitor.add_test_result(collide)
 		
 		if true: # limit the scope
 			p_monitor.add_test("Can  not collide with Body")
 			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.transform = Transform2D(0, CENTER)
 			body_query.collide_with_bodies = false
 			body_query.shape_rid = shape_rid
-			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			var collide = true if d_space.intersect_shape(body_query) else false
 			p_monitor.add_test_result(not collide)
 
 		if true:
 			p_monitor.add_test("Can collide with Area")
 			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.transform = Transform2D(0, CENTER)
 			area_query.shape_rid = shape_rid
-			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = true
 			var collide = true if d_space.intersect_shape(area_query) else false
 			p_monitor.add_test_result(collide)
@@ -59,8 +64,9 @@ func start() -> void:
 		if true:
 			p_monitor.add_test("Can not collide with Area")
 			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.transform = Transform2D(0, CENTER)
 			area_query.shape_rid = shape_rid
-			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = false
 			var collide = true if d_space.intersect_shape(area_query) else false
 			p_monitor.add_test_result(not collide)
@@ -89,6 +95,7 @@ func start() -> void:
 		if true:
 			p_monitor.add_test("Can exclude a Body by RID")
 			var exclude_rid_query := PhysicsShapeQueryParameters2D.new()
+			exclude_rid_query.transform = Transform2D(0, CENTER)
 			exclude_rid_query.collide_with_bodies = true
 			exclude_rid_query.shape_rid = shape_rid
 			exclude_rid_query.motion = Vector2(CENTER_RIGHT / 0.016)
@@ -99,10 +106,11 @@ func start() -> void:
 		if true:
 			p_monitor.add_test("Can exclude an Area by RID")
 			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.transform = Transform2D(0, CENTER)
 			area_query.shape_rid = shape_rid
 			area_query.collide_with_areas = true
 			area_query.exclude = [area.get_rid()]
-			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			var collide = true if d_space.intersect_shape(area_query) else false
 			p_monitor.add_test_result(not collide)
 			
@@ -120,8 +128,9 @@ func start() -> void:
 		if true:
 			p_monitor.add_test("Don't report collision in the wrong collision layer")
 			var area_query := PhysicsShapeQueryParameters2D.new()
+			area_query.transform = Transform2D(0, CENTER)
 			area_query.shape_rid = shape_rid
-			area_query.motion = Vector2(CENTER_LEFT / 0.016)
+			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = true
 			area_query.collision_mask = pow(2, 2-1) # second layer
 			var collide = true if d_space.intersect_shape(area_query) else false
@@ -130,12 +139,32 @@ func start() -> void:
 		if true:
 			p_monitor.add_test("Report collision in good collision layer")
 			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.transform = Transform2D(0, CENTER)
 			body_query.shape_rid = shape_rid
-			body_query.motion = Vector2(CENTER_RIGHT / 0.016)
+			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			body_query.collide_with_bodies = true
 			body_query.collision_mask = pow(2, 2-1) # second layer
 			var collide = true if d_space.intersect_shape(body_query) else false
 			p_monitor.add_test_result(collide)
+			
+		# Rotation
+		if true:
+			p_monitor.add_test("Can apply rotation to the shape")
+			# Without Rotation Don't collide
+			var body_query := PhysicsShapeQueryParameters2D.new()
+			body_query.shape_rid = shape_rid
+			body_query.transform = Transform2D(0, Vector2(CENTER.x, 261-10))
+			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
+			body_query.collide_with_bodies = true
+			var collide1 = true if d_space.intersect_shape(body_query) else false
+			# With rotation collide
+			var body_query_rot := PhysicsShapeQueryParameters2D.new()
+			body_query_rot.shape_rid = shape_rid
+			body_query_rot.transform = Transform2D(deg_to_rad(45), Vector2(CENTER.x, 261-10))
+			body_query_rot.motion = Vector2(mid_screen_width / 0.016, 0)
+			body_query_rot.collide_with_bodies = true
+			var collide2 = true if d_space.intersect_shape(body_query_rot) else false
+			p_monitor.add_test_result(not collide1 and collide2)
 			
 		PhysicsServer2D.free_rid(shape_rid)
 		p_monitor.monitor_completed()
