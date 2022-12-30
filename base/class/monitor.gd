@@ -10,6 +10,7 @@ var monitor_maximum_duration := 10.0
 var error_message := ""
 var success := false
 var started := false
+var frame := 0 # physics frame
 
 var text: String:
 	set(value):

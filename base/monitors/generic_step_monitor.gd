@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-
+	frame += 1
 	# If all steps are completed
 	var last_step = total_step - 1
 	if current_step == last_step:

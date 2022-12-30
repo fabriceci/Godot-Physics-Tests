@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
-		
+	frame += 1
 	if physics_step_cbk:
 		physics_step_cbk.call(target, self)
 

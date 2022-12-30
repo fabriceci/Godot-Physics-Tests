@@ -61,9 +61,7 @@ func start() -> void:
 		var monitor = create_generic_expiration_monitor(body, ray_lambda, null, simulation_duration)
 		monitor.test_name = "Testing Raycast collision with %s" % [shape_name(shape_type)]
 		cpt += 1
-	
-	
-	
+
 func create_rigid_body(p_position: Vector2, p_collision_shape: PhysicsTest2D.TestCollisionShape) -> RigidBody2D:
 	var body := RigidBody2D.new()
 	body.gravity_scale = 0
