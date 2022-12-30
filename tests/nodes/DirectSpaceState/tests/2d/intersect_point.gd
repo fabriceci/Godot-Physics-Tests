@@ -16,6 +16,8 @@ func start() -> void:
 	
 	# Add Body on the RIGHT
 	var body := add_body(CENTER_RIGHT)
+	body.set_collision_layer_value(2, true)
+	body.set_collision_mask_value(2, true)
 	
 	# Add two body in the center
 	var area_center := add_area(CENTER)
@@ -121,8 +123,6 @@ func start() -> void:
 			area_query.collide_with_areas = true
 			var result := d_space.intersect_point(area_query)
 			p_monitor.add_test_result(result.size() == 4)
-			
-			
 		if true:
 			p_monitor.add_test("Can limit multiple collision")
 			var area_query := PhysicsPointQueryParameters2D.new()
@@ -131,6 +131,22 @@ func start() -> void:
 			area_query.collide_with_areas = true
 			var result := d_space.intersect_point(area_query, 2)
 			p_monitor.add_test_result(result.size() == 2)
+		if true:
+			p_monitor.add_test("Don't report collision in the wrong collision layer")
+			var area_query := PhysicsPointQueryParameters2D.new()
+			area_query.position = CENTER_LEFT
+			area_query.collide_with_areas = true
+			area_query.collision_mask = pow(2, 2-1) # second layer
+			var collide = true if d_space.intersect_point(area_query) else false
+			p_monitor.add_test_result(not collide)
+		if true:
+			p_monitor.add_test("Report collision in good collision layer")
+			var body_query := PhysicsPointQueryParameters2D.new()
+			body_query.position = CENTER_RIGHT # Rectangle is 100px wide
+			body_query.collide_with_bodies = true
+			body_query.collision_mask = pow(2, 2-1) # second layer
+			var collide = true if d_space.intersect_point(body_query) else false
+			p_monitor.add_test_result(collide)
 			
 		p_monitor.monitor_completed()
 
