@@ -7,7 +7,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "CollisionShape2D | testing [intersect_shape] from [get_world_2d().direct_space_state]"
+	return "DirectSpaceState2D | testing [intersect_shape] from [get_world_2d().direct_space_state]"
 	
 func start() -> void:
 
