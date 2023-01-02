@@ -30,7 +30,8 @@ func _process(delta: float) -> void:
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:
 		error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
-		return monitor_completed()
+		monitor_completed()
+		return
 
 func monitor_name() -> String:
 	@warning_ignore(assert_always_false)

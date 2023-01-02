@@ -28,7 +28,8 @@ func _process(delta: float) -> void:
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:
 		success = test_lambda.call(target, self)
-		return monitor_completed()
+		monitor_completed()
+		return
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
