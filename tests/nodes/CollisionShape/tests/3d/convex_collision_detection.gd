@@ -56,7 +56,7 @@ func start() -> void:
 		var tested_collide := tested_body.move_and_collide(Vector3.ZERO, true)
 		if tested_collide:
 			t_collide = true
-			t_normal = ref_collide.get_normal()
+			t_normal = tested_collide.get_normal()
 		
 		if t_collide != r_collide:
 			test_failed = true

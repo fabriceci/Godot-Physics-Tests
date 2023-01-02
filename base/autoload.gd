@@ -18,6 +18,9 @@ var MONITOR_PASSED := 0
 var MONITOR_FAILED := 0
 var TEST_PASSED := 0
 
+var RUN_2D_TEST := true
+var RUN_3D_TEST := true
+
 var PERFORMANCE_RESULT := {}
 
 func _process(_delta: float) -> void:

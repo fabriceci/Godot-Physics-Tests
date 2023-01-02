@@ -37,7 +37,7 @@ func _ready() -> void:
 		for scene_file in result[key]:
 			var scene: TestScene = load(scene_file).instantiate()	
 			for child in scene.get_children():
-				if child is PhysicsTest2D:
+				if (Global.RUN_2D_TEST and child is PhysicsTest2D) or (Global.RUN_3D_TEST and child is PhysicsTest3D):
 					runner.add_test(child)
 			scene.queue_free()
 	

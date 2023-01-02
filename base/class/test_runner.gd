@@ -12,10 +12,10 @@ var scroll_container : ScrollContainer
 var container :HFlowContainer
 var status_label: Label
 
-var is_3d: = false
+var is_3d: = true
 
 # Called when the node enters the scene tree for the first time.
-func _init(p_scene: Node, p_is_3d = false) -> void:
+func _init(p_scene: Node, p_is_3d = true) -> void:
 	scene = p_scene
 	is_3d = p_is_3d
 	status_label = Label.new()
