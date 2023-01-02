@@ -47,7 +47,7 @@ func spawn_body() -> void:
 	swap = not swap
 	for i in range(20):
 		var shape := shape1 if swap else shape2
-		var body = _get_rigid_body(TOP_LEFT + Vector2(50 + i * offset, 0), shape)
+		var body = _get_rigid_body(TOP_LEFT + Vector2(50 + randf() * 25 + i * offset, 0), shape)
 		bodies.append(body)
 		add_child(body)
 	
