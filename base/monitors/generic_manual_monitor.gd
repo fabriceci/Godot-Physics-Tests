@@ -27,7 +27,8 @@ func _process(delta: float) -> void:
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:
 		error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
-		return monitor_completed()
+		monitor_completed()
+		return
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:

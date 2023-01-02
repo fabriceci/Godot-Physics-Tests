@@ -42,7 +42,8 @@ func _process(delta: float) -> void:
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:
 		error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
-		return monitor_completed()
+		monitor_completed()
+		return
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta: float) -> void:
@@ -50,7 +51,8 @@ func _physics_process(_delta: float) -> void:
 	# If all steps are completed
 	var last_step = total_step - 1
 	if current_step == last_step:
-		return passed()
+		passed()
+		return
 	
 	if physics_step_cbk:
 		physics_step_cbk.call(current_step, target, first_iteration, self)
@@ -58,7 +60,8 @@ func _physics_process(_delta: float) -> void:
 	# Test according to the lambda provided
 	var result = test_lambda.call(current_step, target, self)
 	if first_iteration and not result:
-		return failed("The verification of the first step has failed")
+		failed("The verification of the first step has failed")
+		return
 	first_iteration = false	
 	
 	# If the test is false, we checks if we can pass to the next step
@@ -66,7 +69,8 @@ func _physics_process(_delta: float) -> void:
 		var is_next = test_lambda.call(current_step + 1, target, self)
 		
 		if not is_next:
-			return failed("Error during the transition from step %d to step %d" % [current_step, current_step + 1])
+			failed("Error during the transition from step %d to step %d" % [current_step, current_step + 1])
+			return
 		else:
 			current_step += 1
 			if physics_step_cbk:
