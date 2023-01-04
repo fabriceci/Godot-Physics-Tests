@@ -33,8 +33,9 @@ func test_completed() -> void:
 	for monitor in monitors:
 		if monitor.has_method("is_test_passed"):
 			if monitor.call("is_test_passed") == null:
-				output += "[color=red]No result in the monitor %s, please check the Callable (argument, argument type or logic)[/color]" % [monitor.name]
-				continue
+				print_rich("[color=red]FATAL ERROR: The monitor [%s] returns null as result, please check the Callable arguments, arguments type[/color]" % [monitor.name])
+				get_tree().quit(1)
+				return
 			var passed:bool = monitor.call("is_test_passed")
 			# multi_test_case
 			if not monitor.multi_test_list.is_empty():
