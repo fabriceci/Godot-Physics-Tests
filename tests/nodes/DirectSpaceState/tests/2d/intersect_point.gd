@@ -25,11 +25,28 @@ func start() -> void:
 	var area_center2 := add_area(CENTER)
 	var body_center2 := add_body(CENTER)
 	
-	# Add Canvas Layer
+	# Add Canvas Layers
 	var canvas := CanvasLayer.new()
-	canvas.layer = 2
-	canvas.add_child(add_area(TOP_CENTER, false))
+	canvas.layer = 1
+	var canvas_area := add_area(TOP_CENTER, false)
+	canvas.add_child(canvas_area)
 	add_child(canvas)
+	
+	var canvas2 := CanvasLayer.new()
+	canvas2.layer = 2
+	var canvas_area2 := add_area(TOP_CENTER, false)
+	canvas2.add_child(canvas_area2)
+	add_child(canvas2)
+	
+	var canvas3 := CanvasLayer.new()
+	canvas3.layer = 3
+	var canvas_area3 := add_area(TOP_CENTER, false)
+	canvas3.add_child(canvas_area3)
+	add_child(canvas3)
+	
+	var canvas_empty := CanvasLayer.new()
+	canvas_empty.layer = 4
+	add_child(canvas_empty)
 	
 	var d_space := get_world_2d().direct_space_state
 	var checks_point = func(p_target, p_monitor: GenericManualMonitor):
@@ -41,40 +58,45 @@ func start() -> void:
 			var body_query := PhysicsPointQueryParameters2D.new()
 			body_query.position = CENTER_RIGHT - (Vector2(51,0)) # Rectangle is 100px wide
 			body_query.collide_with_bodies = true
-			var collide = true if d_space.intersect_point(body_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(body_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 
 		if true:
 			p_monitor.add_test("Can collide with Body at the left border")
 			var body_query := PhysicsPointQueryParameters2D.new()
 			body_query.position = CENTER_RIGHT - (Vector2(50,0))
 			body_query.collide_with_bodies = true
-			var collide = true if d_space.intersect_point(body_query) else false
-			p_monitor.add_test_result(collide)
+			var result := d_space.intersect_point(body_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 1)
 
 		if true:
 			p_monitor.add_test("Can not collide with Body")
 			var body_query := PhysicsPointQueryParameters2D.new()
 			body_query.position = CENTER_RIGHT
 			body_query.collide_with_bodies = false
-			var collide = true if d_space.intersect_point(body_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(body_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 
 		if true:
 			p_monitor.add_test("Can collide with Area")
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = CENTER_LEFT
 			area_query.collide_with_areas = true
-			var collide = true if d_space.intersect_point(area_query) else false
-			p_monitor.add_test_result(collide)
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 1)
 
 		if true:
 			p_monitor.add_test("Can not collide with Area")
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = CENTER_LEFT
 			area_query.collide_with_areas = false
-			var collide = true if d_space.intersect_point(area_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 
 		# Can exclude a RID
 		if true:
@@ -83,8 +105,9 @@ func start() -> void:
 			exclude_rid_query.position = CENTER_RIGHT
 			exclude_rid_query.collide_with_bodies = true
 			exclude_rid_query.exclude = [body.get_rid()]
-			var collide = true if d_space.intersect_point(exclude_rid_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(exclude_rid_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 
 		if true:
 			p_monitor.add_test("Can exclude an Area by RID")
@@ -92,28 +115,49 @@ func start() -> void:
 			exclude_rid_query.position = CENTER_LEFT
 			exclude_rid_query.collide_with_areas = true
 			exclude_rid_query.exclude = [area.get_rid()]
-			var collide = true if d_space.intersect_point(exclude_rid_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(exclude_rid_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 			
 		# Canvas Layer
 		if true:
-			p_monitor.add_test("Should not detect a collision when query the canvas instance")
+			p_monitor.add_test("Should not detect a collision outside the canvas")
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = CENTER_LEFT
 			area_query.collide_with_areas = true
 			area_query.canvas_instance_id = canvas.get_instance_id()
-			var collide = true if d_space.intersect_point(area_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 			
 		if true:
-			p_monitor.add_test("Should not detect a collision when query the canvas instance")
+			p_monitor.add_test("Should not detect a collision inside the empty canvas")
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = TOP_CENTER
 			area_query.collide_with_areas = true
-			area_query.canvas_instance_id = canvas.get_instance_id()
+			area_query.canvas_instance_id = canvas_empty.get_instance_id()
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
 			
-			var collide = true if d_space.intersect_point(area_query) else false
-			p_monitor.add_test_result(collide)
+		if true:
+			p_monitor.add_test("Should detect one collision inside the canvas")
+			var area_query := PhysicsPointQueryParameters2D.new()
+			area_query.position = TOP_CENTER
+			area_query.collide_with_areas = true
+			area_query.canvas_instance_id = canvas2.get_instance_id()
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			var correct_result = false
+			if result_count > 1:
+				p_monitor.add_test_error("Found too many results.")
+			for index in range(result_count):
+				var collider: CollisionObject2D = result[index].collider
+				if collider.get_canvas() == canvas2.get_canvas():
+					correct_result = true
+				else:
+					p_monitor.add_test_error("Found a result in the wrong canvas layer.")
+			p_monitor.add_test_result(result_count == 1 && correct_result)
 			
 		if true:
 			p_monitor.add_test("Can detect multiple collision")
@@ -122,7 +166,9 @@ func start() -> void:
 			area_query.collide_with_bodies = true
 			area_query.collide_with_areas = true
 			var result := d_space.intersect_point(area_query)
-			p_monitor.add_test_result(result.size() == 4)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 4)
+			
 		if true:
 			p_monitor.add_test("Can limit multiple collision")
 			var area_query := PhysicsPointQueryParameters2D.new()
@@ -130,23 +176,28 @@ func start() -> void:
 			area_query.collide_with_bodies = true
 			area_query.collide_with_areas = true
 			var result := d_space.intersect_point(area_query, 2)
-			p_monitor.add_test_result(result.size() == 2)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 2)
+			
 		if true:
 			p_monitor.add_test("Don't report collision in the wrong collision layer")
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = CENTER_LEFT
 			area_query.collide_with_areas = true
 			area_query.collision_mask = pow(2, 2-1) # second layer
-			var collide = true if d_space.intersect_point(area_query) else false
-			p_monitor.add_test_result(not collide)
+			var result := d_space.intersect_point(area_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 0)
+			
 		if true:
 			p_monitor.add_test("Report collision in good collision layer")
 			var body_query := PhysicsPointQueryParameters2D.new()
 			body_query.position = CENTER_RIGHT # Rectangle is 100px wide
 			body_query.collide_with_bodies = true
 			body_query.collision_mask = pow(2, 2-1) # second layer
-			var collide = true if d_space.intersect_point(body_query) else false
-			p_monitor.add_test_result(collide)
+			var result := d_space.intersect_point(body_query)
+			var result_count = result.size() if result else 0
+			p_monitor.add_test_result(result_count == 1)
 			
 		p_monitor.monitor_completed()
 
