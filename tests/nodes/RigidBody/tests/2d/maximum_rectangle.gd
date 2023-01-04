@@ -25,7 +25,7 @@ func start() -> void:
 	timer.start()
 	
 	
-	var maximum_bodies_supported = func(p_target, p_monitor):
+	var maximum_bodies_supported = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		var _bodies := p_target.bodies as Array[RigidBody2D]
 		for body in _bodies:
 			if body.position.y > (Global.WINDOW_SIZE.y) or _bodies.size() >= min_body_expected:

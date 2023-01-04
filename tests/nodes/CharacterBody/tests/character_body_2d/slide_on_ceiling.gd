@@ -20,7 +20,7 @@ func start() -> void:
 	character1.floor_max_angle = deg_to_rad(80)
 	add_child(character1)
 	
-	var c1_test_lambda = func(step, target, monitor):
+	var c1_test_lambda = func(step: int, target: CharacterBody2D, monitor: GenericStepMonitor):
 		if step == 0: return not target.is_on_floor()
 		elif step == 1: return target.is_on_floor()
 		elif step == 2: return not target.is_on_floor() and not target.is_on_ceiling()
@@ -28,7 +28,7 @@ func start() -> void:
 		elif step == 4: return target.position.x < 450
 		elif step == 5: return target.position.x >= 450
 	
-	var physics_step_cbk = func(p_step, p_target, p_is_transition := false, p_monitor = null):
+	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, p_is_transition: bool, p_monitor: GenericStepMonitor):
 		if p_is_transition and p_step == 1:
 			p_target.velocity.y = jump_force
 
@@ -41,12 +41,12 @@ func start() -> void:
 	character2.floor_max_angle = deg_to_rad(80)
 	add_child(character2)
 
-	var c2_test_lambda = func(step, target, monitor):
-		if step == 0: return not target.is_on_floor()
-		elif step == 1: return target.is_on_floor()
-		elif step == 2: return not target.is_on_floor() and not target.is_on_ceiling()
-		elif step == 3: return target.is_on_ceiling()
-		elif step == 4: return is_equal_approx(target.position.x, spawn_position.x)
+	var c2_test_lambda = func(p_step, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
+		if p_step == 0: return not p_target.is_on_floor()
+		elif p_step == 1: return p_target.is_on_floor()
+		elif p_step == 2: return not p_target.is_on_floor() and not p_target.is_on_ceiling()
+		elif p_step == 3: return p_target.is_on_ceiling()
+		elif p_step == 4: return is_equal_approx(p_target.position.x, spawn_position.x)
 
 	var c2_monitor := create_generic_step_monitor(character2, c2_test_lambda, physics_step_cbk)
 	c2_monitor.test_name = "Without sliding, the x position of the body will not change"

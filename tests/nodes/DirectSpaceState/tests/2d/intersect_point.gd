@@ -49,7 +49,7 @@ func start() -> void:
 	add_child(canvas_empty)
 	
 	var d_space := get_world_2d().direct_space_state
-	var checks_point = func(p_target, p_monitor: GenericManualMonitor):
+	var checks_point = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 		
@@ -219,4 +219,4 @@ func add_area(p_position: Vector2, p_add_child := true) -> Area2D:
 	if p_add_child:
 		add_child(area)
 	return area
-	
+

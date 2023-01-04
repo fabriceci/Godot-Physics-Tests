@@ -36,7 +36,7 @@ func start() -> void:
 	add_child(stack)
 	
 	# 1. Should be sleeping
-	var should_be_sleep = func(p_target, p_monitor):
+	var should_be_sleep = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not body.sleeping:
 				return false
@@ -46,18 +46,18 @@ func start() -> void:
 	sleep_monitor.test_name = "The bodies are sleeping"
 	
 	# 2. Should not move horizontally
-	var should_not_move_in_x: Callable = func(p_target, p_monitor):
+	var should_not_move_in_x: Callable = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not (body.position.x > -tolerance and body.position.x < tolerance):
 				p_monitor.error_message = "A body moved by %.1f px" % [body.position.x]
 				return false
 		return true
-		
+
 	var horizontal_monitor = create_generic_expiration_monitor(stack, should_not_move_in_x, null, simulation_duration)
 	horizontal_monitor.test_name = "The bodies did not move horizontally more than %.1f px" % [tolerance]
 	
 	# 3. Should be sorted vertically
-	var should_be_sorted_vertically = func(p_target, p_monitor):
+	var should_be_sorted_vertically = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
 		var child_height = -INF
 		for body in bodies_array as Array[RigidBody2D]:
 			var height = -body.position.y # easier, because the smaller the y, the higher it is (a bit counter intuitive)
@@ -66,12 +66,12 @@ func start() -> void:
 			else:
 				return false
 		return true
-		
+
 	var sorted_vertically_monitor = create_generic_expiration_monitor(stack, should_be_sorted_vertically, null, simulation_duration)
 	sorted_vertically_monitor.test_name = "The bodies are sorted vertically"
 
 	# 4. Only neighboring children overlap
-	var shoud_overlaps_with_neighbours= func(p_target, p_monitor):
+	var shoud_overlaps_with_neighbours= func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
 		var bodies = bodies_array as Array[RigidBody2D]
 		for child_idx in bodies.size():
 			var body := bodies[child_idx]
@@ -94,4 +94,3 @@ func start() -> void:
 		
 	var overlaps_with_neighbours_monitor = create_generic_expiration_monitor(stack, shoud_overlaps_with_neighbours, null, simulation_duration)
 	overlaps_with_neighbours_monitor.test_name = "Only neighboring children overlap"
-	

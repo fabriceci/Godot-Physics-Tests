@@ -30,7 +30,7 @@ func start() -> void:
 	static_body.set_collision_mask_value(2, true)
 	static_body.rotation.z = deg_to_rad(45)
 	
-	var callback_lambda = func(p_target, p_monitor: Monitor):
+	var callback_lambda = func(p_target: PhysicsUnitTest3D, p_monitor: Monitor):
 		tested_body.rotation.x += rot_cpt_x
 		reference_body.rotation.x += rot_cpt_x
 		tested_body.rotation.y += rot_cpt_x / 2

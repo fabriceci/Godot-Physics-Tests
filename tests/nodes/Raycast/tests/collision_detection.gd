@@ -11,7 +11,7 @@ func test_name() -> String:
 
 func start() -> void:
 
-	var ray_lambda = func(p_target, p_monitor: Monitor):
+	var ray_lambda = func(p_target: RigidBody2D, p_monitor: Monitor):
 
 		var ray1 = p_target.get_child(1) # from up 
 		if ray1.is_colliding():
@@ -48,7 +48,7 @@ func start() -> void:
 
 		return true
 	
-	var offset := (Global.WINDOW_SIZE.x ) / (PhysicsTest2D.TestCollisionShape.values().size() -1)
+	var offset := (Global.WINDOW_SIZE.x) / (PhysicsTest2D.TestCollisionShape.values().size() -1)
 	var cpt := 0
 	var bottom_box := PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(600, 600), Vector2(850,20)), PhysicsTest2D.TestCollisionShape.RECTANGLE)
 	bottom_box.position = Vector2(500, 600)

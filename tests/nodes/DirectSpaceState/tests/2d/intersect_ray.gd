@@ -27,7 +27,7 @@ func start() -> void:
 	add_child(body)
 	
 	var d_space := get_world_2d().direct_space_state
-	var checks_ray = func(p_target, p_monitor: GenericManualMonitor):
+	var checks_ray = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 			

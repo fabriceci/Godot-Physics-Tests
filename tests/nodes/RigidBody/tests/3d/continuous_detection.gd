@@ -19,16 +19,16 @@ func start() -> void:
 	var vertical_mov_wall = $VerticalStaticBody3D
 	var horizontal_mov_wall = $HorizontalStaticBody3D
 		
-	var x_lambda = func(p_target: RigidBody3D, p_monitor):
+	var x_lambda = func(p_target: RigidBody3D, p_monitor: GenericExpirationMonitor):
 		return p_target.position.x <= horizontal_mov_wall.position.x # good
 
-	var y_lambda = func(p_target:RigidBody3D , p_monitor):
+	var y_lambda = func(p_target: RigidBody3D , p_monitor: GenericExpirationMonitor):
 		return p_target.position.y >= vertical_mov_wall.position.y # good
 	
-	var collide_x_lambda = func(p_target, p_monitor):
+	var collide_x_lambda = func(p_target: RigidBody3D, p_monitor: GenericExpirationMonitor):
 		return detect_x_collision
 
-	var collide_y_lambda = func(p_target, p_monitor):
+	var collide_y_lambda = func(p_target: RigidBody3D, p_monitor: GenericExpirationMonitor):
 		return detect_y_collision
 	#var horizontal_rigid_body = create_rigid_body(true)
 	#var vertical_rigid_body = create_rigid_body(false)

@@ -12,20 +12,20 @@ func test_name() -> String:
 	return "CharacterBody2D | testing [floor_constant_speed], params: [speed:%s, tolerance:%.1f]" % [speed, tolerance]
 
 func start() -> void:
-	var test_lambda = func(step, target, p_monitor):
-		if step == 0: return not target.is_on_floor()
-		elif step == 1: return target.is_on_floor_only()
-		elif step == 2: return target.is_on_wall()
+	var test_lambda = func(p_step: int, target: CharacterBody2D, p_monitor: GenericStepMonitor):
+		if p_step == 0: return not target.is_on_floor()
+		elif p_step == 1: return target.is_on_floor_only()
+		elif p_step == 2: return target.is_on_wall()
 		
-	var physics_step_cbk = func(step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
-		if is_transition and step == 1:
+	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: GenericStepMonitor):
+		if is_transition and p_step == 1:
 			p_target.velocity.x = speed
 			p_monitor.data["speed"] = 0.0
 			p_monitor.data["cpt_speed"] = 0
-		elif step >= 1 and p_target.is_on_floor_only():
+		elif p_step >= 1 and p_target.is_on_floor_only():
 			p_monitor.data["speed"] += p_target.get_real_velocity().length()
 			p_monitor.data["cpt_speed"] += 1
-		elif step == 2:
+		elif p_step == 2:
 			var average: float = p_monitor.data["speed"] / p_monitor.data["cpt_speed"]
 			p_monitor.test_name += " | average=%.2f" % [average]
 			if average < (speed - tolerance) or average > (speed + tolerance):

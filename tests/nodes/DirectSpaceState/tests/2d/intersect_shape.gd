@@ -27,7 +27,7 @@ func start() -> void:
 	var size = Vector2(20,20)
 	PhysicsServer2D.shape_set_data(shape_rid, size)
 
-	var checks_point = func(p_target, p_monitor: GenericManualMonitor):
+	var checks_point = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 		

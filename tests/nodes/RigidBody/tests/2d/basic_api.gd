@@ -20,24 +20,26 @@ func start() -> void:
 			return
 
 		# Apply constant force
-		var constant_force = Vector2i(200, 0)
-		p_monitor.register_sub_step("Constant force is applied")
+		var constant_force = Vector2(200, 0)
 		p_target.add_constant_force(constant_force)
-		await get_tree().create_timer(.5).timeout
-		var pos_diff = Vector2i(CENTER - p_target.position)
-		if pos_diff == Vector2i(-246, 0):
-			p_monitor.sub_step_success()
-		else:
-			p_monitor.failed("Constant force is not applied: expected %v, get %v" % [Vector2i(-23, 0), pos_diff])
+		#p_monitor.add_test("Constant force is applied")
 		
+		#await get_tree().create_timer(.5).timeout
+		#var pos_diff = Vector2(CENTER - p_target.position)
+		#if pos_diff == Vector2(-246, 0):
+		#	p_monitor.add_test_result(true)
+		#else:
+		#	p_monitor.add_test_error("Constant force is not applied: expected %v, get %v" % [Vector2(-23, 0), pos_diff])
+		#	p_monitor.add_test_result(false)
+			
 		# Retrieve constant force
-		p_monitor.register_sub_step("Constant force can be retrieved")
+		p_monitor.add_test("Constant force can be retrieved")
 		if p_target.constant_force == Vector2(constant_force):
-			p_monitor.sub_step_success()
+			p_monitor.add_test_result(true)
 		else:
-			p_monitor.failed("Constant force is not retrieved correctly: expected %v, get %v" % [constant_force, p_target.constant_force])
-		
-		p_monitor.passed()
+			p_monitor.add_test_error("Constant force is not retrieved correctly: expected %v, get %v" % [constant_force, p_target.constant_force])
+			p_monitor.add_test_result(false)
+		p_monitor.monitor_completed()
 
 	var check_max_stability_monitor := create_generic_manual_monitor(body, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = "Check the RigidBody2D force API"

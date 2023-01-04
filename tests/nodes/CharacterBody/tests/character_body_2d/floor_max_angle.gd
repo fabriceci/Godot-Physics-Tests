@@ -16,13 +16,13 @@ func test_name() -> String:
 	return "CharacterBody2D | testing [floor_max_angle]"
 
 func start() -> void:
-	var test_lambda: Callable = func(p_target: CharacterBody2D, p_monitor):
+	var test_lambda: Callable = func(p_target: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		if p_monitor.data["max_angle"] == 44:
 			return p_monitor.data["maximum_x"] < 375
 		else:
 			return p_monitor.data["maximum_x"] > 975
 	
-	var callback_lambda = func(p_target: CharacterBody2D, p_monitor: Monitor):
+	var callback_lambda = func(p_target: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		if p_target.is_on_floor():
 			p_target.velocity = Vector2(speed, 0)
 		if p_target.position.x > p_monitor.data["maximum_x"]:

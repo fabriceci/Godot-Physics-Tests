@@ -10,7 +10,7 @@ func test_name() -> String:
 func start() -> void:
 	var world_boundary = create_static_body(-25, CENTER)
 	world_boundary.position = BOTTOM_CENTER - Vector2(0, 50)
-	var body = create_character(0)
+	var body = create_character(1)
 	body.position = CENTER
 
 func create_static_body(p_rotation: float, p_force: Vector2) -> StaticBody2D:

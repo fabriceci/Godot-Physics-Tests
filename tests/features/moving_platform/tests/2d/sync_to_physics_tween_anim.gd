@@ -12,21 +12,19 @@ func test_name() -> String:
 
 func start() -> void:
 	# Check x displacement
-	var check_pos_x_callback = func(p_target, p_monitor: Monitor):
+	var check_pos_x_callback = func(p_body: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		await get_tree().process_frame #sync to physics is applied after the physics frame
-		var body: CharacterBody2D = p_monitor.data["character"]
-		if body.position.x - p_monitor.data["platform"].position.x != 0:
+		if p_body.position.x - p_monitor.data["platform"].position.x != 0:
 			p_monitor.data["failure"] += 1
 
 	# Check y displacement
-	var check_pos_y_callback = func(p_target, p_monitor: Monitor):
+	var check_pos_y_callback = func(p_body: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		await get_tree().process_frame #sync to physics is applied after the physics frame
-		var body: CharacterBody2D = p_monitor.data["character"]
-		var y_diff = body.position.y + 50 - p_monitor.data["platform"].position.y
-		if y_diff > body.get_safe_margin() or y_diff < -body.get_safe_margin(): # => != 0
+		var y_diff = p_body.position.y + 50 - p_monitor.data["platform"].position.y
+		if y_diff > p_body.get_safe_margin() or y_diff < -p_body.get_safe_margin(): # => != 0
 			p_monitor.data["failure"] += 1
 
-	var test_lambda = func(p_target, p_monitor):
+	var test_lambda = func(p_target, p_monitor: GenericExpirationMonitor):
 		if p_monitor.data["sync_to_physics"]:
 			if not p_monitor.data["failure"] == 0:
 				p_monitor.error_message = "Out of sync during %d frames" % [p_monitor.data["failure"]]
@@ -67,7 +65,6 @@ func create_sync_to_physics_monitor(p_name_animator: String, p_axis: String, p_a
 	var txt2 := "is sync" if p_sync_to_physic else "is not sync" 
 	monitor.test_name = "%s %s [sync_to_physics] %s %s" % [p_name_animator, txt,  p_axis, txt2]
 	monitor.data["platform"] = p_animator
-	monitor.data["character"] = p_character
 	monitor.data["sync_to_physics"] = p_sync_to_physic
 	monitor.data["failure"] = 0
 	monitor.success = true

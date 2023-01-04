@@ -15,22 +15,22 @@ func start() -> void:
 	add_collision_boundaries(150)
 	
 	# checks all collision type
-	var test_lambda = func(step, target, monitor):
-			if step == 0: return target.get_slide_collision_count() == 0
-			elif step == 1: return target.is_on_wall_only()
-			elif step == 2: return target.is_on_wall() and target.is_on_ceiling()
-			elif step == 3: return target.is_on_ceiling_only()
-			elif step == 4: return target.is_on_wall() and target.is_on_ceiling()
-			elif step == 5: return target.is_on_wall_only()
-			elif step == 6: return target.is_on_wall() and target.is_on_floor()
-			elif step == 7: return target.is_on_floor_only()
+	var test_lambda = func(p_step: int, p_body: CharacterBody2D, monitor: GenericStepMonitor):
+			if p_step == 0: return p_body.get_slide_collision_count() == 0
+			elif p_step == 1: return p_body.is_on_wall_only()
+			elif p_step == 2: return p_body.is_on_wall() and p_body.is_on_ceiling()
+			elif p_step == 3: return p_body.is_on_ceiling_only()
+			elif p_step == 4: return p_body.is_on_wall() and p_body.is_on_ceiling()
+			elif p_step == 5: return p_body.is_on_wall_only()
+			elif p_step == 6: return p_body.is_on_wall() and p_body.is_on_floor()
+			elif p_step == 7: return p_body.is_on_floor_only()
 	
-	var physics_step_cbk = func(step: int, target: CharacterBody2D, is_transition: bool, p_monitor: Monitor):
-		if step == 0: target.velocity = Vector2(speed, 0) # right
-		elif step < 2: target.velocity = Vector2(speed, -speed) # up right
-		elif step < 4: target.velocity = Vector2(-speed, -speed) # up left
-		elif step < 6: target.velocity = Vector2(-speed, speed) # down left
-		elif step == 6: target.velocity = Vector2(speed, speed) # down right
+	var physics_step_cbk = func(p_step: int, p_body: CharacterBody2D, is_transition: bool, p_monitor: GenericStepMonitor):
+		if p_step == 0: p_body.velocity = Vector2(speed, 0) # right
+		elif p_step < 2: p_body.velocity = Vector2(speed, -speed) # up right
+		elif p_step < 4: p_body.velocity = Vector2(-speed, -speed) # up left
+		elif p_step < 6: p_body.velocity = Vector2(-speed, speed) # down left
+		elif p_step == 6: p_body.velocity = Vector2(speed, speed) # down right
 	
 	var cpt_layer := 1
 	for shape_type in PhysicsTest2D.TestCollisionShape.values():

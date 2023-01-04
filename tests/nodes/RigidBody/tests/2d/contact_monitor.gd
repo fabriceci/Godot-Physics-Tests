@@ -28,7 +28,7 @@ func start() -> void:
 
 	var body = create_rigid_body(1)
 	body.position = CENTER - Vector2(100, 0)
-	var contact_lambda = func(p_step, p_target, p_monitor):
+	var contact_lambda = func(p_step: int, p_target: PhysicsTest2D, p_monitor: GenericStepMonitor):
 		var colliding_bodies = body.get_colliding_bodies().size() 
 		if p_step == 0: 
 			return body.get_colliding_bodies().size() == 0 

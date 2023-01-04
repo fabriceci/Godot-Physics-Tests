@@ -20,7 +20,7 @@ func start() -> void:
 	# checks all collision type
 	var test_lambda
 	if body_mode == CharacterBody2D.MOTION_MODE_GROUNDED:
-		test_lambda = func(p_step, p_target, p_monitor):
+		test_lambda = func(p_step, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
 			if p_step == 0: return p_target.get_slide_collision_count() == 0 # idle
 			elif p_step == 1: return p_target.is_on_wall_only() and p_target.get_slide_collision_count() == 1 # touch right wall
 			elif p_step == 2: return p_target.get_slide_collision_count() == 0 # go up
@@ -31,7 +31,7 @@ func start() -> void:
 			elif p_step == 7: return p_target.is_on_floor_only() and p_target.get_slide_collision_count() == 1 # hit the floor
 			elif p_step == 8: return p_target.get_slide_collision_count() == 0 # move right
 	elif body_mode == CharacterBody2D.MOTION_MODE_FLOATING:
-		test_lambda = func(p_step, p_target, p_monitor):
+		test_lambda = func(p_step, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
 			if p_step == 0: return p_target.get_slide_collision_count() == 0 # idle
 			elif p_step == 1: return p_target.is_on_wall_only() and p_target.get_slide_collision_count() == 1 # touch right wall
 			elif p_step == 2: return p_target.get_slide_collision_count() == 0 # go up

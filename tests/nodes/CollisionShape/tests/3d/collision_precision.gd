@@ -109,7 +109,7 @@ func start() -> void:
 			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(-45), deg_to_rad(-90))
 			static_body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
 
-	var maximum_bodies_supported = func(p_target, p_monitor):
+	var maximum_bodies_supported = func(p_target: PhysicsUnitTest3D, p_monitor: GenericManualMonitor):
 		if tested_done and ref_done:
 			
 			$Draw.normal = tested_result[1]
@@ -120,12 +120,13 @@ func start() -> void:
 
 			var normal_dot: float = ref_result[1].dot(tested_result[1])
 			
-#			var pos_diff: Vector3 = ref_result[0] - tested_result[0]
-#			var pos_length := pos_diff.length()
-#			output += "[indent][indent][color=purple]Position obtained: %v, expected %v, diff %v (length %f)[/color][/indent][/indent]\n" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()]
-#			output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f,[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot]
-			var failed = false
+			if Global.DEBUG:	
+				var pos_diff: Vector3 = ref_result[0] - tested_result[0]
+				var pos_length := pos_diff.length()
+				output += "[indent][indent][color=purple]Position obtained: %v, expected %v, diff %v (length %f)[/color][/indent][/indent]\n" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()]
+				output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f,[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot]
 			
+			var failed = false
 			var ref = get_reference()
 
 			if not is_equal_approx(ref[1], normal_dot):
@@ -139,9 +140,7 @@ func start() -> void:
 				p_monitor.failed()
 			else:
 				p_monitor.passed()
-			
-			# p_monitor.test_name += " → [color=orange]failed at %d[/color]" % [_bodies.size()]
-			# p_monitor.failed()
+
 			return
 
 		var collide: KinematicCollision3D = tested_body.move_and_collide(tested_body.velocity * 0.008)

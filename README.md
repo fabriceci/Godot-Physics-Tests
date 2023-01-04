@@ -120,15 +120,14 @@ var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
     	p_monitor.add_test("Don't collide at 1px left from the body")
         var body_query := PhysicsPointQueryParameters2D.new()
         var result := d_space.intersect_point(body_query)
-        var result_count = result.size() if result else 0
-        p_monitor.add_test_result(result_count == 0)
+        p_monitor.add_test_result(result.size() == 0)
     if true:
         p_monitor.add_test("Should detect one collision inside the canvas")
         var area_query := PhysicsPointQueryParameters2D.new()
         var result := d_space.intersect_point(area_query)
         if result.size() > 1:
         	p_monitor.add_test_error("Found too many results.")
-        p_monitor.add_test_result(result.size() > 1)
+        p_monitor.add_test_result(result.size() == 1)
         
     p_monitor.monitor_completed()
 ```

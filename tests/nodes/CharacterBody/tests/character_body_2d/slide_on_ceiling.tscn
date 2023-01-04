@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://dplo6k3cmfows"]
 
 [ext_resource type="Script" path="res://tests/nodes/CharacterBody/tests/character_body_2d/slide_on_ceiling.gd" id="1_ypb7w"]
 

@@ -39,16 +39,16 @@ func start() -> void:
 	var rigid_y_ccd_shape := create_rigid_body(RigidBody2D.CCD_MODE_CAST_SHAPE, false)
 	rigid_y_ccd_shape.position = Vector2(vertical_wall.position.x + 250, 50)
 	
-	var x_lambda = func(p_target, p_monitor):
+	var x_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
 		return p_target.position.x <= vertical_wall.position.x # good
 
-	var y_lambda = func(p_target, p_monitor):
+	var y_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
 		return p_target.position.y <= horizontal_wall.position.y # good
 	
-	var collide_x_lambda = func(p_target, p_monitor):
+	var collide_x_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
 		return detect_x_collision
 
-	var collide_y_lambda = func(p_target, p_monitor):
+	var collide_y_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
 		return detect_y_collision
 
 	var x_ray_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration)
