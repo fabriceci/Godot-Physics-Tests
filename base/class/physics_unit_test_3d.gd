@@ -34,15 +34,16 @@ func test_completed() -> void:
 		if monitor.has_method("is_test_passed"):
 			var passed:bool = monitor.call("is_test_passed")
 			# multi_test_case
-			if not monitor.multi_test_names.is_empty():
-				for i in range(0, monitor.multi_test_names.size()):
-					var sub_test_result = monitor.multi_test_result.get(i, false)
-					if sub_test_result:
+			if not monitor.multi_test_list.is_empty():
+				for sub_test in monitor.multi_test_list:
+					if sub_test.result:
 						Global.MONITOR_PASSED += 1
 					else:
 						Global.MONITOR_FAILED += 1
-					var subs_result = "[color=red]✗[/color]" if not sub_test_result else "[color=green]✓[/color]"
-					output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.multi_test_names[i], subs_result]
+					var subs_result = "[color=red]✗[/color]" if not sub_test.result else "[color=green]✓[/color]"
+					output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [sub_test.name, subs_result]
+					for sub_test_error in sub_test.errors:
+						output += "[indent][indent][indent][indent][color=red]Error: %s[/color][/indent][/indent][/indent][/indent]\n" % sub_test_error
 			else:
 				if passed:
 					Global.MONITOR_PASSED += 1

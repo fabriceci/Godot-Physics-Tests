@@ -36,4 +36,4 @@ func _physics_process(_delta: float) -> void:
 	first_iteration = false	
 
 func add_test(p_name: String):
-	multi_test_names.append(p_name)
+	add_sub_test(p_name)
