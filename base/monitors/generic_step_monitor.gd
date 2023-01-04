@@ -74,7 +74,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func add_test(p_step_should_reach:int, p_name: String):
-	multi_test_names.append(p_name)
+	add_sub_test(p_name)
 	multi_test_auto_step.append(p_step_should_reach)
 	
 func monitor_completed() -> void:
