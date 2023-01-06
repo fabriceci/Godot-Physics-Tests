@@ -24,7 +24,7 @@ func test_start() -> void:
 		Global.NUMBER_TEST_PER_ROW = 1
 		Global.MAXIMUM_PARALLEL_TESTS = 1
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-	runner.start()
+	runner.run()
 			
 func completed() -> void:
 	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
