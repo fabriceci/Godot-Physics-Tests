@@ -18,13 +18,13 @@ var platforms_center_pos = []
 var platforms = []
 var labels = []
 	
-func start() -> void:
+func test_start() -> void:
 	var offset_x = (Global.WINDOW_SIZE.x - 57) / 29.0 # 30 columns
 	var offset_y = (Global.WINDOW_SIZE.y - 72) / 11.0  # 12 rows - 72 + 528
 	var deg := 0
 	for y in range(12):
 		for x in range(30):
-			var wall_on_way = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(20,20)), TestCollisionShape.RECTANGLE)
+			var wall_on_way = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(20,20)), TestCollisionShape.RECTANGLE)
 			var center = Vector2(28 + offset_x * x , 36 + offset_y * y)
 			platforms_center_pos.append(center)
 			wall_on_way.position = center
@@ -45,7 +45,7 @@ func start() -> void:
 			
 			var character = CharacterBody2D.new()
 			character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide.gd")
-			character.add_child(get_default_collision_shape(body_shape, 0.5))
+			character.add_child(PhysicsTest2D.get_default_collision_shape(body_shape, 0.5))
 			character.position = center + Vector2(-20, 0)
 			character.velocity = Vector2(speed, 0)
 			bodies.append(character)

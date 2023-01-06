@@ -16,7 +16,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "CharacterBody2D | testing [floor_block_on_wall]"
 
-func start() -> void:
+func test_start() -> void:
 	var test_lambda: Callable = func(p_target: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		if p_target.floor_block_on_wall:
 			return p_monitor.data["maximum_x"] > (275 - p_target.safe_margin) and p_monitor.data["maximum_x"] < (275 + p_target.safe_margin)

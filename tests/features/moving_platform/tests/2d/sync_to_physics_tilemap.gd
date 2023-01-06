@@ -11,7 +11,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "Sync to Physics | testing if [collision_animatable] sync body to the Tilemap2D platform"
 
-func start() -> void:
+func test_start() -> void:
 	
 	animatable_tilemap.collision_animatable = true
 	
@@ -29,7 +29,7 @@ func start() -> void:
 		if y_diff > p_body.get_safe_margin() or y_diff < -p_body.get_safe_margin(): # => != 0
 			p_monitor.data["failure"] += 1
 		
-	var test_lambda = func(p_target, p_monitor: GenericExpirationMonitor):
+	var test_lambda = func(_p_target, p_monitor: GenericExpirationMonitor):
 		if not p_monitor.data["failure"] == 0:
 			p_monitor.error_message = "Out of sync during %d/%d frames" % [p_monitor.data["failure"], p_monitor.frame]
 		return p_monitor.data["failure"] == 0
@@ -57,7 +57,7 @@ func create_character(p_position: Vector2, p_body_shape := PhysicsTest2D.TestCol
 	var character = CharacterBody2D.new()
 	character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd")
 	character.position = p_position
-	var body_col: Node2D = get_default_collision_shape(p_body_shape, 2)
+	var body_col: Node2D = PhysicsTest2D.get_default_collision_shape(p_body_shape, 2)
 	character.add_child(body_col)
 	add_child(character)
 	return character

@@ -14,7 +14,7 @@ func test_name() -> String:
 	var mode = "Grounded" if body_mode == CharacterBody2D.MOTION_MODE_GROUNDED else "Floating"
 	return "CharacterBody2D | testing surface detection when the body don't push against the surface [mode=%s]" % [mode]
 
-func start() -> void:
+func test_start() -> void:
 	add_collision_boundaries(150)
 	
 	# checks all collision type

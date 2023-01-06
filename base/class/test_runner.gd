@@ -41,7 +41,7 @@ func add_test(node):
 	list_of_tests.append(node.duplicate())
 	total_tests += 1
 	
-func start():
+func run():
 	var available := Global.MAXIMUM_PARALLEL_TESTS - ongoing_tests
 	var remaining_test = total_tests - current_test_index
 	while available > 0 and remaining_test != 0:
@@ -68,7 +68,7 @@ func start():
 		
 		var callable = self.update_test.bind(node)
 		node.completed.connect(callable)
-		node.start()
+		node.test_start()
 		current_test_index += 1
 		ongoing_tests += 1
 		available = Global.MAXIMUM_PARALLEL_TESTS - ongoing_tests
@@ -83,7 +83,7 @@ func update_test(node):
 	if completed_tests == total_tests:
 		completed.emit()
 	else:
-		start()
+		run()
 
 func reset():
 	if scroll_container:

@@ -11,20 +11,20 @@ func test_description() -> String:
 	"""
 
 func test_name() -> String:
-	return "CharacterBody2D | testing [floor floor_snap_length] [shape: %s]" % [shape_name(body_shape)]
+	return "CharacterBody2D | testing [floor floor_snap_length] [shape: %s]" % [PhysicsTest2D.shape_name(body_shape)]
 	
-func start() -> void:
+func test_start() -> void:
 	# C1 start in air, touch the ground until he reach the wall
 	var character1 = create_character(1) # checks behaviour without snap
 	character1.position = spawn_position
 	add_child(character1)
 	
-	var c1_test_lambda = func(p_step: int, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
+	var c1_test_lambda = func(p_step: int, p_target: CharacterBody2D, _p_monitor: GenericStepMonitor):
 		if p_step == 0: return not p_target.is_on_floor()
 		elif p_step == 1: return p_target.is_on_floor_only()
 		elif p_step == 2: return p_target.is_on_wall()
 		
-	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: GenericStepMonitor):
+	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, is_transition: bool, _p_monitor: GenericStepMonitor):
 		if is_transition and p_step == 1:
 			p_target.velocity.x = speed
 		
@@ -37,7 +37,7 @@ func start() -> void:
 	character2.floor_snap_length = 0 # turn off snapping ton confirm different behavior
 	add_child(character2)
 	
-	var c2_test_lambda = func(p_step: int, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
+	var c2_test_lambda = func(p_step: int, p_target: CharacterBody2D, _p_monitor: GenericStepMonitor):
 		if p_step == 0: return not p_target.is_on_floor()
 		elif p_step == 1: return p_target.is_on_floor_only()
 		elif p_step == 2: return not p_target.is_on_wall()
@@ -51,13 +51,13 @@ func start() -> void:
 	character3.position = spawn_position
 	add_child(character3)
 	
-	var c3_test_lambda = func(p_step: int, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
+	var c3_test_lambda = func(p_step: int, p_target: CharacterBody2D, _p_monitor: GenericStepMonitor):
 		if p_step == 0: return not p_target.is_on_floor()
 		elif p_step == 1: return p_target.is_on_floor_only()
 		elif p_step == 2: return not p_target.is_on_floor()
 		elif p_step == 3: return p_target.is_on_floor()
 
-	var cbk_jump_lambda = func(step: int, p_target: CharacterBody2D, p_is_transition: bool, p_monitor: GenericStepMonitor):
+	var cbk_jump_lambda = func(step: int, p_target: CharacterBody2D, p_is_transition: bool, _p_monitor: GenericStepMonitor):
 		if p_is_transition and step == 1:
 			p_target.velocity.y = -500
 	
@@ -73,6 +73,6 @@ func create_character(layer: int) -> CharacterBody2D:
 	character.collision_mask = 0
 	character.set_collision_layer_value(layer, true)
 	character.set_collision_mask_value(layer, true)
-	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
+	var body_col: Node2D = PhysicsTest2D.get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	return character

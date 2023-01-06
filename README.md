@@ -29,11 +29,11 @@ Note: when you start the project it runs all the tests, but **you can also run t
 
   - `test_description()`: return a full description of the unit test
   - `test_name()`: return the name of the unit test
-  - `start()`: the test code which generally means adding one or more monitors (sub-tests).
+  - `test_start()`: the test code which generally means adding one or more monitors (sub-tests).
   
 ### Write a monitor
 
-In the `start()` method of your `PhysicsUnitTest2D|3D` file, you need to add at least one monitor, there are 3 generic monitors provided by default to easily create a test, but you can create a custom one if you need to.
+In the `test_start()` method of your `PhysicsUnitTest2D|3D` file, you need to add at least one monitor, there are 3 generic monitors provided by default to easily create a test, but you can create a custom one if you need to.
 
 Don't hesitate to look at existing tests.
 

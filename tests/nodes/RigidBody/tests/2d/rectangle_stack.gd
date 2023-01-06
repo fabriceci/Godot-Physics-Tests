@@ -16,7 +16,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "RigidBody2D | testing the box stack stability"
 
-func start() -> void:
+func test_start() -> void:
 	add_collision_boundaries(20, false)
 
 	var stack = Node2D.new()
@@ -25,7 +25,7 @@ func start() -> void:
 	var bodies_array : Array[RigidBody2D] = []
 	for i in range(stack_height):
 		var body := RigidBody2D.new()
-		var body_col: Node2D = get_collision_shape(Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size), body_shape, true)
+		var body_col: Node2D = PhysicsTest2D.get_collision_shape(Rect2(Vector2(-body_size.x * 0.5, -body_size.y * 0.5), body_size), body_shape, true)
 		body.add_child(body_col)
 		
 		# Spawn the body
@@ -36,7 +36,7 @@ func start() -> void:
 	add_child(stack)
 	
 	# 1. Should be sleeping
-	var should_be_sleep = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
+	var should_be_sleep = func(_p_target: Node2D, _p_monitor: GenericExpirationMonitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not body.sleeping:
 				return false
@@ -46,7 +46,7 @@ func start() -> void:
 	sleep_monitor.test_name = "The bodies are sleeping"
 	
 	# 2. Should not move horizontally
-	var should_not_move_in_x: Callable = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
+	var should_not_move_in_x: Callable = func(_p_target: Node2D, p_monitor: GenericExpirationMonitor):
 		for body in bodies_array as Array[RigidBody2D]:
 			if not (body.position.x > -tolerance and body.position.x < tolerance):
 				p_monitor.error_message = "A body moved by %.1f px" % [body.position.x]
@@ -57,7 +57,7 @@ func start() -> void:
 	horizontal_monitor.test_name = "The bodies did not move horizontally more than %.1f px" % [tolerance]
 	
 	# 3. Should be sorted vertically
-	var should_be_sorted_vertically = func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
+	var should_be_sorted_vertically = func(_p_target: Node2D, _p_monitor: GenericExpirationMonitor):
 		var child_height = -INF
 		for body in bodies_array as Array[RigidBody2D]:
 			var height = -body.position.y # easier, because the smaller the y, the higher it is (a bit counter intuitive)
@@ -71,7 +71,7 @@ func start() -> void:
 	sorted_vertically_monitor.test_name = "The bodies are sorted vertically"
 
 	# 4. Only neighboring children overlap
-	var shoud_overlaps_with_neighbours= func(p_target: Node2D, p_monitor: GenericExpirationMonitor):
+	var shoud_overlaps_with_neighbours= func(p_target: Node2D, _p_monitor: GenericExpirationMonitor):
 		var bodies = bodies_array as Array[RigidBody2D]
 		for child_idx in bodies.size():
 			var body := bodies[child_idx]

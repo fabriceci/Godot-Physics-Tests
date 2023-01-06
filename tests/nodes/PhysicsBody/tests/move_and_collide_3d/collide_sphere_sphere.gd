@@ -1,10 +1,8 @@
 extends PhysicsUnitTest3D
 
-
 # Tolerances
 const POSITION_TOLERANCE := 0.01
 const NORMAL_TOLERANCE := 0.001
-
 
 var simulation_duration := 20
 var test_failed := false
@@ -16,21 +14,20 @@ func test_description() -> String:
 func test_name() -> String:
 	return "PhysicsBody3D | testing collide sphere with sphere"
 
-
 var tested_body: CharacterBody3D
 var static_body: StaticBody3D
 
-func start() -> void:
+func test_start() -> void:
 	tested_body = $Tested
 	static_body = $Static
 	
-	var test_lambda: Callable = func(p_target, p_monitor: GenericManualMonitor):
+	var test_lambda: Callable = func(_p_target, p_monitor: GenericManualMonitor):
 		# Get the test block and index
-		var test_block := int(p_monitor.frame / 100)
+		var test_block := int(p_monitor.frame / 100.0)
 		var test_index := int(p_monitor.frame % 100)
 
 		# Get the test raster positions X/Y/Theta
-		var r1 : float = floor(test_index / 10) - 5.0
+		var r1 : float = floor(test_index / 10.0) - 5.0
 		var r2 : float = (test_index % 10) - 5.0
 		var rt : float = test_index * TAU / 100.0
 

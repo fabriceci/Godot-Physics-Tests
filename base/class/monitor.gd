@@ -18,7 +18,7 @@ var text: Dictionary:
 func _init() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
-func start() -> void:
+func test_start() -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 	started = true
 
@@ -51,9 +51,9 @@ func passed():
 	success = true
 	monitor_completed()
 
-func add_sub_test(name: String) -> void:
+func add_sub_test(p_name: String) -> void:
 	multi_test_list.append({
-		"name": name,
+		"name": p_name,
 		"result": false,
 		"errors": [],
 	})

@@ -9,7 +9,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "DirectSpaceState2D | testing [intersect_point] from [get_world_2d().direct_space_state]"
 	
-func start() -> void:
+func test_start() -> void:
 
 	# Add Area on the LEFT
 	var area := add_area(CENTER_LEFT)
@@ -20,10 +20,10 @@ func start() -> void:
 	body.set_collision_mask_value(2, true)
 	
 	# Add two body in the center
-	var area_center := add_area(CENTER)
-	var body_center := add_body(CENTER)
-	var area_center2 := add_area(CENTER)
-	var body_center2 := add_body(CENTER)
+	add_area(CENTER)
+	add_body(CENTER)
+	add_area(CENTER)
+	add_body(CENTER)
 	
 	# Add Canvas Layers
 	var canvas := CanvasLayer.new()
@@ -49,7 +49,7 @@ func start() -> void:
 	add_child(canvas_empty)
 	
 	var d_space := get_world_2d().direct_space_state
-	var checks_point = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
+	var checks_point = func(_p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 		
@@ -184,7 +184,7 @@ func start() -> void:
 			var area_query := PhysicsPointQueryParameters2D.new()
 			area_query.position = CENTER_LEFT
 			area_query.collide_with_areas = true
-			area_query.collision_mask = pow(2, 2-1) # second layer
+			area_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var result := d_space.intersect_point(area_query)
 			var result_count = result.size() if result else 0
 			p_monitor.add_test_result(result_count == 0)
@@ -194,18 +194,18 @@ func start() -> void:
 			var body_query := PhysicsPointQueryParameters2D.new()
 			body_query.position = CENTER_RIGHT # Rectangle is 100px wide
 			body_query.collide_with_bodies = true
-			body_query.collision_mask = pow(2, 2-1) # second layer
+			body_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var result := d_space.intersect_point(body_query)
 			var result_count = result.size() if result else 0
 			p_monitor.add_test_result(result_count == 1)
 			
 		p_monitor.monitor_completed()
 
-	var check_max_stability_monitor := create_generic_manual_monitor(self, checks_point, simulation_duration)
+	create_generic_manual_monitor(self, checks_point, simulation_duration)
 
 func add_body(p_position: Vector2, p_add_child := true) -> StaticBody2D:
 	var body := StaticBody2D.new()
-	var body_shape := get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4)
+	var body_shape := PhysicsTest2D.get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4)
 	body.add_child(body_shape)
 	body.position = p_position
 	if p_add_child:
@@ -214,7 +214,7 @@ func add_body(p_position: Vector2, p_add_child := true) -> StaticBody2D:
 	
 func add_area(p_position: Vector2, p_add_child := true) -> Area2D:
 	var area := Area2D.new()
-	area.add_child(get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4))
+	area.add_child(PhysicsTest2D.get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4))
 	area.position = p_position
 	if p_add_child:
 		add_child(area)

@@ -10,8 +10,8 @@ script/source = "extends TestScene
 script = SubResource("GDScript_n4cxb")
 
 [node name="convex 1026v" parent="." instance=ExtResource("1_myy22")]
-shape1 = 100
 shape2 = 100
+shape1 = 100
 number_bodies_per_step = 1
 delay_for_new_bodies = 2.0
 step_recording = 1

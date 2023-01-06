@@ -39,7 +39,7 @@ var tested_result := []
 var ref_done := false
 var ref_result := []
 
-func start() -> void:
+func test_start() -> void:
 	tested_body = create_body(1, shape_tested)
 	if (shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON or shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX):
 		reference_body = create_body(2, PhysicsTest3D.TestCollisionShape.BOX)
@@ -109,7 +109,7 @@ func start() -> void:
 			body.rotation = Vector3(deg_to_rad(45), deg_to_rad(-45), deg_to_rad(-90))
 			static_body.rotation = Vector3(deg_to_rad(45), deg_to_rad(45), 0)
 
-	var maximum_bodies_supported = func(p_target: PhysicsUnitTest3D, p_monitor: GenericManualMonitor):
+	var maximum_bodies_supported = func(_p_target: PhysicsUnitTest3D, p_monitor: GenericManualMonitor):
 		if tested_done and ref_done:
 			
 			$Draw.normal = tested_result[1]
@@ -122,7 +122,6 @@ func start() -> void:
 			
 			if Global.DEBUG:	
 				var pos_diff: Vector3 = ref_result[0] - tested_result[0]
-				var pos_length := pos_diff.length()
 				output += "[indent][indent][color=purple]Position obtained: %v, expected %v, diff %v (length %f)[/color][/indent][/indent]\n" % [tested_result[0], ref_result[0], pos_diff, pos_diff.length()]
 				output += "[indent][indent][color=purple]Normal obtained: %v, expected %v, dot %f,[/color][/indent][/indent]\n" % [tested_result[1], ref_result[1], normal_dot]
 			

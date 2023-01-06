@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://cplr40c1sl0b5"]
 
-[ext_resource type="PackedScene" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_sphere.tscn" id="1_qsgnv"]
-[ext_resource type="PackedScene" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_cylinder.tscn" id="2_0pbta"]
-[ext_resource type="PackedScene" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_capsule.tscn" id="3_5xjmy"]
+[ext_resource type="PackedScene" uid="uid://dxosfcvftax0d" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_sphere.tscn" id="1_qsgnv"]
+[ext_resource type="PackedScene" uid="uid://mnqtchryrkij" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_cylinder.tscn" id="2_0pbta"]
+[ext_resource type="PackedScene" uid="uid://bwgl5ivfqijki" path="res://tests/nodes/PhysicsBody/tests/move_and_collide_3d/collide_sphere_capsule.tscn" id="3_5xjmy"]
 
 [sub_resource type="GDScript" id="GDScript_13ds0"]
 script/source = "extends TestScene

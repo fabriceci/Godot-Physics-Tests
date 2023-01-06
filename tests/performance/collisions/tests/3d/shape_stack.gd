@@ -11,10 +11,10 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing the %s stack stability" % [shape_name(shape)]
+	return "RigidBody | testing the %s stack stability" % [PhysicsTest3D.shape_name(shape)]
 
 
-func start() -> void:
+func test_start() -> void:
 	$Camera.current = true
 	
 	var timer = Timer.new()

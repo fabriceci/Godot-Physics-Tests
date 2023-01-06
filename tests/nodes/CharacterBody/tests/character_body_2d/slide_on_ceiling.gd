@@ -11,24 +11,24 @@ func test_description() -> String:
 	"""
 
 func test_name() -> String:
-	return "CharacterBody2D | testing slide on ceiling [shape: %s]" % [shape_name(body_shape)]
+	return "CharacterBody2D | testing slide on ceiling [shape: %s]" % [PhysicsTest2D.shape_name(body_shape)]
 	
-func start() -> void:
+func test_start() -> void:
 	# C1 Jump in the ceiling and expect to move in x
 	var character1 = create_character(1)
 	character1.slide_on_ceiling = true
 	character1.floor_max_angle = deg_to_rad(80)
 	add_child(character1)
 	
-	var c1_test_lambda = func(step: int, target: CharacterBody2D, monitor: GenericStepMonitor):
-		if step == 0: return not target.is_on_floor()
-		elif step == 1: return target.is_on_floor()
-		elif step == 2: return not target.is_on_floor() and not target.is_on_ceiling()
-		elif step == 3: return target.is_on_ceiling()
-		elif step == 4: return target.position.x < 450
-		elif step == 5: return target.position.x >= 450
+	var c1_test_lambda = func(p_step: int, p_target: CharacterBody2D, _p_monitor: GenericStepMonitor):
+		if p_step == 0: return not p_target.is_on_floor()
+		elif p_step == 1: return p_target.is_on_floor()
+		elif p_step == 2: return not p_target.is_on_floor() and not p_target.is_on_ceiling()
+		elif p_step == 3: return p_target.is_on_ceiling()
+		elif p_step == 4: return p_target.position.x < 450
+		elif p_step == 5: return p_target.position.x >= 450
 	
-	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, p_is_transition: bool, p_monitor: GenericStepMonitor):
+	var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, p_is_transition: bool, _p_monitor: GenericStepMonitor):
 		if p_is_transition and p_step == 1:
 			p_target.velocity.y = jump_force
 
@@ -41,7 +41,7 @@ func start() -> void:
 	character2.floor_max_angle = deg_to_rad(80)
 	add_child(character2)
 
-	var c2_test_lambda = func(p_step, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
+	var c2_test_lambda = func(p_step, p_target: CharacterBody2D, _p_monitor: GenericStepMonitor):
 		if p_step == 0: return not p_target.is_on_floor()
 		elif p_step == 1: return p_target.is_on_floor()
 		elif p_step == 2: return not p_target.is_on_floor() and not p_target.is_on_ceiling()
@@ -59,6 +59,6 @@ func create_character(layer: int) -> CharacterBody2D:
 	character.position = spawn_position
 	character.set_collision_layer_value(layer, true)
 	character.set_collision_mask_value(layer, true)
-	var body_col: Node2D = get_default_collision_shape(body_shape, 2)
+	var body_col: Node2D = PhysicsTest2D.get_default_collision_shape(body_shape, 2)
 	character.add_child(body_col)
 	return character

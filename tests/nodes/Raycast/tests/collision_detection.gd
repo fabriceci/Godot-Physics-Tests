@@ -9,7 +9,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "Raycast2D | testing collision"
 
-func start() -> void:
+func test_start() -> void:
 
 	var ray_lambda = func(p_target: RigidBody2D, p_monitor: Monitor):
 
@@ -59,13 +59,13 @@ func start() -> void:
 		var body = create_rigid_body(Vector2(100 + offset * cpt, CENTER.y), shape_type)
 		body.name = PhysicsTest2D.shape_name(shape_type)
 		var monitor = create_generic_expiration_monitor(body, ray_lambda, null, simulation_duration)
-		monitor.test_name = "Testing Raycast collision with %s" % [shape_name(shape_type)]
+		monitor.test_name = "Testing Raycast collision with %s" % [PhysicsTest2D.shape_name(shape_type)]
 		cpt += 1
 
 func create_rigid_body(p_position: Vector2, p_collision_shape: PhysicsTest2D.TestCollisionShape) -> RigidBody2D:
 	var body := RigidBody2D.new()
 	body.gravity_scale = 0
-	body.add_child(get_default_collision_shape(p_collision_shape, 6))
+	body.add_child(PhysicsTest2D.get_default_collision_shape(p_collision_shape, 6))
 	body.position = p_position
 	add_child(body)
 	

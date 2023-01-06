@@ -10,7 +10,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "Sync to Physics | checks if the body is synced with the platform with Tween/AnimationPlayer"
 
-func start() -> void:
+func test_start() -> void:
 	# Check x displacement
 	var check_pos_x_callback = func(p_body: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		await get_tree().process_frame #sync to physics is applied after the physics frame
@@ -24,7 +24,7 @@ func start() -> void:
 		if y_diff > p_body.get_safe_margin() or y_diff < -p_body.get_safe_margin(): # => != 0
 			p_monitor.data["failure"] += 1
 
-	var test_lambda = func(p_target, p_monitor: GenericExpirationMonitor):
+	var test_lambda = func(_p_target, p_monitor: GenericExpirationMonitor):
 		if p_monitor.data["sync_to_physics"]:
 			if not p_monitor.data["failure"] == 0:
 				p_monitor.error_message = "Out of sync during %d frames" % [p_monitor.data["failure"]]
@@ -75,7 +75,7 @@ func create_platform(p_sync_to_physics:bool, p_platform_start_pos:Vector2, p_pla
 	var animatable_body:AnimatableBody2D
 	
 	animatable_body = AnimatableBody2D.new()
-	animatable_body.add_child(get_collision_shape(Rect2(Vector2(0,0), Vector2(150,50)), PhysicsTest2D.TestCollisionShape.RECTANGLE, false))
+	animatable_body.add_child(PhysicsTest2D.get_collision_shape(Rect2(Vector2(0,0), Vector2(150,50)), PhysicsTest2D.TestCollisionShape.RECTANGLE, false))
 	animatable_body.position = p_platform_start_pos
 	animatable_body.sync_to_physics = p_sync_to_physics
 	add_child(animatable_body)
@@ -109,7 +109,7 @@ func create_character(p_position: Vector2, p_body_shape := PhysicsTest2D.TestCol
 	var character = CharacterBody2D.new()
 	character.script = load("res://tests/nodes/CharacterBody/scripts/2d/character_body_2d_move_and_slide_with_gravity.gd")
 	character.position = p_position
-	var body_col: Node2D = get_default_collision_shape(p_body_shape, 2)
+	var body_col: Node2D = PhysicsTest2D.get_default_collision_shape(p_body_shape, 2)
 	character.add_child(body_col)
 	add_child(character)
 	return character

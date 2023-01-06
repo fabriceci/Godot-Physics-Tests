@@ -5,9 +5,9 @@ var runner: TestRunner
 
 func _ready() -> void:
 	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
-		start()
+		test_start()
 
-func start() -> void:
+func test_start() -> void:
 	runner = TestRunner.new(self, true)
 	runner.completed.connect(self.completed)
 	var is_performance := false

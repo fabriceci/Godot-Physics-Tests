@@ -15,7 +15,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "CharacterBody2D | testing [floor_max_angle]"
 
-func start() -> void:
+func test_start() -> void:
 	var test_lambda: Callable = func(p_target: CharacterBody2D, p_monitor: GenericExpirationMonitor):
 		if p_monitor.data["max_angle"] == 44:
 			return p_monitor.data["maximum_x"] < 375

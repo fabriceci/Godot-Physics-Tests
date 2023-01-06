@@ -26,9 +26,9 @@ var static_body: StaticBody3D
 #var ref_body
 
 func test_name() -> String:
-	return "Testing precision for %s | type: %s" % [shape_name(shape_tested), TestType.keys()[type]]
+	return "Testing precision for %s | type: %s" % [PhysicsTest3D.shape_name(shape_tested), TestType.keys()[type]]
 	
-func start() -> void:
+func test_start() -> void:
 	
 	tested_body = create_body(1, shape_tested)
 	reference_body = create_body(2, shape_tested)
@@ -99,7 +99,6 @@ func _physics_process(delta: float) -> void:
 		$Draw.normal = tested_result[1]
 		$Draw.point = tested_result[0]
 		$Draw.camera = $Camera
-		
 		
 		var pos_diff: Vector3 = tested_result[0] - ref_result[0]
 		var normal_diff: Vector3 = tested_result[1] - ref_result[1]

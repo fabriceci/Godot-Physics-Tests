@@ -13,7 +13,7 @@ var swap := false # change order bodies fall
 func test_name() -> String:
 	return "Maximum number of bodies before FPS are less than %d (%s vs %s)" % [minimum_fps, PhysicsTest2D.shape_name(shape1), PhysicsTest2D.shape_name(shape2)]
 
-func start() -> void:
+func test_start() -> void:
 	label_number = Label.new()
 	label_number.position = TOP_LEFT + Vector2(20,60)
 	label_number.set("theme_override_font_sizes/font_size", 18)
@@ -30,7 +30,7 @@ func start() -> void:
 	timer.start()
 	super() # launch the test
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	label_number.text = "Bodies: " + str(bodies.size())
 
 	if get_fps() <= minimum_fps:

@@ -14,13 +14,13 @@ func test_name() -> String:
 var detect_x_collision := false
 var detect_y_collision := false
 
-func start() -> void:
+func test_start() -> void:
 	
-	var vertical_wall = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+	var vertical_wall = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
 	vertical_wall.position = Vector2(TOP_RIGHT.x - Global.WINDOW_SIZE.y/2 -1, 0)
 	add_child(vertical_wall)
 	
-	var horizontal_wall = get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(Global.WINDOW_SIZE.y/2, 2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+	var horizontal_wall = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(Global.WINDOW_SIZE.y/2, 2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
 	horizontal_wall.position = Vector2(BOTTOM_RIGHT.x - Global.WINDOW_SIZE.y/2, BOTTOM_RIGHT.y -50)
 	add_child(horizontal_wall)
 	
@@ -39,16 +39,16 @@ func start() -> void:
 	var rigid_y_ccd_shape := create_rigid_body(RigidBody2D.CCD_MODE_CAST_SHAPE, false)
 	rigid_y_ccd_shape.position = Vector2(vertical_wall.position.x + 250, 50)
 	
-	var x_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
+	var x_lambda = func(p_target: RigidBody2D, _p_monitor: GenericExpirationMonitor):
 		return p_target.position.x <= vertical_wall.position.x # good
 
-	var y_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
+	var y_lambda = func(p_target: RigidBody2D, _p_monitor: GenericExpirationMonitor):
 		return p_target.position.y <= horizontal_wall.position.y # good
 	
-	var collide_x_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
+	var collide_x_lambda = func(_p_target: RigidBody2D, _p_monitor: GenericExpirationMonitor):
 		return detect_x_collision
 
-	var collide_y_lambda = func(p_target: RigidBody2D, p_monitor: GenericExpirationMonitor):
+	var collide_y_lambda = func(_p_target: RigidBody2D, _p_monitor: GenericExpirationMonitor):
 		return detect_y_collision
 
 	var x_ray_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration)
@@ -75,7 +75,7 @@ func start() -> void:
 
 func create_rigid_body(p_ccd_mode: RigidBody2D.CCDMode, p_horizontal := true, p_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.RECTANGLE) -> RigidBody2D:
 	var player = RigidBody2D.new()
-	player.add_child(get_default_collision_shape(p_shape))
+	player.add_child(PhysicsTest2D.get_default_collision_shape(p_shape))
 	player.gravity_scale = 0
 	player.continuous_cd = p_ccd_mode
 	player.contact_monitor = true

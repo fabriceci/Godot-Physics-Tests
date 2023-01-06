@@ -18,18 +18,18 @@ func test_description() -> String:
 func test_name() -> String:
 	return "RigidBody | testing the stability with a pyramid [tolerance %.2v]" % [tolerance]
 
-func start() -> void:
+func test_start() -> void:
 	add_collision_boundaries(size_boundary, false)
 	create_pyramid()
 
-	var test_sleep: Callable = func(p_target, p_monitor):
+	var test_sleep: Callable = func(_p_target: PhysicsTest2D, _p_monitor: GenericExpirationMonitor):
 		for body_parent in bodies as Array[Node2D]:
 			var body: RigidBody2D = body_parent.get_child(0)
 			if not body.sleeping:
 				return false
 		return true
 	
-	var test_head_position: Callable = func(p_target: PhysicsTest2D, p_monitor: GenericExpirationMonitor):
+	var test_head_position: Callable = func(_p_target: PhysicsTest2D, p_monitor: GenericExpirationMonitor):
 		var last_cube_parent: Node2D = bodies[bodies.size() - 1]
 		var end_simulation_pos := Vector2(last_cube_parent.get_child(0).position.x, last_cube_parent.position.y)
 		if end_simulation_pos.x < top_last_position.x - tolerance.x or end_simulation_pos.x > top_last_position.x + tolerance.x:
@@ -76,6 +76,6 @@ func create_pyramid():
 		
 func get_rigid_body() -> RigidBody2D:
 	var body = RigidBody2D.new()
-	var shape = get_collision_shape(Rect2(Vector2(0, 0), box_size), TestCollisionShape.RECTANGLE, false)
+	var shape = PhysicsTest2D.get_collision_shape(Rect2(Vector2(0, 0), box_size), TestCollisionShape.RECTANGLE, false)
 	body.add_child(shape)
 	return body

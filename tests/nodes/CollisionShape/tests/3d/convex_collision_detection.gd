@@ -17,7 +17,7 @@ var static_body: CharacterBody3D
 
 var rot_cpt_x = 0.06
 
-func start() -> void:
+func test_start() -> void:
 	tested_body = create_body(1, PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON)
 	reference_body = create_body(2, PhysicsTest3D.TestCollisionShape.BOX)
 	
@@ -30,7 +30,7 @@ func start() -> void:
 	static_body.set_collision_mask_value(2, true)
 	static_body.rotation.z = deg_to_rad(45)
 	
-	var callback_lambda = func(p_target: PhysicsUnitTest3D, p_monitor: Monitor):
+	var callback_lambda = func(_p_target: PhysicsUnitTest3D, _p_monitor: Monitor):
 		tested_body.rotation.x += rot_cpt_x
 		reference_body.rotation.x += rot_cpt_x
 		tested_body.rotation.y += rot_cpt_x / 2
@@ -46,8 +46,7 @@ func start() -> void:
 		var t_normal = Vector3.ZERO
 		var r_collide = false
 		var r_normal = Vector3.ZERO
-
-
+		
 		var ref_collide := reference_body.move_and_collide(Vector3.ZERO, true)
 		if ref_collide:
 			r_collide = true
@@ -63,7 +62,7 @@ func start() -> void:
 		if not r_normal.is_equal_approx(t_normal):
 			test_failed = true
 			
-	var test_lambda: Callable = func(p_target, p_monitor):
+	var test_lambda: Callable = func(_p_target, _p_monitor):
 		return not test_failed
 
 	var collision_monitor = create_generic_expiration_monitor(self, test_lambda, callback_lambda, simulation_duration)

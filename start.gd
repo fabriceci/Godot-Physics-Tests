@@ -43,11 +43,11 @@ func _ready() -> void:
 	
 	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] SCENES FOUND[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
 	start_time = Time.get_unix_time_from_system()
-	runner.start()
+	runner.run()
 
 func find_test(result: Dictionary, folder: String) -> void:
 	
-	var path = "res://tests/" + folder  + "/";
+	var path = "res://tests/" + folder  + "/"
 	var dir = DirAccess.open(path)
 
 	if dir:

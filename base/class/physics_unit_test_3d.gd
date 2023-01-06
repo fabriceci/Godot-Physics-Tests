@@ -15,7 +15,7 @@ func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true
 		monitor.owner = p_owner
 		monitor.target = p_owner
 		if p_start:
-			monitor.start()
+			monitor.test_start()
 
 func on_monitor_completed() -> void:
 	monitor_completed += 1

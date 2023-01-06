@@ -66,7 +66,7 @@ func _process(_delta: float) -> void:
 func get_fps():
 	return _smoothed_fps
 
-func start() -> void:
+func test_start() -> void:
 	super()
 	
 	_fps_label = Label.new()

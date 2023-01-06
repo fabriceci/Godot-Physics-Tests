@@ -28,7 +28,7 @@ var step_next = 0
 func test_name() -> String:
 	return "Maximum number of bodies before FPS are less than %d (%s vs %s)" % [minimum_fps, PhysicsTest3D.shape_name(shape1), PhysicsTest3D.shape_name(shape2)]
 
-func start() -> void:
+func test_start() -> void:
 	$Camera.current = true
 	step_next = step_recording
 	label_number = Label.new()

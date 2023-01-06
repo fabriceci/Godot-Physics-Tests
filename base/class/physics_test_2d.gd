@@ -31,7 +31,7 @@ enum TestCollisionShape {
 
 func _ready() -> void:
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		start()
+		test_start()
 	var center_layout = CenterContainer.new()
 	center_layout.size = Vector2(Global.WINDOW_SIZE.x, 40)
 	var text_label = Label.new()
@@ -42,10 +42,10 @@ func _ready() -> void:
 
 func test_name() -> String:
 	@warning_ignore(assert_always_false)
-	assert(false, "ERROR: You must give implement test_name()");
+	assert(false, "ERROR: You must give implement test_name()")
 	return ""
 
-func start() -> void:
+func test_start() -> void:
 	pass
 
 func test_completed() -> void:

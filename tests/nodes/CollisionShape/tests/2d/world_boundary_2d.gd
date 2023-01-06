@@ -7,7 +7,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "CollisionShape2D | testing [One Way Collision] with World Boundary 2D"
 	
-func start() -> void:
+func test_start() -> void:
 	var world_boundary = create_static_body(-25, CENTER)
 	world_boundary.position = BOTTOM_CENTER - Vector2(0, 50)
 	var body = create_character(1)

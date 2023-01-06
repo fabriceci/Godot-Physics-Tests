@@ -9,7 +9,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "DirectSpaceState2D | testing [intersect_shape] from [get_world_2d().direct_space_state]"
 	
-func start() -> void:
+func test_start() -> void:
 
 	var mid_screen_width := Global.WINDOW_SIZE.x/2
 
@@ -27,7 +27,7 @@ func start() -> void:
 	var size = Vector2(20,20)
 	PhysicsServer2D.shape_set_data(shape_rid, size)
 
-	var checks_point = func(p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
+	var checks_point = func(_p_target: PhysicsUnitTest2D, p_monitor: GenericManualMonitor):
 		if p_monitor.frame != 2: # avoid a bug in first frame
 			return
 		
@@ -132,7 +132,7 @@ func start() -> void:
 			area_query.shape_rid = shape_rid
 			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = true
-			area_query.collision_mask = pow(2, 2-1) # second layer
+			area_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var collide = true if d_space.intersect_shape(area_query) else false
 			p_monitor.add_test_result(not collide)
 
@@ -143,7 +143,7 @@ func start() -> void:
 			body_query.shape_rid = shape_rid
 			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			body_query.collide_with_bodies = true
-			body_query.collision_mask = pow(2, 2-1) # second layer
+			body_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var collide = true if d_space.intersect_shape(body_query) else false
 			p_monitor.add_test_result(collide)
 			
@@ -169,11 +169,11 @@ func start() -> void:
 		PhysicsServer2D.free_rid(shape_rid)
 		p_monitor.monitor_completed()
 
-	var check_max_stability_monitor := create_generic_manual_monitor(self, checks_point, simulation_duration)
+	create_generic_manual_monitor(self, checks_point, simulation_duration)
 
 func add_body(p_position: Vector2, p_add_child := true) -> StaticBody2D:
 	var body := StaticBody2D.new()
-	var body_shape := get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4)
+	var body_shape := PhysicsTest2D.get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4)
 	body.add_child(body_shape)
 	body.position = p_position
 	if p_add_child:
@@ -182,7 +182,7 @@ func add_body(p_position: Vector2, p_add_child := true) -> StaticBody2D:
 	
 func add_area(p_position: Vector2, p_add_child := true) -> Area2D:
 	var area := Area2D.new()
-	area.add_child(get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4))
+	area.add_child(PhysicsTest2D.get_default_collision_shape(PhysicsTest2D.TestCollisionShape.RECTANGLE, 4))
 	area.position = p_position
 	if p_add_child:
 		add_child(area)

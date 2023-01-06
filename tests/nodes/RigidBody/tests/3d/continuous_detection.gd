@@ -14,7 +14,7 @@ func test_name() -> String:
 var detect_x_collision := false
 var detect_y_collision := false
 
-func start() -> void:
+func test_start() -> void:
 	# TO DO: Instanciate scene nodes in code
 	var vertical_mov_wall = $VerticalStaticBody3D
 	var horizontal_mov_wall = $HorizontalStaticBody3D

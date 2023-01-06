@@ -9,7 +9,7 @@ func test_description() -> String:
 func test_name() -> String:
 	return "RigidBody | testing the API"
 
-func start() -> void:
+func test_start() -> void:
 	
 	add_collision_boundaries()
 	var body := create_rigid_body(1)
@@ -19,13 +19,17 @@ func start() -> void:
 		if not p_monitor.first_iteration:
 			return
 
-		# Apply constant force
+		# Setup the force
+	
 		var constant_force = Vector2(200, 0)
+		var frame_start = p_monitor.frame
 		p_target.add_constant_force(constant_force)
-		#p_monitor.add_test("Constant force is applied")
-		
-		#await get_tree().create_timer(.5).timeout
-		#var pos_diff = Vector2(CENTER - p_target.position)
+		p_monitor.add_test("Constant force is applied")
+		await get_tree().create_timer(.5).timeout
+		var pos_diff = Vector2(CENTER - p_target.position)
+		var frame_end = p_monitor.frame
+		var frame = frame_end - frame_start
+		print("test")
 		#if pos_diff == Vector2(-246, 0):
 		#	p_monitor.add_test_result(true)
 		#else:
@@ -39,7 +43,7 @@ func start() -> void:
 		else:
 			p_monitor.add_test_error("Constant force is not retrieved correctly: expected %v, get %v" % [constant_force, p_target.constant_force])
 			p_monitor.add_test_result(false)
-		p_monitor.monitor_completed()
+		#p_monitor.monitor_completed()
 
 	var check_max_stability_monitor := create_generic_manual_monitor(body, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = "Check the RigidBody2D force API"
@@ -49,9 +53,17 @@ func create_rigid_body(p_layer := 1, p_report_contact := 20) -> RigidBody2D:
 	player.add_child(get_default_collision_shape(body_shape))
 	player.gravity_scale = 0
 	player.contact_monitor = true
+	player.linear_damp = 0
+	player.angular_damp = 0
+	player.linear_damp_mode = RigidBody2D.DAMP_MODE_COMBINE
+	player.linear_damp_mode = RigidBody2D.DAMP_MODE_COMBINE
+	var material = PhysicsMaterial.new()
+	material.friction = 0
+	player.physics_material_override = material
 	player.max_contacts_reported = p_report_contact
 	player.collision_mask = 0
 	player.collision_layer = 0
 	player.set_collision_mask_value(p_layer, true)
+	player.position = CENTER
 	add_child(player)
 	return player

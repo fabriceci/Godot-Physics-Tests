@@ -18,7 +18,7 @@ var platforms_center_pos = []
 var platforms = []
 var labels = []
 	
-func start() -> void:
+func test_start() -> void:
 	var offset_x = (Global.WINDOW_SIZE.x - 57) / 29.0 # 30 columns
 	var offset_y = (Global.WINDOW_SIZE.y - 72) / 11.0  # 12 rows - 72 + 528
 	var deg := 0
@@ -61,7 +61,7 @@ func start() -> void:
 			
 			deg += 1
 	
-	var lambda: Callable = func(p_target: PhysicsUnitTest2D, p_monitor: GenericExpirationMonitor):
+	var lambda: Callable = func(_p_target: PhysicsUnitTest2D, p_monitor: GenericExpirationMonitor):
 		var error_cpt := 0
 		for body in bodies as Array[RigidBody2D]:
 			var idx = bodies.find(body)
