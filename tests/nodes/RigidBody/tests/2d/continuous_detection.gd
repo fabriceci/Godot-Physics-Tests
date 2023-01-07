@@ -25,7 +25,6 @@ func test_start() -> void:
 	add_child(horizontal_wall)
 	
 	var rigid_x_ccd_ray := create_rigid_body(RigidBody2D.CCD_MODE_CAST_RAY)
-	rigid_x_ccd_ray.name = "lolilol"
 	rigid_x_ccd_ray.position = Vector2(50, 150)
 	rigid_x_ccd_ray.body_entered.connect(x_collide.bind(rigid_x_ccd_ray))
 	
