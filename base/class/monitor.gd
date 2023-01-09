@@ -10,6 +10,7 @@ var error_message := ""
 var success := false
 var started := false
 var frame := 0 # physics frame
+var expected_to_fail := false
 
 var text: Dictionary:
 	set(value):
@@ -51,11 +52,12 @@ func passed():
 	success = true
 	monitor_completed()
 
-func add_sub_test(p_name: String) -> void:
+func add_sub_test(p_name: String, p_expected_to_fail := false) -> void:
 	multi_test_list.append({
 		"name": p_name,
 		"result": false,
 		"errors": [],
+		"expected_to_fail": p_expected_to_fail
 	})
 
 func add_test_error(p_error: String):

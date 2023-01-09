@@ -15,7 +15,7 @@ func test_name() -> String:
 	
 func test_start() -> void:
 	# C1 start in air, touch the ground until he reach the wall
-	var character1 = create_character(1) # checks behaviour without snap
+	var character1 := create_character(1) # checks behaviour without snap
 	character1.position = spawn_position
 	add_child(character1)
 	
@@ -32,7 +32,7 @@ func test_start() -> void:
 	c1_monitor.test_name = "Snapping works as expected (stick to the floor)"
 
 	# C2 without snap it should be not stick to the ground
-	var character2 = create_character(2) # checks behaviour with snap
+	var character2 := create_character(2) # checks behaviour with snap
 	character2.position = spawn_position
 	character2.floor_snap_length = 0 # turn off snapping ton confirm different behavior
 	add_child(character2)
@@ -43,11 +43,11 @@ func test_start() -> void:
 		elif p_step == 2: return not p_target.is_on_wall()
 		elif p_step == 3: return p_target.is_on_wall()
 
-	var c2_monitor = create_generic_step_monitor(character2, c2_test_lambda, physics_step_cbk)
+	var c2_monitor := create_generic_step_monitor(character2, c2_test_lambda, physics_step_cbk)
 	c2_monitor.test_name = "Snapping has a different behaviour than without it"
 	
 	# C3 try to jump with
-	var character3 = create_character(3) # checks if the body can jump
+	var character3 := create_character(3) # checks if the body can jump
 	character3.position = spawn_position
 	add_child(character3)
 	

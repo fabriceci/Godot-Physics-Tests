@@ -8,9 +8,9 @@ func test_name() -> String:
 	return "CollisionShape2D | testing [One Way Collision] with World Boundary 2D"
 	
 func test_start() -> void:
-	var world_boundary = create_static_body(-25, CENTER)
+	var world_boundary := create_static_body(-25, CENTER)
 	world_boundary.position = BOTTOM_CENTER - Vector2(0, 50)
-	var body = create_character(1)
+	var body := create_character(1)
 	body.position = CENTER
 
 func create_static_body(p_rotation: float, p_force: Vector2) -> StaticBody2D:

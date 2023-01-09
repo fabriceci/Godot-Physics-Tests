@@ -56,9 +56,9 @@ func test_start() -> void:
 	for shape_type in PhysicsTest2D.TestCollisionShape.values():
 		if shape_type == PhysicsTest2D.TestCollisionShape.WORLD_BOUNDARY or shape_type == PhysicsTest2D.TestCollisionShape.CONCAVE_SEGMENT:
 			continue
-		var body = create_rigid_body(Vector2(100 + offset * cpt, CENTER.y), shape_type)
+		var body := create_rigid_body(Vector2(100 + offset * cpt, CENTER.y), shape_type)
 		body.name = PhysicsTest2D.shape_name(shape_type)
-		var monitor = create_generic_expiration_monitor(body, ray_lambda, null, simulation_duration)
+		var monitor := create_generic_expiration_monitor(body, ray_lambda, null, simulation_duration)
 		monitor.test_name = "Testing Raycast collision with %s" % [PhysicsTest2D.shape_name(shape_type)]
 		cpt += 1
 

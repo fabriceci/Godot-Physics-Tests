@@ -31,7 +31,7 @@ Note: when you start the project it runs all the tests, but **you can also run t
   - `test_name()`: return the name of the unit test
   - `test_start()`: the test code which generally means adding one or more monitors (sub-tests).
   
-### Write a monitor
+## Write a monitor
 
 In the `test_start()` method of your `PhysicsUnitTest2D|3D` file, you need to add at least one monitor, there are 3 generic monitors provided by default to easily create a test, but you can create a custom one if you need to.
 
@@ -39,7 +39,7 @@ Don't hesitate to look at existing tests.
 
 Note: to create a monitor you must provide a callback function (`Callable`), **be careful - the method signature of the `Callable` must include all parameters, even the ones you don't use**.
 
-#### The expiration monitor
+### The expiration monitor
 
 This monitor will wait a certain `[duration]` then execute a `Callable` that will return `true` if the test succeeded, otherwise `false`.
 
@@ -47,7 +47,7 @@ This monitor will wait a certain `[duration]` then execute a `Callable` that wil
 
 ```python
 var lambda: Callable = func(p_target, p_monitor: GenericExpirationMonitor):
-    return body.sleeping
+	return body.sleeping
  
 var monitor = create_generic_expiration_monitor(self, lambda, null, simulation_duration)
 monitor.test_name = "sub test name"
@@ -62,19 +62,71 @@ monitor.test_name = "sub test name"
 
 You can give details of the error by assigning a `String`to `p_monitor.error_message`.
 
-#### The auto step monitor
+### The manual monitor
 
-This monitor will test a succession of steps. The callback function will perform a series of tests depending on the step the test is in (`p_step`). As long as the test is false, the step remains the same, when the test is true, we move on to the next step, which must be false, and then we repeat until the end of the test.
+This monitor is the most flexible, it allows you to decide when a test has passed or failed. You can define several sub-tests within a test.
+
+`create_generic_manual_monitor` takes as parameter:
+
+1. a node: this node will be send as `p_target` to the test callback
+2. a test callback (`Callable`) where you will manually indicate whether the test has failed or not.
+3. the duration of the test
+4. set the behavior when the monitor reach the end of the simulation/duration, by default the parameter `fail_on_expiration` is set the `false`, which means that is considered as failed.
+
+**Example of single test**
+
+```python
+var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
+	if p_monitor.frame == 60: # wait until the 60th frame before running the test.
+		if  body.rotation == 0:
+			p_monitor.passed()
+   		else:
+			p_monitor.failed(“Rotation is not equal to 0”)
+
+var check_max_stability_monitor = create_generic_manual_monitor(self, test_cbk, simulation_duration)
+check_max_stability_monitor.test_name = "Testing stability"
+```
+
+You can give details of the error by passing a `String` to `p_monitor.failed`.
+
+**Example of multi test**
+
+```python
+Example:
+var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
+	if true: # limit the variables scope
+		p_monitor.add_test("Don't collide at 1px left from the body")
+		var body_query := PhysicsPointQueryParameters2D.new()
+		var result := d_space.intersect_point(body_query)
+		p_monitor.add_test_result(result.size() == 0)
+	if true:
+		p_monitor.add_test("Should detect one collision inside the canvas")
+		var area_query := PhysicsPointQueryParameters2D.new()
+		var result := d_space.intersect_point(area_query)
+		if result.size() > 1:
+			p_monitor.add_test_error("Found too many results.")
+		p_monitor.add_test_result(result.size() == 1)
+		
+	p_monitor.monitor_completed()
+```
+
+
+- The tests need to be run in order.
+- You can give details of the error by calling `p_monitor.add_test_error`, and even call it multiple times to add multiple errors.
+
+### The auto step monitor
+
+Most of the time it's better to use the manual monitor than this one. This monitor will test a succession of steps. The callback function will perform a series of tests depending on the step the test is in (`p_step`). As long as the test is false, the step remains the same, when the test is true, we move on to the next step, which must be false, and then we repeat until the end of the test.
 
 **Example:**
 
 ```python
 var test_lambda = func(p_step, p_target: CharacterBody2D, p_monitor: GenericStepMonitor):
 	if p_step == 0: return p_target.get_slide_collision_count() == 0
-    elif p_step == 1: return p_target.is_on_wall_only()
-    elif p_step == 2: return p_target.is_on_wall() and target.is_on_ceiling()
-    elif p_step == 3: return p_target.is_on_ceiling_only()
-    
+	elif p_step == 1: return p_target.is_on_wall_only()
+	elif p_step == 2: return p_target.is_on_wall() and target.is_on_ceiling()
+	elif p_step == 3: return p_target.is_on_ceiling_only()
+	
 var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, is_transition: bool, p_monitor: GenericStepMonitor):
 	if p_step == 0: p_target.velocity = Vector2(speed, 0) 
 	elif p_step < 2: p_target.velocity = Vector2(speed, -speed)
@@ -91,53 +143,20 @@ contact_monitor.test_name = "sub test name"
 
 You can give details of the error by assigning a `String`to `p_monitor.error_message`.
 
-#### The manual monitor
+### When a test fails because of a bug
 
-This monitor is the most flexible, it allows you to decide when a test has passed or failed. You can define several sub-tests within a test.
+If a bug is detected and you are not in the process of fixing it, you can indicate that this test is expected to fail, this allows the project to track regressions.
 
-**Example of single test**
+In a single monitor test, you must set the boolean `expected_to_fail` to `true`, example: `monitor.expected_to_fail = true`.
 
-```python
-var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
-	if p_monitor.frame == 60: # wait until the 60th frame before running the test.
-    	if  body.rotation == 0:
-        	p_monitor.passed()
-   		else:
-        	p_monitor.failed(“Rotation is not equal to 0”)
+In a manual, multi-monitor test, you can set this boolean in the second parameter of `add_sub_test`, example: `add_sub_test(p_name: String, p_expected_to_fail := false)`
 
-var check_max_stability_monitor = create_generic_manual_monitor(self, test_cbk, simulation_duration)
-check_max_stability_monitor.test_name = "Testing stability"
-```
-
-You can give details of the error by passing a `String` to `p_monitor.failed`.
-
-**Example of multi test**
-
-```python
-Example:
-var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
-	if true: # limit the variables scope
-    	p_monitor.add_test("Don't collide at 1px left from the body")
-        var body_query := PhysicsPointQueryParameters2D.new()
-        var result := d_space.intersect_point(body_query)
-        p_monitor.add_test_result(result.size() == 0)
-    if true:
-        p_monitor.add_test("Should detect one collision inside the canvas")
-        var area_query := PhysicsPointQueryParameters2D.new()
-        var result := d_space.intersect_point(area_query)
-        if result.size() > 1:
-        	p_monitor.add_test_error("Found too many results.")
-        p_monitor.add_test_result(result.size() == 1)
-        
-    p_monitor.monitor_completed()
-```
-
-The tests need to be run in order.
-
-You can give details of the error by calling `p_monitor.add_test_error`, and even call it multiple times to add multiple errors.
 
 ## Tips
 
+### Constants
+
+There are constants in the `Global.gd` file to customize the execution of the tests.
 ### Debugging a test
 
 You can press `P` to switch to Frame by Frame mode, in this mode, press `O` to move to the next frame or `P` a second time to exit this mode. This is a very easy way to debug a test, if you want to start a test in pause mode, edit the `base/pause.gd` file and set the first variable `var paused = false` to `true`. 
@@ -146,3 +165,4 @@ You can press `P` to switch to Frame by Frame mode, in this mode, press `O` to m
 
   - `monitor.frame`: return the current frame (since the test started)
   - `monitor.data`: an array where you can store/retrieve extra data
+  - `expected_to_fail`: return `true` if the monitor, in the current state of the engine, is expected to fail

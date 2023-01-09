@@ -94,8 +94,9 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://base/autoload.gd"
+Global="*res://base/Global.gd"
 Pause="*res://base/pause.gd"
+Utils2D="*res://base/Utils2D.gd"
 
 [display]
 
@@ -124,3 +125,10 @@ zoom_out={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":8,"position":Vector2(297, 215),"global_position":Vector2(1052, 542),"factor":0.120081,"button_index":4,"pressed":true,"double_click":false,"script":null)
 ]
 }
+
+[rendering]
+
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=0
+environment/ssao/quality=0
+environment/ssil/quality=0

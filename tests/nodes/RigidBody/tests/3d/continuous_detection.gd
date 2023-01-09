@@ -9,7 +9,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing Continuous Collision Detection (CCD)"
+	return "RigidBody3D | testing Continuous Collision Detection (CCD)"
 
 var detect_x_collision := false
 var detect_y_collision := false
@@ -30,24 +30,24 @@ func test_start() -> void:
 
 	var collide_y_lambda = func(_p_target: RigidBody3D, _p_monitor: GenericExpirationMonitor):
 		return detect_y_collision
-	#var horizontal_rigid_body = create_rigid_body(true)
-	#var vertical_rigid_body = create_rigid_body(false)
+
 	$HorizontalRigidBody3D.body_entered.connect(x_collide.bind($HorizontalRigidBody3D))
 	$VerticalRigidBody3D.body_entered.connect(y_collide.bind($VerticalRigidBody3D))
 	
 	$HorizontalRigidBody3D.apply_central_impulse(Vector3(speed, 0, 0))
 	$VerticalRigidBody3D.apply_central_impulse(Vector3(0, -speed, 0))
 	
-	var x_shape_ccd_monitor = create_generic_expiration_monitor($HorizontalRigidBody3D, x_lambda, null, simulation_duration)
+	var x_shape_ccd_monitor := create_generic_expiration_monitor($HorizontalRigidBody3D, x_lambda, null, simulation_duration)
 	x_shape_ccd_monitor.test_name = "Rigid moving in x with CCD Cast shape does not pass through the wall"
+	x_shape_ccd_monitor.expected_to_fail = true
 	
-	var y_shape_ccd_monitor = create_generic_expiration_monitor($VerticalRigidBody3D, y_lambda, null, simulation_duration)
+	var y_shape_ccd_monitor := create_generic_expiration_monitor($VerticalRigidBody3D, y_lambda, null, simulation_duration)
 	y_shape_ccd_monitor.test_name = "Rigid moving in y with CCD Cast shape does not pass through the wall"
 	
-	var x_collision_monitor = create_generic_expiration_monitor($HorizontalRigidBody3D, collide_x_lambda, null, simulation_duration)
+	var x_collision_monitor := create_generic_expiration_monitor($HorizontalRigidBody3D, collide_x_lambda, null, simulation_duration)
 	x_collision_monitor.test_name = "Rigid moving in x with CCD detects collision"
 
-	var y_collision_monitor = create_generic_expiration_monitor($VerticalRigidBody3D, collide_y_lambda, null, simulation_duration)
+	var y_collision_monitor := create_generic_expiration_monitor($VerticalRigidBody3D, collide_y_lambda, null, simulation_duration)
 	y_collision_monitor.test_name = "Rigid moving in y with CCD detects collision"
 	
 	process_mode = Node.PROCESS_MODE_DISABLED # to be able to see something

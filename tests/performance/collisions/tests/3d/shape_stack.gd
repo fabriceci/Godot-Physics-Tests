@@ -11,7 +11,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing the %s stack stability" % [PhysicsTest3D.shape_name(shape)]
+	return "RigidBody3D | testing the %s stack stability" % [PhysicsTest3D.shape_name(shape)]
 
 
 func test_start() -> void:

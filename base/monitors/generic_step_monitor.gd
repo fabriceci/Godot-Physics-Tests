@@ -1,17 +1,6 @@
 extends Monitor
 class_name GenericStepMonitor
 
-# This monitor works will send [current_step] to [test_lambda]
-# -> if [test_lambda] return [false], it will pass send the number of the next step ([current_step + 1]
-#	-> if the next step is returning [false], the test failed
-#  	-> if the next step is [true], we increase [current_step]
-# -> if [true], we do nothing
-# When the [current_step] match the [total_step] the test is done
-
-# Callback
-# var physics_step_cbk = func(step: int, p_target, is_transition: bool, p_monitor: Monitor):
-# var test_lambda = func(step: int, target, p_monitor: Monitor):
-
 var multi_test_auto_step = []
 var first_iteration = true
 var current_step := 0

@@ -26,7 +26,7 @@ func test_start() -> void:
 
 	var test_lambda = func(_p_target, p_monitor: GenericExpirationMonitor):
 		if p_monitor.data["sync_to_physics"]:
-			if not p_monitor.data["failure"] == 0:
+			if p_monitor.data["failure"] != 0:
 				p_monitor.error_message = "Out of sync during %d frames" % [p_monitor.data["failure"]]
 			return p_monitor.data["failure"] == 0
 		return p_monitor.data["failure"] != 0
@@ -35,9 +35,9 @@ func test_start() -> void:
 	var platform_tween_from_pos := CENTER - Vector2(Global.WINDOW_SIZE.x /3, 0)
 
 	var character_tween_sync := create_character(platform_tween_from_pos - Vector2(0, 50))
-	var animatable_tween_sync = create_platform(true, platform_tween_from_pos, platform_tween_from_pos + displacement, true)
+	var animatable_tween_sync := create_platform(true, platform_tween_from_pos, platform_tween_from_pos + displacement, true)
 
-	var animatable_tween_no_sync = create_platform(false, platform_tween_from_pos + Vector2(0, 150),  platform_tween_from_pos + displacement + Vector2(0, 150), true)
+	var animatable_tween_no_sync := create_platform(false, platform_tween_from_pos + Vector2(0, 150),  platform_tween_from_pos + displacement + Vector2(0, 150), true)
 	var character_tween_no_sync := create_character(platform_tween_from_pos + Vector2(0, 150) - Vector2(0, 50))
 
 	create_sync_to_physics_monitor("Tween", "pos x", animatable_tween_sync, character_tween_sync, true, test_lambda, check_pos_x_callback)
@@ -60,14 +60,13 @@ func test_start() -> void:
 	create_sync_to_physics_monitor("Animation Player", "pos y", animatable_animp_no_sync, character_animp_no_sync, false, test_lambda, check_pos_y_callback)
 
 func create_sync_to_physics_monitor(p_name_animator: String, p_axis: String, p_animator: Node, p_character: CharacterBody2D, p_sync_to_physic: bool, p_test:Callable, p_cbk: Callable):
-	var monitor = create_generic_expiration_monitor(p_character, p_test, p_cbk, simulation_duration)
+	var monitor := create_generic_expiration_monitor(p_character, p_test, p_cbk, simulation_duration)
 	var txt := "with" if p_sync_to_physic else "without"
 	var txt2 := "is sync" if p_sync_to_physic else "is not sync" 
 	monitor.test_name = "%s %s [sync_to_physics] %s %s" % [p_name_animator, txt,  p_axis, txt2]
 	monitor.data["platform"] = p_animator
 	monitor.data["sync_to_physics"] = p_sync_to_physic
 	monitor.data["failure"] = 0
-	monitor.success = true
 	return monitor
 
 func create_platform(p_sync_to_physics:bool, p_platform_start_pos:Vector2, p_platform_end_pos:Vector2, p_tween := true) -> AnimatableBody2D:
@@ -84,6 +83,7 @@ func create_platform(p_sync_to_physics:bool, p_platform_start_pos:Vector2, p_pla
 		# Tween movement
 		var tween: Tween = get_tree().create_tween()
 		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS if p_sync_to_physics else Tween.TWEEN_PROCESS_IDLE)
+		tween.tween_interval(0.05)
 		tween.tween_property(animatable_body, "position", p_platform_end_pos, simulation_duration/2)
 		tween.tween_property(animatable_body, "position", p_platform_start_pos, simulation_duration/2)
 	else:

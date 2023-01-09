@@ -1,12 +1,6 @@
 extends Monitor
 class_name GenericExpirationMonitor
 
-# EXPIRATION: success if [test_lambda] return [true] when the time limit is done.
-
-# Callback
-# var physics_step_cbk = func(p_target, p_monitor: Monitor):
-# var test_lambda = func(target, p_monitor: Monitor):
-
 var first_iteration = true
 var test_lambda: Callable
 var physics_step_cbk = null

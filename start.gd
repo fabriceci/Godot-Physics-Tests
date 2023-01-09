@@ -41,7 +41,13 @@ func _ready() -> void:
 					runner.add_test(child)
 			scene.queue_free()
 	
-	print_rich("[color=orange] > MODE: [b]%s[/b] → [b]%d[/b] SCENES FOUND[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests])
+	var engine_txt := ""
+	if Global.RUN_2D_TEST:
+		engine_txt += " | 2D → %s" % [ProjectSettings.get("physics/2d/physics_engine")]
+	if Global.RUN_3D_TEST:
+		engine_txt += " | 3D → %s" % [ProjectSettings.get("physics/3d/physics_engine")]
+	if Global.VERBOSE:
+		print_rich("[color=orange] > MODE: [b]%s[/b] ([b]%d[/b] SCENES FOUND) - ENGINE:%s[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests, engine_txt])
 	start_time = Time.get_unix_time_from_system()
 	runner.run()
 
@@ -76,13 +82,9 @@ func find_test(result: Dictionary, folder: String) -> void:
 			file_name = dir.get_next()
 
 func completed() -> void:
-	var duration = Time.get_unix_time_from_system() - start_time
-	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
-		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
-		var status = "FAILED" if Global.MONITOR_FAILED > 0 else "PASSED"
-		print_rich("[color=orange] > COMPLETED IN %.2fs, PASSED MONITORS: %d/%d, STATUS: [color=%s]%s[/color]" % [duration, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, color, status])
-	else:
-		print_rich("[color=orange] > COMPLETED IN %.2fs[/color]" % [duration])
+	var duration := Time.get_unix_time_from_system() - start_time
 
-	var error_code = 1 if Global.MONITOR_FAILED > 0 else 0
+	Global.print_summary(duration)
+		
+	var error_code = 1 if Global.MONITOR_REGRESSION.size() != 0 else 0
 	Global.exit(error_code)

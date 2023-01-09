@@ -1,15 +1,10 @@
 extends Monitor
 class_name GenericManualMonitor
 
-# MANUAL MODE: test using [test_lambda] the [current_step], the step should be
-# Increased manually, the test is done when [passed()] or [failed()] are called.
-
-# Callback
-# var physics_step_cbk = func(p_target, p_monitor: Monitor):
-# var test_lambda = func(target, p_monitor: Monitor):
 var first_iteration = true
 var test_lambda: Callable
 var test_name := "Generic Manual Monitor"
+var fail_on_expiration := true
 
 var target: Node
 var data := {} # Dictionnary used to pass data to the monitor
@@ -26,8 +21,10 @@ func _process(delta: float) -> void:
 	# Maximum duration
 	monitor_duration += delta
 	if monitor_duration > monitor_maximum_duration:
-		error_message = "The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration]
-		monitor_completed()
+		if fail_on_expiration:
+			failed("The maximum duration has been exceeded (> %.1f s)" % [monitor_maximum_duration])
+		else:
+			passed()
 		return
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.

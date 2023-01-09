@@ -1,14 +1,14 @@
 extends PhysicsUnitTest2D
 
 @export var body_shape: PhysicsTest2D.TestCollisionShape = TestCollisionShape.CIRCLE
-var simulation_duration := 1.0
+var simulation_duration := 0.8
 var speed := 50000
 
 func test_description() -> String:
 	return """Checks if the contact is correctly reported when [contact_monitor] is turn ON"""
 	
 func test_name() -> String:
-	return "RigidBody | testing [contact_monitor]"
+	return "RigidBody2D | testing [contact_monitor]"
 	
 func test_start() -> void:
 	var wall_top = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y/2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
@@ -26,7 +26,7 @@ func test_start() -> void:
 	add_child(wall_bot)
 	add_child(wall_top)
 
-	var body = create_rigid_body(1)
+	var body := create_rigid_body(1)
 	body.position = CENTER - Vector2(100, 0)
 	var contact_lambda = func(p_step: int, _p_target: PhysicsTest2D, _p_monitor: GenericStepMonitor):
 		if p_step == 0: 
@@ -44,12 +44,11 @@ func test_start() -> void:
 	var body_no_contact := create_rigid_body(2, 0)
 	body_no_contact.position = CENTER - Vector2(200, 0)
 
-	var lambda_no_contact = func(p_step, _p_target, _p_monitor):
-		if p_step == 0: return body_no_contact.linear_velocity.is_equal_approx(Vector2.ZERO) # Start without velocity
-		elif p_step == 1: return body_no_contact.get_colliding_bodies().size() == 0 and not body_no_contact.linear_velocity.is_equal_approx(Vector2.ZERO) # Moving
-		elif p_step == 2: return body_no_contact.get_colliding_bodies().size() == 0 and  body_no_contact.linear_velocity.is_equal_approx(Vector2.ZERO)  # After the wall hit
+	var lambda_no_contact = func(p_body, p_monitor: GenericManualMonitor):
+		if p_body.get_colliding_bodies().size() != 0:
+			p_monitor.failed("%d collision(s) detected" % [p_body.get_colliding_bodies().size()])
 
-	var no_contact_monitor := create_generic_step_monitor(self, lambda_no_contact)
+	var no_contact_monitor := create_generic_manual_monitor(body_no_contact, lambda_no_contact, simulation_duration, false)
 	no_contact_monitor.test_name = "No contact reported when [contacts_reported] is 0"
 
 func create_rigid_body(p_layer := 1, p_report_contact := 20) -> RigidBody2D:

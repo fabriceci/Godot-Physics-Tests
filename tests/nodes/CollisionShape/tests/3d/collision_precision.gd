@@ -156,7 +156,7 @@ func test_start() -> void:
 			reference_body.velocity = Vector3.ZERO
 			ref_done = true
 	
-	var check_max_stability_monitor = create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
+	var check_max_stability_monitor := create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = "Testing stability"
 
 func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):

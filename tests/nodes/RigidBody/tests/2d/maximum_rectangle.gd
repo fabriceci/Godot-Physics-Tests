@@ -12,7 +12,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing if %d rectangles can be handled before instablity" % [min_body_expected]
+	return "RigidBody2D | testing if %d rectangles can be handled before instablity" % [min_body_expected]
 
 func test_start() -> void:
 	add_collision_boundaries(1, false)
@@ -36,7 +36,7 @@ func test_start() -> void:
 					p_monitor.test_name += " → [color=orange]failed at %d[/color]" % [_bodies.size()]
 					p_monitor.failed()
 	
-	var check_max_stability_monitor = create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
+	var check_max_stability_monitor := create_generic_manual_monitor(self, maximum_bodies_supported, simulation_duration)
 	check_max_stability_monitor.test_name = "Handle at least %d bodies" % [min_body_expected]
 
 func spawn_body() -> void:

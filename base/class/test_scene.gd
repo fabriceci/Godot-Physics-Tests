@@ -2,15 +2,17 @@ class_name TestScene
 extends Node
 
 var runner: TestRunner
+var start_time := 0.0
+var is_performance := false
 
 func _ready() -> void:
 	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
 		test_start()
 
 func test_start() -> void:
+	start_time = Time.get_unix_time_from_system() 
 	runner = TestRunner.new(self, true)
 	runner.completed.connect(self.completed)
-	var is_performance := false
 	for child in get_children():
 		if child is PhysicsPerformanceTest2D or child is PhysicsPerformanceTest3D:
 			is_performance = true
@@ -27,8 +29,10 @@ func test_start() -> void:
 	runner.run()
 			
 func completed() -> void:
-	if Global.MONITOR_FAILED != 0 || Global.MONITOR_PASSED != 0:
-		var color = "red" if Global.MONITOR_FAILED > 0 else "green"
-		print_rich("[indent][color=%s]→ PASSED TESTS: %d/%d[/color][/indent]" % [color, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
-	print_rich("[color=orange] > SCENE TESTS ARE COMPLETED[/color]")
+	var duration := Time.get_unix_time_from_system() - start_time
+	if is_performance:
+		print_rich("[color=green] > COMPLETED IN %.2fs[/color]" % duration)
+	else:
+		Global.print_summary(duration)
+	
 	Global.exit()

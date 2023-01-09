@@ -31,12 +31,12 @@ func test_start() -> void:
 	var character_angle_lower := create_character(spawn_1.position, 44)
 	var character_angle_greater := create_character(spawn_2.position, 45)
 	
-	var monitor_angle_lower = create_generic_expiration_monitor(character_angle_lower, test_lambda, callback_lambda, simulation_duration)
+	var monitor_angle_lower := create_generic_expiration_monitor(character_angle_lower, test_lambda, callback_lambda, simulation_duration)
 	monitor_angle_lower.test_name = "If [floor_max_angle] is lower than the slope, the body can't climb"
 	monitor_angle_lower.data["max_angle"] = 44
 	monitor_angle_lower.data["maximum_x"] = 0
 
-	var monitor_angle_greater = create_generic_expiration_monitor(character_angle_greater, test_lambda, callback_lambda, simulation_duration)
+	var monitor_angle_greater := create_generic_expiration_monitor(character_angle_greater, test_lambda, callback_lambda, simulation_duration)
 	monitor_angle_greater.test_name = "If [floor_max_angle] is greater or equal than the slope, the body can climb"
 	monitor_angle_greater.data["max_angle"] = 45
 	monitor_angle_greater.data["maximum_x"] = 0

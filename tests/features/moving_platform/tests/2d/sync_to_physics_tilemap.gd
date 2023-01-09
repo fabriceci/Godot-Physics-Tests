@@ -40,13 +40,14 @@ func test_start() -> void:
 	var character := create_character(CENTER + Vector2(25, -25))
 	var tween: Tween = get_tree().create_tween()
 	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	tween.tween_interval(0.05)
 	tween.tween_property(animatable_tilemap, "position", end_pos, simulation_duration/2)
 	tween.tween_property(animatable_tilemap, "position", start_pos, simulation_duration/2)
 	create_sync_to_physics_monitor("pos x", animatable_tilemap, character, test_lambda, check_pos_x_callback)
 	create_sync_to_physics_monitor("pos y", animatable_tilemap, character, test_lambda, check_pos_y_callback)
 
 func create_sync_to_physics_monitor(p_axis: String, p_animator: Node, p_character: CharacterBody2D, p_test:Callable, p_cbk: Callable) -> GenericExpirationMonitor:
-	var monitor = create_generic_expiration_monitor(p_character, p_test, p_cbk, simulation_duration)
+	var monitor := create_generic_expiration_monitor(p_character, p_test, p_cbk, simulation_duration)
 	monitor.test_name = "Tilemap with [sync_to_physics] %s is sync" % [p_axis]
 	monitor.data["platform"] = p_animator
 	monitor.data["failure"] = 0

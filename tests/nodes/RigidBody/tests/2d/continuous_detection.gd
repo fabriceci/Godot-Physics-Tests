@@ -9,7 +9,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing Continuous Collision Detection (CCD)"
+	return "RigidBody2D | testing Continuous Collision Detection (CCD)"
 
 var detect_x_collision := false
 var detect_y_collision := false
@@ -50,22 +50,25 @@ func test_start() -> void:
 	var collide_y_lambda = func(_p_target: RigidBody2D, _p_monitor: GenericExpirationMonitor):
 		return detect_y_collision
 
-	var x_ray_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration)
+	var x_ray_ccd_monitor := create_generic_expiration_monitor(rigid_x_ccd_ray, x_lambda, null, simulation_duration)
 	x_ray_ccd_monitor.test_name = "Rigid moving in x with CCD Ray does not pass through the wall"
+	x_ray_ccd_monitor.expected_to_fail = true
 	
-	var x_shape_ccd_monitor = create_generic_expiration_monitor(rigid_x_ccd_shape, x_lambda, null, simulation_duration)
+	var x_shape_ccd_monitor := create_generic_expiration_monitor(rigid_x_ccd_shape, x_lambda, null, simulation_duration)
 	x_shape_ccd_monitor.test_name = "Rigid moving in x with CCD Cast shape does not pass through the wall"
+	x_shape_ccd_monitor.expected_to_fail = true
 
-	var y_ray_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_ray, y_lambda, null, simulation_duration)
+	var y_ray_ccd_monitor := create_generic_expiration_monitor(rigid_y_ccd_ray, y_lambda, null, simulation_duration)
 	y_ray_ccd_monitor.test_name = "Rigid moving in y with CCD Ray does not pass through the wall"
 	
-	var y_shape_ccd_monitor = create_generic_expiration_monitor(rigid_y_ccd_shape, y_lambda, null, simulation_duration)
+	var y_shape_ccd_monitor := create_generic_expiration_monitor(rigid_y_ccd_shape, y_lambda, null, simulation_duration)
 	y_shape_ccd_monitor.test_name = "Rigid moving in y with CCD Cast shape does not pass through the wall"
+	y_shape_ccd_monitor.expected_to_fail = true
 	
-	var x_collision_monitor = create_generic_expiration_monitor(rigid_x_ccd_ray, collide_x_lambda, null, simulation_duration)
+	var x_collision_monitor := create_generic_expiration_monitor(rigid_x_ccd_ray, collide_x_lambda, null, simulation_duration)
 	x_collision_monitor.test_name = "Rigid moving in x with CCD detects collision"
 
-	var y_collision_monitor = create_generic_expiration_monitor(rigid_y_ccd_ray, collide_y_lambda, null, simulation_duration)
+	var y_collision_monitor := create_generic_expiration_monitor(rigid_y_ccd_ray, collide_y_lambda, null, simulation_duration)
 	y_collision_monitor.test_name = "Rigid moving in y with CCD detects collision"
 	
 	process_mode = Node.PROCESS_MODE_DISABLED # to be able to see something

@@ -1,11 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8rd0ut3utr8l"]
+[gd_scene load_steps=2 format=3 uid="uid://c8rd0ut3utr8l"]
 
 [ext_resource type="Script" path="res://tests/nodes/RigidBody/tests/2d/basic_api.gd" id="1_cdttp"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_led5y"]
-
 [node name="basic_api" type="Node2D"]
 script = ExtResource("1_cdttp")
-
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-physics_material_override = SubResource("PhysicsMaterial_led5y")

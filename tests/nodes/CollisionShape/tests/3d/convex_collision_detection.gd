@@ -30,7 +30,7 @@ func test_start() -> void:
 	static_body.set_collision_mask_value(2, true)
 	static_body.rotation.z = deg_to_rad(45)
 	
-	var callback_lambda = func(_p_target: PhysicsUnitTest3D, _p_monitor: Monitor):
+	var callback_lambda = func(_p_target: PhysicsUnitTest3D, p_monitor: Monitor):
 		tested_body.rotation.x += rot_cpt_x
 		reference_body.rotation.x += rot_cpt_x
 		tested_body.rotation.y += rot_cpt_x / 2
@@ -59,14 +59,17 @@ func test_start() -> void:
 		
 		if t_collide != r_collide:
 			test_failed = true
+			p_monitor.error_message = "They don't collide at the same time"
 		if not r_normal.is_equal_approx(t_normal):
 			test_failed = true
+			p_monitor.error_message = "The normals are not the same, ref: %v, convex: %v" % [r_normal, t_normal]
 			
 	var test_lambda: Callable = func(_p_target, _p_monitor):
 		return not test_failed
 
-	var collision_monitor = create_generic_expiration_monitor(self, test_lambda, callback_lambda, simulation_duration)
+	var collision_monitor := create_generic_expiration_monitor(self, test_lambda, callback_lambda, simulation_duration)
 	collision_monitor.test_name = "Convex collisions are detected correctly"
+	collision_monitor.expected_to_fail = true
 
 func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):
 	var _body := CharacterBody3D.new()

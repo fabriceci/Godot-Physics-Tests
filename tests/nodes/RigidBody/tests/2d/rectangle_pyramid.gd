@@ -16,7 +16,7 @@ func test_description() -> String:
 	"""
 	
 func test_name() -> String:
-	return "RigidBody | testing the stability with a pyramid [tolerance %.2v]" % [tolerance]
+	return "RigidBody2D | testing the stability with a pyramid [tolerance %.2v]" % [tolerance]
 
 func test_start() -> void:
 	add_collision_boundaries(size_boundary, false)
@@ -41,10 +41,10 @@ func test_start() -> void:
 		
 		return true
 			
-	var pyramid_sleep = create_generic_expiration_monitor(self, test_sleep, null, simulation_duration)
+	var pyramid_sleep := create_generic_expiration_monitor(self, test_sleep, null, simulation_duration)
 	pyramid_sleep.test_name = "All body are sleep"
 	
-	var pyramid_top_cube = create_generic_expiration_monitor(self, test_head_position, null, simulation_duration)
+	var pyramid_top_cube := create_generic_expiration_monitor(self, test_head_position, null, simulation_duration)
 	pyramid_top_cube.test_name = "The top cube did not move"
 	
 func create_pyramid():

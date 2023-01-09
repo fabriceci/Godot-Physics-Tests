@@ -31,11 +31,11 @@ func test_start() -> void:
 	var character_blocked := create_character(spawn_1.position, true)
 	var character_not_blocked := create_character(spawn_2.position, false)
 	
-	var monitor_blocked = create_generic_expiration_monitor(character_blocked, test_lambda, callback_lambda, simulation_duration)
+	var monitor_blocked := create_generic_expiration_monitor(character_blocked, test_lambda, callback_lambda, simulation_duration)
 	monitor_blocked.test_name = "The body is properly blocked when [floor_block_on_wall] is ON"
 	monitor_blocked.data["maximum_x"] = 0
 	
-	var monitor_not_blocked = create_generic_expiration_monitor(character_not_blocked, test_lambda, callback_lambda, simulation_duration)
+	var monitor_not_blocked := create_generic_expiration_monitor(character_not_blocked, test_lambda, callback_lambda, simulation_duration)
 	monitor_not_blocked.test_name = "The body is not blocked when [floor_block_on_wall] is OFF"
 	monitor_not_blocked.data["maximum_x"] = 0
 	

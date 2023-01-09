@@ -15,7 +15,7 @@ func test_name() -> String:
 	
 func test_start() -> void:
 	# C1 Jump in the ceiling and expect to move in x
-	var character1 = create_character(1)
+	var character1 := create_character(1)
 	character1.slide_on_ceiling = true
 	character1.floor_max_angle = deg_to_rad(80)
 	add_child(character1)
@@ -36,7 +36,7 @@ func test_start() -> void:
 	c1_monitor.test_name = "Slide enough to go through the platform"
 
 	# C2 without slide on ceiling, the body should not move in x
-	var character2 = create_character(2)
+	var character2 := create_character(2)
 	character2.slide_on_ceiling = false
 	character2.floor_max_angle = deg_to_rad(80)
 	add_child(character2)

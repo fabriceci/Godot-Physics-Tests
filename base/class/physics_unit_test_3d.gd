@@ -3,9 +3,11 @@ extends PhysicsTest3D
 
 var monitors: Array[Monitor]
 var monitor_completed := 0
+var start_time := 0.0
 
 func _ready() -> void:
 	super()
+	start_time = Time.get_unix_time_from_system()
 
 func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:
@@ -33,37 +35,51 @@ func test_completed() -> void:
 	for monitor in monitors:
 		if monitor.has_method("is_test_passed"):
 			if monitor.call("is_test_passed") == null:
-				print_rich("[color=red]FATAL ERROR: The monitor [%s] returns null as result, please check the Callable arguments, arguments type[/color]" % [monitor.name])
+				var bad_test_name = monitor.monitor_name() if monitor.monitor_name() else test_name()
+				print_rich("[color=red]STATUS: FAILED - FATAL ERROR: The monitor [%s] returns null as result, please check the Callable arguments, arguments type[/color]" % [bad_test_name])
 				get_tree().quit(1)
 				return
-			var passed:bool = monitor.call("is_test_passed")
 			# multi_test_case
 			if not monitor.multi_test_list.is_empty():
 				for sub_test in monitor.multi_test_list:
 					if sub_test.result:
 						Global.MONITOR_PASSED += 1
+						if sub_test.expected_to_fail:
+							Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), sub_test.name])
 					else:
 						Global.MONITOR_FAILED += 1
+						if not sub_test.expected_to_fail:
+							Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), sub_test.name])
+						else:
+							Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), sub_test.name])
 					var subs_result = "[color=red]✗[/color]" if not sub_test.result else "[color=green]✓[/color]"
 					output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [sub_test.name, subs_result]
 					for sub_test_error in sub_test.errors:
 						output += "[indent][indent][indent][indent][color=red]Error: %s[/color][/indent][/indent][/indent][/indent]\n" % sub_test_error
 			else:
+				var passed:bool = monitor.call("is_test_passed")
 				if passed:
 					Global.MONITOR_PASSED += 1
+					if monitor.expected_to_fail:
+						Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), monitor.monitor_name()])
 				else:
 					Global.MONITOR_FAILED += 1
+					if not monitor.expected_to_fail:
+						Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), monitor.monitor_name()])
+					else:
+						Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), monitor.monitor_name()])
 				
 				var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 				output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.monitor_name(), result]
-			if not passed and monitor.error_message != "" :
-				output += "[color=red][indent][indent][indent] %s [/indent][/indent][/indent][/color]\n" % [monitor.error_message]
+				if not passed and monitor.error_message != "" :
+					output += "[color=red][indent][indent][indent] %s [/indent][/indent][/indent][/color]\n" % [monitor.error_message]
 		elif monitor.has_method("get_score"):
 			output += "[indent][indent][indent] → %s : score [b]%f[/b][/indent][/indent][/indent]\n" % [monitor.monitor_name(), monitor.call("get_score")]
 		else:
 			@warning_ignore(assert_always_false)
 			assert(false, "Monitor without is_test_passed or get_score method")
-	print_rich(output)
+	if Global.VERBOSE:
+		print_rich(output)
 	process_mode = PROCESS_MODE_DISABLED
 	completed.emit()
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
@@ -71,6 +87,8 @@ func test_completed() -> void:
 		label.position =  Vector2(882,678)
 		label.text = "Test completed | status: %s" % ["SUCCESS" if Global.MONITOR_FAILED == 0 else "FAILED"]
 		add_child(label)
+		var duration := Time.get_unix_time_from_system() - start_time
+		Global.print_summary(duration)
 	else:
 		queue_free()
 
