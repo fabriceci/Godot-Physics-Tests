@@ -6,7 +6,7 @@ This project aims to provide automated tests for Godot Physics Engine. This will
 
 Avoid using nodes in the editor as much as possible, this has two advantages:
 
-- It makes it easier to detect changes in the engine API and
+- it makes it easier to detect changes in the engine API
 - it is easier to understand how a test works.
 
 If you need to use nodes, e.g. to draw a polygon, create a body, use only the basic editor fields (transformations, collision shape, etc.), if you need to modify the properties of objects, modify them in the code.
@@ -17,19 +17,19 @@ Note: when you start the project it runs all the tests, but **you can also run t
 
 ### Main files
 
-- `start.tscn`: the main scene that will run all regression tests.
+- `start.tscn`: the main scene that will run all regression tests
 - `tests/nodes/[name]/`: folder containing the unit tests for specific nodes
 - `tests/features/[name]/`: folder containing the unit tests for more complex physics features
 - `tests/performance/[name]/`: small benchmarks of the engine performance, they must be run manually
 
 ### Unit test folder:
 
-- `xxxx_[2d|3d].tscn` : contains all the unit tests for the feature/node. The root node of the scene is a `Node2D|3D`  with **a build in script** that extends `TestScene`. In this scene you will add an instance of all the unit tests, this can allow you to add multiple instances of the same unit test with different editor settings.
+- `xxxx_[2d|3d].tscn` : contains all the unit tests for the feature/node. The root node of the scene is a `Node2D|3D`  with **a build in script** that extends `TestScene`. In this scene you will add an instance of all the unit tests, this can allow you to add multiple instances of the same unit test with different editor settings
 - `tests/sub_folder/*.tscn`: a unit test scene, the root node of the scene is a`Node2D|3D` with a script that extends `PhysicsUnitTest2D|3D` and implements 3 methods:
 
   - `test_description()`: return a full description of the unit test
   - `test_name()`: return the name of the unit test
-  - `test_start()`: the test code which generally means adding one or more monitors (sub-tests).
+  - `test_start()`: the test code which generally means adding one or more monitors (sub-tests)
   
 ## Write a monitor
 
@@ -55,7 +55,7 @@ monitor.test_name = "sub test name"
 
 `create_generic_expiration_monitor` takes as parameter:
 
-1. a node: this node will be send as `p_target` to the test callback
+1. a node that will be the parent of the monitor and will be sent as `p_target` to the test callback
 2. a test callback (`Callable`)
 3. an optional physics callback (`Callable`) that will be called on each physics steps
 4. the duration of the test
@@ -68,8 +68,8 @@ This monitor is the most flexible, it allows you to decide when a test has passe
 
 `create_generic_manual_monitor` takes as parameter:
 
-1. a node: this node will be send as `p_target` to the test callback
-2. a test callback (`Callable`) where you will manually indicate whether the test has failed or not.
+1. a node that will be the parent of the monitor and will be sent as `p_target` to the test callback
+2. a test callback (`Callable`) where you will manually indicate whether the test has failed or not
 3. the duration of the test
 4. set the behavior when the monitor reach the end of the simulation/duration, by default the parameter `fail_on_expiration` is set the `false`, which means that is considered as failed.
 
@@ -110,7 +110,6 @@ var test_cbk = func(p_target, p_monitor: GenericManualMonitor):
 	p_monitor.monitor_completed()
 ```
 
-
 - The tests need to be run in order.
 - You can give details of the error by calling `p_monitor.add_test_error`, and even call it multiple times to add multiple errors.
 
@@ -131,12 +130,11 @@ var physics_step_cbk = func(p_step: int, p_target: CharacterBody2D, is_transitio
 	if p_step == 0: p_target.velocity = Vector2(speed, 0) 
 	elif p_step < 2: p_target.velocity = Vector2(speed, -speed)
 
-
 var contact_monitor := create_generic_step_monitor(character, test_lambda, physics_step_cbk, simulation_duration)
 contact_monitor.test_name = "sub test name"
 ```
 
-1. a node: this node will be send as `p_target` to the test callback
+1. a node that will be the parent of the monitor and will be sent as `p_target` to the test callback
 2. a test callback (`Callable`)
 3. a physics callback (`Callable`) that will be called on each physics steps
 4. the maximum duration of the test
@@ -151,12 +149,12 @@ In a single monitor test, you must set the boolean `expected_to_fail` to `true`,
 
 In a manual, multi-monitor test, you can set this boolean in the second parameter of `add_sub_test`, example: `add_sub_test(p_name: String, p_expected_to_fail := false)`
 
-
 ## Tips
 
 ### Constants
 
 There are constants in the `Global.gd` file to customize the execution of the tests.
+
 ### Debugging a test
 
 You can press `P` to switch to Frame by Frame mode, in this mode, press `O` to move to the next frame or `P` a second time to exit this mode. This is a very easy way to debug a test, if you want to start a test in pause mode, edit the `base/pause.gd` file and set the first variable `var paused = false` to `true`. 
