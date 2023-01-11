@@ -98,8 +98,9 @@ func create_generic_step_monitor(p_target: Node, p_test_lambda: Callable,  p_phy
 	instance.setup(p_test_lambda, p_physics_step_cbk, p_maximum_duration)
 	return instance
 
-func create_generic_manual_monitor(p_target: Node, p_test_lambda: Callable, p_maximum_duration := 5.0, p_auto_start:= true) -> GenericManualMonitor:
+func create_generic_manual_monitor(p_target: Node, p_test_lambda: Callable, p_maximum_duration := 5.0, p_fail_on_expiration := true, p_auto_start:= true) -> GenericManualMonitor:
 	var instance: GenericManualMonitor = load("res://base/monitors/generic_manual_monitor.gd").new()
+	instance.fail_on_expiration = p_fail_on_expiration
 	register_monitors([instance as Monitor], p_target, p_auto_start)
 	instance.setup(p_test_lambda, p_maximum_duration)
 	return instance
