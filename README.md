@@ -7,7 +7,7 @@ This project aims to provide automated tests for Godot Physics Engine. This will
 Avoid using nodes in the editor as much as possible, this has two advantages:
 
 - it makes it easier to detect changes in the engine API
-- it is easier to understand how a test works.
+- it is easier to understand how a test works
 
 If you need to use nodes, e.g. to draw a polygon, create a body, use only the basic editor fields (transformations, collision shape, etc.), if you need to modify the properties of objects, modify them in the code.
 

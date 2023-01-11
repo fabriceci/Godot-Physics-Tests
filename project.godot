@@ -96,7 +96,7 @@ config/icon="res://icon.png"
 
 Global="*res://base/Global.gd"
 Pause="*res://base/pause.gd"
-Utils2D="*res://base/Utils2D.gd"
+Utils="*res://base/Utils.gd"
 
 [display]
 

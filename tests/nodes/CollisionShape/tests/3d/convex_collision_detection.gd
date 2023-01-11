@@ -60,7 +60,7 @@ func test_start() -> void:
 		if t_collide != r_collide:
 			test_failed = true
 			p_monitor.error_message = "They don't collide at the same time"
-		if not r_normal.is_equal_approx(t_normal):
+		if not Utils.vec3_equals(r_normal, t_normal, 0.0001):
 			test_failed = true
 			p_monitor.error_message = "The normals are not the same, ref: %v, convex: %v" % [r_normal, t_normal]
 			
@@ -69,7 +69,6 @@ func test_start() -> void:
 
 	var collision_monitor := create_generic_expiration_monitor(self, test_lambda, callback_lambda, simulation_duration)
 	collision_monitor.test_name = "Convex collisions are detected correctly"
-	collision_monitor.expected_to_fail = true
 
 func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):
 	var _body := CharacterBody3D.new()

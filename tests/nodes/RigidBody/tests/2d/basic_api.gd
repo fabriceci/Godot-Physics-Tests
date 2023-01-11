@@ -27,7 +27,7 @@ func test_start() -> void:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected = 0.5 *  Vector2(0, gravity) * pow((dt * 20.0), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Gravity is applied properly")
-				var success:= Utils2D.vec_equals(travel, expected, 4)
+				var success:= Utils.vec2_equals(travel, expected, 4)
 				if not success:
 					p_monitor.add_test_error("Gravity is not applied properly, expected %v, get %v" % [expected, travel])
 				p_monitor.add_test_result(success)
@@ -44,7 +44,7 @@ func test_start() -> void:
 			# Apply the force 20 frames
 			if p_monitor.frame == 20:
 				p_monitor.add_test("Gravity scale works")
-				var success:= Utils2D.vec_equals(p_target.position, p_monitor.data["position"])
+				var success:= Utils.vec2_equals(p_target.position, p_monitor.data["position"])
 				p_monitor.add_test_result(success)
 
 				p_monitor.monitor_completed()
@@ -151,7 +151,7 @@ func test_start() -> void:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected = 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Constant force is applied")
-				var success:= Utils2D.vec_equals(travel, expected, 1)
+				var success:= Utils.vec2_equals(travel, expected, 1)
 				if not success:
 					p_monitor.add_test_error("Constant central force is not applied correctly: expected %v, get %v" % [expected, travel])
 				p_monitor.add_test_result(success)
@@ -180,7 +180,7 @@ func test_start() -> void:
 				var travel = p_target.position - (p_monitor.data["position"] + Vector2(0, 200))
 				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
 				p_monitor.add_test("Force impulse is applied")
-				var success:= Utils2D.vec_equals(travel, expected, 0.001)
+				var success:= Utils.vec2_equals(travel, expected, 0.001)
 				if not success:
 					p_monitor.add_test_error("Force impulse is not applied correctly: expected %v, get %v" % [expected, travel])
 				p_monitor.add_test_result(success)
@@ -209,7 +209,7 @@ func test_start() -> void:
 #				var travel = p_target.position - (p_monitor.data["position"] + Vector2(0, 200))
 #				var expected =  Vector2(2000, 0) * dt * 20  # x(t) = at + v0t + x0
 #				p_monitor.add_test("Force impulse at specific position is applied")
-#				var success:= Utils2D.vec_equals(travel, expected, 0.001)
+#				var success:= Utils.vec2_equals(travel, expected, 0.001)
 #				if not success:
 #					p_monitor.add_test_error("Force impulse at specific position is not applied correctly: expected %v, get %v, rotation %f"  % [expected.x, travel.x, p_target.rotation])
 #				p_monitor.add_test_result(success)
@@ -231,7 +231,7 @@ func test_start() -> void:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected = 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Constant force at specific position is applied")
-				var success:= Utils2D.f_equals(travel.x, expected.x, 1) and p_target.rotation != 0
+				var success:= Utils.f_equals(travel.x, expected.x, 1) and p_target.rotation != 0
 				if not success:
 					p_monitor.add_test_error("Constant force at specific position is not applied correctly: expected %v, get %v, rotation %f" % [expected.x, travel.x, p_target.rotation])
 				p_monitor.add_test_result(success)
@@ -255,7 +255,7 @@ func test_start() -> void:
 				var inertia := PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
 				var expected = 0.5 *  (500.0 / inertia) * pow((dt * 20.0), 2.0)  # x(t) = (1/2)at2 + v0t + x0
 				var result = p_target.rotation
-				var success:= Utils2D.f_equals(result, expected, 0.02)
+				var success:= Utils.f_equals(result, expected, 0.02)
 				if not success:
 					p_monitor.add_test_error("Constant torque is not applied correctly: expected %v, get %v" % [expected, result])
 				p_monitor.add_test_result(success)
@@ -287,7 +287,7 @@ func test_start() -> void:
 				var angular_acc_expected =  (1.0/inertia) * 500.0 # θ(t) = (1/I)τ0t + θ0 
 				if true:
 					p_monitor.add_test("The impulse torque is applied to the angular velocity")
-					var success_vel:= Utils2D.f_equals(p_target.angular_velocity, angular_acc_expected)
+					var success_vel:= Utils.f_equals(p_target.angular_velocity, angular_acc_expected)
 					if not success_vel:
 						p_monitor.add_test_error("Impulse torque is not applied correctly to the angular velocity: expected %v, get %v" % [angular_acc_expected, p_target.angular_velocity])
 					p_monitor.add_test_result(success_vel)
@@ -295,7 +295,7 @@ func test_start() -> void:
 				if true:
 					p_monitor.add_test("The impulse torque makes the body rotate correctly")
 					var angular_rotation_expected = (angular_acc_expected * dt) * 20.0
-					var success_rot:= Utils2D.f_equals(p_target.rotation, angular_rotation_expected)
+					var success_rot:= Utils.f_equals(p_target.rotation, angular_rotation_expected)
 					if not success_rot:
 						p_monitor.add_test_error("The impulse torque is not applied correctly to the rotation: expected %v, get %v" % [angular_rotation_expected, p_target.rotation])
 					p_monitor.add_test_result(success_rot)
@@ -374,7 +374,7 @@ func next_test_position() -> Vector2:
 	var nb_vertical_items := 3
 	
 	var column = current_test_nb % nb_horizontal_items
-	var row = int( (current_test_nb ) / 6)
+	var row = int((current_test_nb ) / 6.0)
 	column += 1
 	row += 1
 	
