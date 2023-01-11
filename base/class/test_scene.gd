@@ -6,6 +6,7 @@ var start_time := 0.0
 var is_performance := false
 
 func _ready() -> void:
+	Global.print_engine()
 	if get_tree().get_root() == get_parent(): # autostart if the scene is executed alone
 		test_start()
 

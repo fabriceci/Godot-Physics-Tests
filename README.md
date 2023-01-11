@@ -149,6 +149,14 @@ In a single monitor test, you must set the boolean `expected_to_fail` to `true`,
 
 In a manual, multi-monitor test, you can set this boolean in the second parameter of `add_sub_test`, example: `add_sub_test(p_name: String, p_expected_to_fail := false)`
 
+#### Physics engine other than GodotPhysics
+
+If you wish to use the project to test/find regressions on another physics engine, it may happen that a test/feature cannot be implemented for that engine.
+
+You can indicate this:
+- in a single monitor test: by inserting the engine name in the array `engine_expected_to_fail`
+- in a multi-test, by calling the `add_test_engine_expected_to_fail(Array[String])` method
+
 ## Tips
 
 ### Constants

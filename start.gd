@@ -41,12 +41,13 @@ func _ready() -> void:
 					runner.add_test(child)
 			scene.queue_free()
 	
-	var engine_txt := ""
-	if Global.RUN_2D_TEST:
-		engine_txt += " | 2D → %s" % [ProjectSettings.get("physics/2d/physics_engine")]
-	if Global.RUN_3D_TEST:
-		engine_txt += " | 3D → %s" % [ProjectSettings.get("physics/3d/physics_engine")]
 	if Global.VERBOSE:
+		var engine_txt := ""
+		if Global.RUN_2D_TEST:
+			engine_txt += " | 2D → %s" % [Global.engine_2d]
+		if Global.RUN_3D_TEST:
+			engine_txt += " | 3D → %s" % [Global.engine_3d]
+
 		print_rich("[color=orange] > MODE: [b]%s[/b] ([b]%d[/b] SCENES FOUND) - ENGINE:%s[/color]\n" % [Global.TEST_MODE.keys()[mode], runner.total_tests, engine_txt])
 	start_time = Time.get_unix_time_from_system()
 	runner.run()

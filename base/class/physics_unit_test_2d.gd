@@ -8,6 +8,8 @@ var start_time := 0.0
 func _ready() -> void:
 	super()
 	start_time = Time.get_unix_time_from_system()
+	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
+		Global.print_engine()
 
 func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:
@@ -44,11 +46,11 @@ func test_completed() -> void:
 				for sub_test in monitor.multi_test_list:
 					if sub_test.result:
 						Global.MONITOR_PASSED += 1
-						if sub_test.expected_to_fail:
+						if monitor.is_sub_test_expected_to_fail(sub_test):
 							Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), sub_test.name])
 					else:
 						Global.MONITOR_FAILED += 1
-						if not sub_test.expected_to_fail:
+						if not monitor.is_sub_test_expected_to_fail(sub_test):
 							Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), sub_test.name])
 						else:
 							Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), sub_test.name])
@@ -60,11 +62,11 @@ func test_completed() -> void:
 				var passed:bool = monitor.call("is_test_passed")
 				if passed:
 					Global.MONITOR_PASSED += 1
-					if monitor.expected_to_fail:
+					if monitor.is_expected_to_fail():
 						Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), monitor.monitor_name()])
 				else:
 					Global.MONITOR_FAILED += 1
-					if not monitor.expected_to_fail:
+					if not monitor.is_expected_to_fail():
 						Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), monitor.monitor_name()])
 					else:
 						Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), monitor.monitor_name()])

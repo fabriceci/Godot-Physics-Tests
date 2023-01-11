@@ -11,6 +11,7 @@ var success := false
 var started := false
 var frame := 0 # physics frame
 var expected_to_fail := false
+var engine_expected_to_fail: Array[String] = []
 
 var text: Dictionary:
 	set(value):
@@ -25,6 +26,18 @@ func test_start() -> void:
 
 func is_test_passed() -> bool:
 	return success
+
+func is_expected_to_fail() -> bool:
+	if engine_expected_to_fail.size() > 0:
+		if Global.engine_2d in engine_expected_to_fail or Global.engine_3d in engine_expected_to_fail:
+			return true
+	return expected_to_fail
+
+func is_sub_test_expected_to_fail(p_test:Dictionary) -> bool:
+	if p_test["engine_expected_to_fail"].size() > 0:
+		if Global.engine_2d in p_test["engine_expected_to_fail"] or Global.engine_3d in p_test["engine_expected_to_fail"]:
+			return true
+	return p_test["expected_to_fail"]
 	
 func _process(delta: float) -> void:
 	# Maximum duration
@@ -57,9 +70,13 @@ func add_sub_test(p_name: String, p_expected_to_fail := false) -> void:
 		"name": p_name,
 		"result": false,
 		"errors": [],
-		"expected_to_fail": p_expected_to_fail
+		"expected_to_fail": p_expected_to_fail,
+		"engine_expected_to_fail": []
 	})
 
+func add_test_engine_expected_to_fail(p_engine: Array[String]):
+	multi_test_list[multi_test_current].engine_expected_to_fail.append_array(p_engine)
+	
 func add_test_error(p_error: String):
 	multi_test_list[multi_test_current].errors.append(p_error)
 

@@ -25,6 +25,9 @@ var TEST_PASSED := 0
 var RUN_2D_TEST := true
 var RUN_3D_TEST := true
 
+var engine_2d = "GodotPhysics2D"
+var engine_3d = "GodotPhysics3D"
+
 var PERFORMANCE_RESULT := {}
 
 func _process(_delta: float) -> void:
@@ -33,6 +36,14 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	get_tree().debug_collisions_hint = true
+	
+	var setting_2d_engine = ProjectSettings.get("physics/2d/physics_engine")
+	if setting_2d_engine != "DEFAULT" and setting_2d_engine != "GodotPhysics2D":
+		engine_2d = setting_2d_engine
+	
+	var setting_3d_engine = ProjectSettings.get("physics/3d/physics_engine")
+	if setting_3d_engine != "DEFAULT" and setting_3d_engine != "GodotPhysics3D":
+		engine_3d = setting_3d_engine
 
 func exit(p_code := 0) -> void:
 	await get_tree().create_timer(1).timeout # sometimes the application quits before printing everything in the output
@@ -49,7 +60,7 @@ func print_summary(duration: float) -> void:
 			cpt += 1
 			print_rich("[indent][indent][color=red]%d. %s[/color][/indent][/indent]" % [cpt, regression])
 	if Global.MONITOR_IMRPOVEMENT.size() != 0:
-		print_rich("\n[indent]%d Improvement(s):[/indent]" % [Global.MONITOR_REGRESSION.size()])
+		print_rich("\n[indent]%d Improvement(s):[/indent]" % [Global.MONITOR_IMRPOVEMENT.size()])
 		var cpt := 0
 		for improvement in Global.MONITOR_IMRPOVEMENT:
 			cpt += 1
@@ -61,3 +72,13 @@ func print_summary(duration: float) -> void:
 		for expected in Global.MONITOR_EXPECTED_TO_FAIL:
 			cpt += 1
 			print_rich("[indent][indent]%d. %s[/indent][/indent]" % [cpt, expected])
+
+func print_engine() -> void:
+	if Global.VERBOSE:
+		var engine_txt := ""
+		if Global.RUN_2D_TEST:
+			engine_txt += " | 2D → %s" % [Global.engine_2d]
+		if Global.RUN_3D_TEST:
+			engine_txt += " | 3D → %s" % [Global.engine_3d]
+
+		print_rich("[color=orange] > ENGINE:%s[/color]\n" % engine_txt)
