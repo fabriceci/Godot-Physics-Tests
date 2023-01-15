@@ -74,6 +74,9 @@ func add_sub_test(p_name: String, p_expected_to_fail := false) -> void:
 		"engine_expected_to_fail": []
 	})
 
+func add_test_expected_to_fail():
+	multi_test_list[multi_test_current].expected_to_fail = true
+	
 func add_test_engine_expected_to_fail(p_engine: Array[String]):
 	multi_test_list[multi_test_current].engine_expected_to_fail.append_array(p_engine)
 	

@@ -147,7 +147,7 @@ If a bug is detected and you are not in the process of fixing it, you can indica
 
 In a single monitor test, you must set the boolean `expected_to_fail` to `true`, example: `monitor.expected_to_fail = true`.
 
-In a manual, multi-monitor test, you can set this boolean in the second parameter of `add_sub_test`, example: `add_sub_test(p_name: String, p_expected_to_fail := false)`
+In a manual, multi-monitor test, you can set this boolean by calling `add_test_expected_to_fail()` after the the call of `add_test()`.
 
 #### Physics engine other than GodotPhysics
 

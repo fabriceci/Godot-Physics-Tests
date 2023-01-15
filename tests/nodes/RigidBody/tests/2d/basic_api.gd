@@ -16,6 +16,20 @@ var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func test_start() -> void:
 	
+	# Bug where you can't change the position two time
+	if true:
+		var body := create_rigid_body(next_test_layer(), Vector2(-2000, - 2000))
+		body.position = Vector2(-1000, -1000)
+		body.gravity_scale = 1
+
+		var position_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):		
+			if p_monitor.frame == 1:
+				p_monitor.add_test("Position can be change properly")
+				var success:= p_target.position == Vector2(-1000, -1000)
+				p_monitor.add_test_result(success)
+				p_monitor.monitor_completed()
+		create_generic_manual_monitor(body, position_test, simulation_duration)
+
 	if true:
 		var test_position = next_test_position()
 		var body := create_rigid_body(next_test_layer(), test_position)
@@ -34,11 +48,11 @@ func test_start() -> void:
 				p_monitor.monitor_completed()
 		var monitor := create_generic_manual_monitor(body, gravity_test, simulation_duration)
 		monitor.data["position"] = test_position
+
 	if true:
 		var test_position = next_test_position()
-		var body := create_rigid_body(next_test_layer())
+		var body := create_rigid_body(next_test_layer(), test_position)
 		body.gravity_scale = 0
-		body.global_position = test_position
 
 		var gravity_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):		
 			# Apply the force 20 frames
@@ -50,14 +64,13 @@ func test_start() -> void:
 				p_monitor.monitor_completed()
 		var monitor = create_generic_manual_monitor(body, gravity_test, simulation_duration)
 		monitor.data["position"] = test_position
-		
+
 	if true:
 		var test_position = next_test_position()
 		var current_layer = next_test_layer()
 		var body := create_rigid_body(current_layer, test_position)
 		body.gravity_scale = 1
-		var static_body := create_static_body(current_layer, test_position)
-		static_body.position += Vector2(20, 50)
+		create_static_body(current_layer, test_position + Vector2(20, 50))
 
 		var rotation_test = func(_p_target: PhysicsTest2D, _p_monitor: GenericExpirationMonitor):
 			return body.rotation != 0
@@ -79,21 +92,6 @@ func test_start() -> void:
 
 		var monitor := create_generic_expiration_monitor(self, lock_rotation_test, null, 0.5)
 		monitor.test_name = "Lock_rotation works"
-
-	if true:
-		var test_position = next_test_position()
-		var current_layer = next_test_layer()
-		var body_with_damping := create_rigid_body(current_layer, test_position + Vector2(0, -60), false) # Damping
-		var body_without_damping := create_rigid_body(current_layer, test_position, true) # No Damping
-		body_with_damping.add_constant_force(Vector2(200, 0))
-		body_without_damping.add_constant_force(Vector2(200, 0))
-		
-		var damping_test = func(_p_target: PhysicsTest2D, _p_monitor: GenericExpirationMonitor):
-			return body_with_damping.position.x < body_without_damping.position.x
-			
-		var monitor := create_generic_expiration_monitor(self, damping_test, null, 1)
-		monitor.test_name = "Damping works"
-
 
 	if true:
 		var test_position = next_test_position()
@@ -145,7 +143,8 @@ func test_start() -> void:
 
 		var constant_central_force_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
 			if p_monitor.frame == 1:
-				p_target.add_constant_central_force(Vector2(200, 0))
+				p_target.add_constant_central_force(Vector2(100, 0))
+				p_target.add_constant_central_force(Vector2(100, 0))
 			# Apply the force 20 frames
 			if p_monitor.frame == 21:
 				var travel = p_target.position - p_monitor.data["position"]
@@ -163,59 +162,17 @@ func test_start() -> void:
 					p_monitor.add_test_error("Constant central force is not retrieved correctly: expected %v, get %v" % [Vector2(200, 0), p_target.constant_force])
 				p_monitor.add_test_result(success)
 
+			if p_monitor.frame == 23:
+				p_target.constant_force = Vector2.ZERO # Reset the constant force
+
+			if p_monitor.frame == 24:
+				p_monitor.add_test("Constant force can be removed")
+				var success := p_target.constant_force == Vector2.ZERO
+				p_monitor.add_test_result(success)
 				p_monitor.monitor_completed()
+
 		var monitor := create_generic_manual_monitor(body, constant_central_force_test, simulation_duration)
 		monitor.data["position"] = test_position
-	if true:
-		# Check impulse force API
-		var test_position = next_test_position()
-		var body := create_rigid_body(next_test_layer())
-		body.global_position = test_position + Vector2(0, 200)
-
-		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
-				p_target.apply_central_impulse(Vector2(200, 0))
-			# Apply the force 20 frames
-			if p_monitor.frame == 21:
-				var travel = p_target.position - (p_monitor.data["position"] + Vector2(0, 200))
-				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
-				p_monitor.add_test("Force impulse is applied")
-				var success:= Utils.vec2_equals(travel, expected, 0.001)
-				if not success:
-					p_monitor.add_test_error("Force impulse is not applied correctly: expected %v, get %v" % [expected, travel])
-				p_monitor.add_test_result(success)
-
-			if p_monitor.frame == 22:	
-				p_monitor.add_test("Linear velocity can be retrieved")
-				var success := p_target.linear_velocity == Vector2(200, 0)
-				if not success:
-					p_monitor.add_test_error("Linear velocity is not retrieved correctly: expected %v, get %v" % [Vector2(200, 0), p_target.constant_force])
-				p_monitor.add_test_result(success)
-
-				p_monitor.monitor_completed()
-		var monitor := create_generic_manual_monitor(body, force_impulse_test, simulation_duration)
-		monitor.data["position"] = test_position
-
-#	if true:
-#		var test_position = next_test_position()
-#		var body := create_rigid_body(next_test_layer())
-#		body.global_position = test_position + Vector2(0, 200)
-#
-#		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-#			if p_monitor.frame == 1:
-#				p_target.apply_impulse(Vector2(2000, 0), Vector2(0, 5))
-#			# Apply the force 20 frames
-#			if p_monitor.frame == 21:
-#				var travel = p_target.position - (p_monitor.data["position"] + Vector2(0, 200))
-#				var expected =  Vector2(2000, 0) * dt * 20  # x(t) = at + v0t + x0
-#				p_monitor.add_test("Force impulse at specific position is applied")
-#				var success:= Utils.vec2_equals(travel, expected, 0.001)
-#				if not success:
-#					p_monitor.add_test_error("Force impulse at specific position is not applied correctly: expected %v, get %v, rotation %f"  % [expected.x, travel.x, p_target.rotation])
-#				p_monitor.add_test_result(success)
-#				p_monitor.monitor_completed()
-#		var monitor := create_generic_manual_monitor(body, force_impulse_test, simulation_duration)
-#		monitor.data["position"] = test_position
 
 	# TO DO: check with the right formula
 	if true:
@@ -240,11 +197,83 @@ func test_start() -> void:
 		var monitor := create_generic_manual_monitor(body, force_position_test, simulation_duration)
 		monitor.data["position"] = test_position
 
+ #	need verification
+	if true:
+		var test_position = next_test_position()
+		var body := create_rigid_body(next_test_layer(), test_position)
+
+		var force_position_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
+			if p_monitor.frame <= 20:
+				p_target.apply_force(Vector2(200, 0))
+			# Apply the force 20 frames
+			if p_monitor.frame == 21:
+				var travel = p_target.position - p_monitor.data["position"]
+				var expected := 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
+				p_monitor.add_test("Apply force at specific position is applied")
+				var success:= Utils.f_equals(travel.x, expected.x, 1) and p_target.rotation != 0
+				if not success:
+					p_monitor.add_test_error("apply force at specific position is not applied correctly: expected %f, get %f, rotation %f" % [expected.x, travel.x, p_target.rotation])
+				p_monitor.add_test_result(success)
+				p_monitor.monitor_completed()
+
+		var monitor := create_generic_manual_monitor(body, force_position_test, simulation_duration)
+		monitor.data["position"] = test_position
+
+	if true:
+		# Check impulse force API
+		var test_position = next_test_position()
+		var body := create_rigid_body(next_test_layer(), test_position)
+
+		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
+			if p_monitor.frame == 1:
+				p_target.apply_central_impulse(Vector2(200, 0))
+			# Apply the force 20 frames
+			if p_monitor.frame == 21:
+				var travel = p_target.position - p_monitor.data["position"]
+				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
+				p_monitor.add_test("Force impulse is applied")
+				var success:= Utils.vec2_equals(travel, expected, 0.001)
+				if not success:
+					p_monitor.add_test_error("Force impulse is not applied correctly: expected %v, get %v" % [expected, travel])
+				p_monitor.add_test_result(success)
+
+			if p_monitor.frame == 22:	
+				p_monitor.add_test("Linear velocity can be retrieved")
+				var success := p_target.linear_velocity == Vector2(200, 0)
+				if not success:
+					p_monitor.add_test_error("Linear velocity is not retrieved correctly: expected %v, get %v" % [Vector2(200, 0), p_target.constant_force])
+				p_monitor.add_test_result(success)
+
+				p_monitor.monitor_completed()
+		var monitor := create_generic_manual_monitor(body, force_impulse_test, simulation_duration)
+		monitor.data["position"] = test_position
+
+# TO DO: verify this test
+	if true:
+		var test_position = next_test_position()
+		var body := create_rigid_body(next_test_layer(), test_position)
+
+		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
+			if p_monitor.frame == 1:
+				p_target.apply_impulse(Vector2(200, 0), Vector2(0, 5))
+			# Apply the force 20 frames
+			if p_monitor.frame == 21:
+				var travel = p_target.position - p_monitor.data["position"]
+				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
+				p_monitor.add_test("Force impulse at specific position is applied")
+				p_monitor.add_test_expected_to_fail()
+				var success:= Utils.vec2_equals(travel, expected, 0.001) and p_target.rotation != 0
+				if not success:
+					p_monitor.add_test_error("Force impulse at specific position is not applied correctly: expected %f, get %f, rotation %f"  % [expected.x, travel.x, p_target.rotation])
+				p_monitor.add_test_result(success)
+				p_monitor.monitor_completed()
+		var monitor := create_generic_manual_monitor(body, force_impulse_test, simulation_duration)
+		monitor.data["position"] = test_position
+
 	if true:
 		# Constant Torque
 		var test_position = next_test_position()
-		var body := create_rigid_body(next_test_layer())
-		body.global_position = test_position - Vector2(100, 0)
+		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var constant_torque_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
 			if p_monitor.frame == 1:
@@ -267,15 +296,21 @@ func test_start() -> void:
 					p_monitor.add_test_error("Constant torque is not retrieved correctly: expected %f, get %f" % [50, p_target.constant_torque])
 				p_monitor.add_test_result(success)
 
+			if p_monitor.frame == 22:
+				p_target.constant_torque = 0# Reset the constant torque
+
+			if p_monitor.frame == 23:
+				p_monitor.add_test("Constant torque can be removed")
+				var success := p_target.constant_torque == 0
+				p_monitor.add_test_result(success)
 				p_monitor.monitor_completed()
 
 		create_generic_manual_monitor(body, constant_torque_test, simulation_duration)
-		
+
 	if true:
 		# Impulse Torque
 		var test_position = next_test_position()
-		var body := create_rigid_body(next_test_layer())
-		body.global_position = test_position - Vector2(100, 0)
+		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var impulse_torque_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
 			if p_monitor.frame == 2:
@@ -307,9 +342,8 @@ func test_start() -> void:
 	if true:
 		# Check freeze API
 		var test_position = next_test_position()
-		var body := create_rigid_body(next_test_layer())
+		var body := create_rigid_body(next_test_layer(), test_position)
 		body.freeze = true
-		body.global_position = test_position + Vector2(100, 0)
 		var right_constant_force = Vector2(200, 0)
 
 		var freeze_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
@@ -319,14 +353,28 @@ func test_start() -> void:
 			if p_monitor.frame == 21:
 				if true:
 					p_monitor.add_test("Body can be freeze")
-					var success: bool = p_target.global_position == p_monitor.data["position"] + Vector2(100, 0)
+					var success: bool = p_target.global_position == p_monitor.data["position"]
 					p_monitor.add_test_result(success)
 					reset_body(p_target)
 
 				p_monitor.monitor_completed()
 		var body_freeze_monitor := create_generic_manual_monitor(body, freeze_test, simulation_duration)
 		body_freeze_monitor.data["position"] = test_position
-		
+
+
+	if true:
+		var test_position = next_test_position()
+		var current_layer = next_test_layer()
+		var body_with_damping := create_rigid_body(current_layer, test_position + Vector2(0, -60), false) # Damping
+		var body_without_damping := create_rigid_body(current_layer, test_position, true) # No Damping
+		body_with_damping.add_constant_force(Vector2(200, 0))
+		body_without_damping.add_constant_force(Vector2(200, 0))
+
+		var damping_test = func(_p_target: PhysicsTest2D, _p_monitor: GenericExpirationMonitor):
+			return body_with_damping.position.x < body_without_damping.position.x
+
+		var monitor := create_generic_expiration_monitor(self, damping_test, null, 1)
+		monitor.test_name = "Damping works"
 		
 func reset_body(p_body: RigidBody2D) -> void:
 	p_body.freeze = false
