@@ -20,7 +20,6 @@ func test_start() -> void:
 	if true:
 		var body := create_rigid_body(next_test_layer(), Vector2(-2000, - 2000))
 		body.position = Vector2(-1000, -1000)
-		body.gravity_scale = 1
 
 		var position_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):		
 			if p_monitor.frame == 1:
@@ -204,7 +203,7 @@ func test_start() -> void:
 
 		var force_position_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
 			if p_monitor.frame <= 20:
-				p_target.apply_force(Vector2(200, 0))
+				p_target.apply_force(Vector2(200, 0), Vector2(0,5))
 			# Apply the force 20 frames
 			if p_monitor.frame == 21:
 				var travel = p_target.position - p_monitor.data["position"]
@@ -254,14 +253,13 @@ func test_start() -> void:
 		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2: # first frame is not good because inv_inertia = 0
 				p_target.apply_impulse(Vector2(200, 0), Vector2(0, 5))
 			# Apply the force 20 frames
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
 				p_monitor.add_test("Force impulse at specific position is applied")
-				p_monitor.add_test_expected_to_fail()
 				var success:= Utils.vec2_equals(travel, expected, 0.001) and p_target.rotation != 0
 				if not success:
 					p_monitor.add_test_error("Force impulse at specific position is not applied correctly: expected %f, get %f, rotation %f"  % [expected.x, travel.x, p_target.rotation])
