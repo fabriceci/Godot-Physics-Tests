@@ -49,7 +49,7 @@ func test_completed() -> void:
 						Global.MONITOR_PASSED += 1
 						if monitor.is_sub_test_expected_to_fail(sub_test):
 							Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), sub_test.name])
-							subs_result += " ☺ (improvement)"
+							subs_result += " ❤️ (improvement)"
 					else:
 						Global.MONITOR_FAILED += 1
 						if not monitor.is_sub_test_expected_to_fail(sub_test):
@@ -68,7 +68,7 @@ func test_completed() -> void:
 					Global.MONITOR_PASSED += 1
 					if monitor.is_expected_to_fail():
 						Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), monitor.monitor_name()])
-						result += " ☺ (improvement)"
+						result += " ❤️ (improvement)"
 				else:
 					Global.MONITOR_FAILED += 1
 					if not monitor.is_expected_to_fail():

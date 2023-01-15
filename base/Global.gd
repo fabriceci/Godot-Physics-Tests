@@ -73,7 +73,15 @@ func print_summary(duration: float) -> void:
 			cpt += 1
 			print_rich("[indent][indent][color=green]%d. %s[/color][/indent][/indent]" % [cpt, improvement])
 
-	print_rich("\n[color=%s] > COMPLETED IN %.2fs | STATUS: %s (PASSED MONITORS: %d/%d)[/color]" % [color, duration, status, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
+	var extra = ""
+	if Global.MONITOR_REGRESSION.size() != 0 or Global.MONITOR_IMRPOVEMENT.size() != 0:
+		extra = " | "
+		if Global.MONITOR_REGRESSION.size() != 0:
+			extra += "☹ %d regression(s) " % Global.MONITOR_REGRESSION.size()
+		if Global.MONITOR_IMRPOVEMENT.size() != 0:
+			extra += "❤️ %d improvement(s)" % Global.MONITOR_IMRPOVEMENT.size()	
+
+	print_rich("\n[color=%s] > COMPLETED IN %.2fs | STATUS: %s (PASSED MONITORS: %d/%d)%s[/color]" % [color, duration, status, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED, extra])
 	
 func print_engine() -> void:
 	if Global.VERBOSE:
