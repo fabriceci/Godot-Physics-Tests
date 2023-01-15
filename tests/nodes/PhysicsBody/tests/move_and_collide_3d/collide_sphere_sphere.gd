@@ -8,12 +8,12 @@ var simulation_duration := 20
 var test_failed := false
 
 func test_description() -> String:
-	return """Checks whether the move_and_collide between sphere and sphere works
+	return """Checks whether the move_and_collide between a CharacterBody sphere and a big static sphere works
 	correctly."""
 	
 func test_name() -> String:
-	return "PhysicsBody3D | testing collide sphere with sphere"
-
+	return "PhysicsBody3D | testing the collision between a CharacterBody sphere and a big static sphere"
+	
 var tested_body: CharacterBody3D
 var static_body: StaticBody3D
 
