@@ -52,7 +52,14 @@ func exit(p_code := 0) -> void:
 func print_summary(duration: float) -> void:
 	var status = "FAILED" if Global.MONITOR_REGRESSION.size() != 0 else "SUCCESS"
 	var color = "red" if Global.MONITOR_REGRESSION.size() != 0 else "green"
-	print_rich("[color=%s] > COMPLETED IN %.2fs | STATUS: %s (PASSED MONITORS: %d/%d)[/color]" % [color, duration, status, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
+
+	if Global.VERBOSE and Global.MONITOR_EXPECTED_TO_FAIL.size() != 0:
+		print_rich("\n[indent]%d Monitor(s) expected to fail:[/indent]" % [Global.MONITOR_EXPECTED_TO_FAIL.size()])
+		var cpt := 0
+		for expected in Global.MONITOR_EXPECTED_TO_FAIL:
+			cpt += 1
+			print_rich("[indent][indent]%d. %s[/indent][/indent]" % [cpt, expected])
+	
 	if Global.MONITOR_REGRESSION.size() != 0:
 		print_rich("\n[indent]%d Regression(s):[/indent]" % [Global.MONITOR_REGRESSION.size()])
 		var cpt := 0
@@ -66,13 +73,8 @@ func print_summary(duration: float) -> void:
 			cpt += 1
 			print_rich("[indent][indent][color=green]%d. %s[/color][/indent][/indent]" % [cpt, improvement])
 
-	if Global.VERBOSE and Global.MONITOR_EXPECTED_TO_FAIL.size() != 0:
-		print_rich("\n[indent]%d Monitor(s) expected to fail:[/indent]" % [Global.MONITOR_EXPECTED_TO_FAIL.size()])
-		var cpt := 0
-		for expected in Global.MONITOR_EXPECTED_TO_FAIL:
-			cpt += 1
-			print_rich("[indent][indent]%d. %s[/indent][/indent]" % [cpt, expected])
-
+	print_rich("\n[color=%s] > COMPLETED IN %.2fs | STATUS: %s (PASSED MONITORS: %d/%d)[/color]" % [color, duration, status, Global.MONITOR_PASSED, Global.MONITOR_PASSED + Global.MONITOR_FAILED])
+	
 func print_engine() -> void:
 	if Global.VERBOSE:
 		var engine_txt := ""

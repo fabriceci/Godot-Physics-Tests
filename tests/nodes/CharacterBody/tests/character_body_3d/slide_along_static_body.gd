@@ -21,7 +21,7 @@ func test_description() -> String:
 	return "Checks that the body slides along a %s static body." % [PhysicsTest3D.shape_name(static_body_shape)]
 
 func test_name() -> String:
-	return "CharacterBody3D | testing if the body can slide along a %s static body, params: [speed:%s]" % [PhysicsTest3D.shape_name(static_body_shape), character_body_speed]
+	return "CharacterBody3D | testing if the body can slide along a %s static body, params: [rotation: %.1v, speed:%s]" % [PhysicsTest3D.shape_name(static_body_shape), character_body_rotation_degrees, character_body_speed]
 
 func test_start() -> void:
 	var slide_test_cbk = func(p_target: CharacterBody3D, p_monitor: GenericManualMonitor):

@@ -44,34 +44,39 @@ func test_completed() -> void:
 			# multi_test_case
 			if not monitor.multi_test_list.is_empty():
 				for sub_test in monitor.multi_test_list:
+					var subs_result = "[color=red]✗[/color]" if not sub_test.result else "[color=green]✓[/color]"
 					if sub_test.result:
 						Global.MONITOR_PASSED += 1
 						if monitor.is_sub_test_expected_to_fail(sub_test):
 							Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), sub_test.name])
+							subs_result += " ☺ (improvement)"
 					else:
 						Global.MONITOR_FAILED += 1
 						if not monitor.is_sub_test_expected_to_fail(sub_test):
 							Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), sub_test.name])
+							subs_result += " ☹ (regression)"
 						else:
 							Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), sub_test.name])
-					var subs_result = "[color=red]✗[/color]" if not sub_test.result else "[color=green]✓[/color]"
+					
 					output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [sub_test.name, subs_result]
 					for sub_test_error in sub_test.errors:
 						output += "[indent][indent][indent][indent][color=red]Error: %s[/color][/indent][/indent][/indent][/indent]\n" % sub_test_error
 			else:
 				var passed:bool = monitor.call("is_test_passed")
+				var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
 				if passed:
 					Global.MONITOR_PASSED += 1
 					if monitor.is_expected_to_fail():
 						Global.MONITOR_IMRPOVEMENT.append("%s > %s" % [test_name(), monitor.monitor_name()])
+						result += " ☺ (improvement)"
 				else:
 					Global.MONITOR_FAILED += 1
 					if not monitor.is_expected_to_fail():
 						Global.MONITOR_REGRESSION.append("%s > %s" % [test_name(), monitor.monitor_name()])
+						result += " ☹ (regression)"
 					else:
 						Global.MONITOR_EXPECTED_TO_FAIL.append("%s > %s" % [test_name(), monitor.monitor_name()])
-				
-				var result =  "[color=green]✓[/color]" if passed else "[color=red]✗[/color]"
+						
 				output += "[indent][indent][indent] → %s : %s[/indent][/indent][/indent]\n" % [monitor.monitor_name(), result]
 				if not passed and monitor.error_message != "" :
 					output += "[color=red][indent][indent][indent] %s [/indent][/indent][/indent][/color]\n" % [monitor.error_message]
