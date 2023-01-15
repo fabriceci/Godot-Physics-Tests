@@ -103,6 +103,10 @@ Utils="*res://base/Utils.gd"
 window/size/resizable=false
 window/subwindows/embed_subwindows=false
 
+[editor]
+
+export/convert_text_resources_to_binary=true
+
 [input]
 
 pause={

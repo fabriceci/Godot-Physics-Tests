@@ -1,7 +1,7 @@
 extends PhysicsUnitTest3D
 
 @export var shape: PhysicsTest3D.TestCollisionShape = PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON
-@export var stack_height := 8
+@export var stack_height := 7
 @export var body_spacing := 0.1
 @export var simulation_duration := 5
 @export var tolerance := 0.4
