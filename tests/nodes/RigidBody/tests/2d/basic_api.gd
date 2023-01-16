@@ -189,7 +189,7 @@ func test_start() -> void:
 				p_monitor.add_test("Constant force at specific position is applied")
 				var success:= Utils.f_equals(travel.x, expected.x, 1) and p_target.rotation != 0
 				if not success:
-					p_monitor.add_test_error("Constant force at specific position is not applied correctly: expected %v, get %v, rotation %f" % [expected.x, travel.x, p_target.rotation])
+					p_monitor.add_test_error("Constant force at specific position is not applied correctly: expected %f, get %f, rotation %f" % [expected.x, travel.x, p_target.rotation])
 				p_monitor.add_test_result(success)
 				p_monitor.monitor_completed()
 
@@ -284,7 +284,7 @@ func test_start() -> void:
 				var result = p_target.rotation
 				var success:= Utils.f_equals(result, expected, 0.02)
 				if not success:
-					p_monitor.add_test_error("Constant torque is not applied correctly: expected %v, get %v" % [expected, result])
+					p_monitor.add_test_error("Constant torque is not applied correctly: expected %f, get %f" % [expected, result])
 				p_monitor.add_test_result(success)
 
 			if p_monitor.frame == 21:
@@ -322,7 +322,7 @@ func test_start() -> void:
 					p_monitor.add_test("The impulse torque is applied to the angular velocity")
 					var success_vel:= Utils.f_equals(p_target.angular_velocity, angular_acc_expected)
 					if not success_vel:
-						p_monitor.add_test_error("Impulse torque is not applied correctly to the angular velocity: expected %v, get %v" % [angular_acc_expected, p_target.angular_velocity])
+						p_monitor.add_test_error("Impulse torque is not applied correctly to the angular velocity: expected %f, get %f" % [angular_acc_expected, p_target.angular_velocity])
 					p_monitor.add_test_result(success_vel)
 
 				if true:
@@ -330,7 +330,7 @@ func test_start() -> void:
 					var angular_rotation_expected = (angular_acc_expected * dt) * 20.0
 					var success_rot:= Utils.f_equals(p_target.rotation, angular_rotation_expected)
 					if not success_rot:
-						p_monitor.add_test_error("The impulse torque is not applied correctly to the rotation: expected %v, get %v" % [angular_rotation_expected, p_target.rotation])
+						p_monitor.add_test_error("The impulse torque is not applied correctly to the rotation: expected %f, get %f" % [angular_rotation_expected, p_target.rotation])
 					p_monitor.add_test_result(success_rot)
 
 				p_monitor.monitor_completed()
