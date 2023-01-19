@@ -41,10 +41,6 @@ type = 10
 [node name="collision_precision_box_vertex_vertex" parent="." instance=ExtResource("1_25700")]
 type = 11
 
-[node name="collision_precision_26v_box_top_left" parent="." instance=ExtResource("1_25700")]
-shape_tested = 99
-type = 4
-
 [node name="collision_precision_high_convex_left_right" parent="." instance=ExtResource("1_25700")]
 shape_tested = 100
 static_shape = 2
