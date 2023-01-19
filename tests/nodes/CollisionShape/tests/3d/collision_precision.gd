@@ -177,7 +177,7 @@ func get_dot_reference() -> float:
 	
 	if type == 	TestType.LEFT_TO_RIGHT:
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
-			return 0.997
+			return 1.0
 		
 		if shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX and static_shape == PhysicsTest3D.TestCollisionShape.SPHERE:
 			return 1.0

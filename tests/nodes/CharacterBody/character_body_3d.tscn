@@ -17,7 +17,7 @@ static_body_shape = 2
 [node name="slide_along_upright_cylinder_circle" parent="." instance=ExtResource("1_oc7v8")]
 static_body_shape = 5
 static_body_position = Vector3(6, 0, 0)
-character_body_shapes_failing = [6, 99, 100, 101]
+character_body_shapes_failing = [6]
 
 [node name="slide_along_sideways_cylinder_cap" parent="." instance=ExtResource("1_oc7v8")]
 static_body_shape = 5
@@ -29,4 +29,4 @@ character_body_shapes_failing = []
 static_body_shape = 5
 static_body_position = Vector3(6, 0, 0)
 static_body_rotation_degrees = Vector3(90, 90, 0)
-character_body_shapes_failing = [100, 101, 5]
+character_body_shapes_failing = []
