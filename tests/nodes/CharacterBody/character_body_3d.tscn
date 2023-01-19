@@ -23,10 +23,10 @@ character_body_shapes_failing = [6, 99, 100, 101]
 static_body_shape = 5
 static_body_position = Vector3(6, 0, 0)
 static_body_rotation_degrees = Vector3(90, 0, 0)
-character_body_shapes_failing = [4]
+character_body_shapes_failing = []
 
 [node name="slide_along_sideways_cylinder_edge" parent="." instance=ExtResource("1_oc7v8")]
 static_body_shape = 5
 static_body_position = Vector3(6, 0, 0)
 static_body_rotation_degrees = Vector3(90, 90, 0)
-character_body_shapes_failing = [4, 100, 101, 5]
+character_body_shapes_failing = [100, 101, 5]
