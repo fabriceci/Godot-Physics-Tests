@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnb4q7ofq0735"]
+
+[ext_resource type="Script" path="res://tests/nodes/CharacterBody/tests/character_body_2d/floating_slides.gd" id="1_ivi4y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dsbn4"]
+size = Vector2(20, 300)
+
+[node name="floating_slides" type="Node2D"]
+script = ExtResource("1_ivi4y")
+
+[node name="StaticBody2D1" type="StaticBody2D" parent="."]
+position = Vector2(1088, 512)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D1"]
+shape = SubResource("RectangleShape2D_dsbn4")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(800, 512)
+rotation = 0.523599
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource("RectangleShape2D_dsbn4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(528, 512)
+rotation = 0.785398
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+shape = SubResource("RectangleShape2D_dsbn4")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2(256, 512)
+rotation = 1.0472
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+shape = SubResource("RectangleShape2D_dsbn4")
+
+[node name="Spawn1" type="Marker2D" parent="."]
+position = Vector2(944, 512)
+
+[node name="Spawn2" type="Marker2D" parent="."]
+position = Vector2(672, 512)
+
+[node name="Spawn3" type="Marker2D" parent="."]
+position = Vector2(400, 512)
+
+[node name="Spawn4" type="Marker2D" parent="."]
+position = Vector2(64, 512)
