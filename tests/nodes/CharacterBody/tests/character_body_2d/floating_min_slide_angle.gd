@@ -3,8 +3,8 @@ extends PhysicsUnitTest2D
 var speed := 750
 var simulation_duration := 1
 
-@onready var spawn_1 := $Spawn1 # max_x < 800
-@onready var spawn_2 := $Spawn2 # max_x > 800
+@onready var spawn_1 := $Spawn1 # max_x < 525
+@onready var spawn_2 := $Spawn2 # max_x > 525
 
 func test_description() -> String:
 	return """Checks if [wall_min_slide_angle] is working properly. The body should not slide when
