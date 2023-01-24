@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqb1obldpyahv"]
+
+[ext_resource type="Script" path="res://tests/nodes/CharacterBody/tests/character_body_2d/floating_min_slide_angle.gd" id="1_c8714"]
+
+[node name="floating_min_slide_angle" type="Node2D"]
+script = ExtResource("1_c8714")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(600, 325)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-100, 0, 0, -400, 0, 355)
+
+[node name="Spawn1" type="Marker2D" parent="."]
+position = Vector2(400, 225)
+
+[node name="Spawn2" type="Marker2D" parent="."]
+position = Vector2(400, 425)
