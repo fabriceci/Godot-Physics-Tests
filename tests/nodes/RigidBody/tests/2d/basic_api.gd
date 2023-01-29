@@ -141,11 +141,11 @@ func test_start() -> void:
 		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var constant_central_force_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2:
 				p_target.add_constant_central_force(Vector2(100, 0))
 				p_target.add_constant_central_force(Vector2(100, 0))
 			# Apply the force 20 frames
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected = 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Constant force is applied")
@@ -154,17 +154,17 @@ func test_start() -> void:
 					p_monitor.add_test_error("Constant central force is not applied correctly: expected %v, get %v" % [expected, travel])
 				p_monitor.add_test_result(success)
 
-			if p_monitor.frame == 22:	
+			if p_monitor.frame == 23:	
 				p_monitor.add_test("Constant force can be retrieved")
 				var success := p_target.constant_force == Vector2(200, 0)
 				if not success:
 					p_monitor.add_test_error("Constant central force is not retrieved correctly: expected %v, get %v" % [Vector2(200, 0), p_target.constant_force])
 				p_monitor.add_test_result(success)
 
-			if p_monitor.frame == 23:
+			if p_monitor.frame == 24:
 				p_target.constant_force = Vector2.ZERO # Reset the constant force
 
-			if p_monitor.frame == 24:
+			if p_monitor.frame == 25:
 				p_monitor.add_test("Constant force can be removed")
 				var success := p_target.constant_force == Vector2.ZERO
 				p_monitor.add_test_result(success)
@@ -180,10 +180,10 @@ func test_start() -> void:
 		body.global_position = test_position + Vector2(0, 200)
 
 		var force_position_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2:
 				p_target.add_constant_force(Vector2(200, 0), Vector2(0, 5))
 			# Apply the force 20 frames
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected = 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Constant force at specific position is applied")
@@ -224,10 +224,10 @@ func test_start() -> void:
 		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var force_impulse_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2:
 				p_target.apply_central_impulse(Vector2(200, 0))
 			# Apply the force 20 frames
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected =  Vector2(200, 0) * dt * 20  # x(t) = at + v0t + x0
 				p_monitor.add_test("Force impulse is applied")
@@ -236,7 +236,7 @@ func test_start() -> void:
 					p_monitor.add_test_error("Force impulse is not applied correctly: expected %v, get %v" % [expected, travel])
 				p_monitor.add_test_result(success)
 
-			if p_monitor.frame == 22:	
+			if p_monitor.frame == 23:	
 				p_monitor.add_test("Linear velocity can be retrieved")
 				var success := p_target.linear_velocity == Vector2(200, 0)
 				if not success:
@@ -274,10 +274,10 @@ func test_start() -> void:
 		var body := create_rigid_body(next_test_layer(), test_position)
 
 		var constant_torque_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2:
 				p_target.add_constant_torque(500)
 			# Apply the force 20 frames
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				p_monitor.add_test("Constant torque is applied")
 				var inertia := PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
 				var expected = 0.5 *  (500.0 / inertia) * pow((dt * 20.0), 2.0)  # x(t) = (1/2)at2 + v0t + x0
@@ -287,17 +287,17 @@ func test_start() -> void:
 					p_monitor.add_test_error("Constant torque is not applied correctly: expected %f, get %f" % [expected, result])
 				p_monitor.add_test_result(success)
 
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 23:
 				p_monitor.add_test("Constant torque can be retrieved")
 				var success := p_target.constant_torque == 500
 				if not success:
 					p_monitor.add_test_error("Constant torque is not retrieved correctly: expected %f, get %f" % [50, p_target.constant_torque])
 				p_monitor.add_test_result(success)
 
-			if p_monitor.frame == 22:
+			if p_monitor.frame == 23:
 				p_target.constant_torque = 0# Reset the constant torque
 
-			if p_monitor.frame == 23:
+			if p_monitor.frame == 24:
 				p_monitor.add_test("Constant torque can be removed")
 				var success := p_target.constant_torque == 0
 				p_monitor.add_test_result(success)
@@ -345,10 +345,10 @@ func test_start() -> void:
 		var right_constant_force = Vector2(200, 0)
 
 		var freeze_test = func(p_target: RigidBody2D, p_monitor: GenericManualMonitor):
-			if p_monitor.frame == 1:
+			if p_monitor.frame == 2:
 				# Setup the force
 				p_target.add_constant_central_force(right_constant_force)
-			if p_monitor.frame == 21:
+			if p_monitor.frame == 22:
 				if true:
 					p_monitor.add_test("Body can be freeze")
 					var success: bool = p_target.global_position == p_monitor.data["position"]
