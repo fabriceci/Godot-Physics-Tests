@@ -77,7 +77,7 @@ func test_start() -> void:
 	
 	# 4. Only neighboring children overlap
 	var shoud_overlaps_with_neighbours= func(p_target: Node3D, _p_monitor: GenericExpirationMonitor):
-		var bodies = bodies_array as Array[RigidBody3D]
+		var bodies := bodies_array as Array[RigidBody3D]
 		for child_idx in bodies.size():
 			var body := bodies[child_idx]
 			for shape_owner_id in body.get_shape_owners():

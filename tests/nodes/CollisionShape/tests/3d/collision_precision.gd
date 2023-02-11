@@ -46,7 +46,7 @@ func test_start() -> void:
 	elif (shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or shape_tested == PhysicsTest3D.TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX):
 		reference_body = create_body(2, PhysicsTest3D.TestCollisionShape.SPHERE)
 	else:
-		@warning_ignore(assert_always_false)
+		@warning_ignore("assert_always_false")
 		assert(false)
 	# static body
 	static_body = StaticBody3D.new()
@@ -201,6 +201,6 @@ func get_dot_reference() -> float:
 			return 1.000000
 	
 	print("No reference for %s vs %s with type %s" % [PhysicsUnitTest3D.shape_name(shape_tested), PhysicsUnitTest3D.shape_name(static_shape),TestType.keys()[type]])
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false)
 	return 100.0 

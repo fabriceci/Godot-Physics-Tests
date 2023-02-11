@@ -41,7 +41,7 @@ func _ready() -> void:
 	add_child(center_layout)
 
 func test_name() -> String:
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false, "ERROR: You must give implement test_name()")
 	return ""
 
@@ -84,7 +84,7 @@ static func get_static_body_with_collision_shape(p_shape_definition, p_shape_typ
 # Get CollisionShape2D or CollisionPolygon2D that fits in the rectangle.
 static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.RECTANGLE, p_top_left_position := false) -> Node2D:
 	if p_top_left_position and not p_shape_type in [TestCollisionShape.CIRCLE, TestCollisionShape.RECTANGLE]:
-		@warning_ignore(assert_always_false)
+		@warning_ignore("assert_always_false")
 		assert(false, "Top left position not supported for this shape")
 	var col = null
 	if p_shape_type == TestCollisionShape.CAPSULE:
@@ -122,7 +122,7 @@ static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisio
 			col.position = p_shape_definition.position + 0.5 * p_shape_definition.size
 	return col
 
-static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0):
+static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0) -> Node2D:
 	return get_collision_shape(get_default_shape_definition(p_shape_type, p_scale), p_shape_type)
 	
 static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
@@ -151,7 +151,7 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 			convex.append(v * p_scale)
 		return convex
 	
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false, "No default shape for this shape type")
 
 static func shape_name(p_shape_type : TestCollisionShape) -> String:
@@ -164,7 +164,7 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 #		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
 		TestCollisionShape.CIRCLE: return "Circle"
 		_:
-			@warning_ignore(assert_always_false)
+			@warning_ignore("assert_always_false")
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
 

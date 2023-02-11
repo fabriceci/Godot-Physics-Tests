@@ -83,7 +83,7 @@ func test_completed() -> void:
 		elif monitor.has_method("get_score"):
 			output += "[indent][indent][indent] → %s : score [b]%f[/b][/indent][/indent][/indent]\n" % [monitor.monitor_name(), monitor.call("get_score")]
 		else:
-			@warning_ignore(assert_always_false)
+			@warning_ignore("assert_always_false")
 			assert(false, "Monitor without is_test_passed or get_score method")
 	if Global.VERBOSE:
 		print_rich(output)

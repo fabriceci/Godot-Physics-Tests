@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 		return
 
 func monitor_name() -> String:
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false, "ERROR: You must implement monitor_name()")
 	return ""
 
