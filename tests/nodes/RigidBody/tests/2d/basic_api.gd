@@ -279,7 +279,7 @@ func test_start() -> void:
 			# Apply the force 20 frames
 			if p_monitor.frame == 22:
 				p_monitor.add_test("Constant torque is applied")
-				var inertia := PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
+				var inertia : float = PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
 				var expected = 0.5 *  (500.0 / inertia) * pow((dt * 20.0), 2.0)  # x(t) = (1/2)at2 + v0t + x0
 				var result = p_target.rotation
 				var success:= Utils.f_equals(result, expected, 0.02)
@@ -316,7 +316,7 @@ func test_start() -> void:
 
 			# Apply the force 20 frames
 			if p_monitor.frame == 22:
-				var inertia := PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
+				var inertia : float = PhysicsServer2D.body_get_param(p_target.get_rid(), PhysicsServer2D.BODY_PARAM_INERTIA)
 				var angular_acc_expected =  (1.0/inertia) * 500.0 # θ(t) = (1/I)τ0t + θ0 
 				if true:
 					p_monitor.add_test("The impulse torque is applied to the angular velocity")

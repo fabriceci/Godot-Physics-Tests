@@ -33,7 +33,7 @@ func _ready() -> void:
 	add_child(center_layout)
 
 func test_name() -> String:
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false, "ERROR: You must give implement test_name()")
 	return ""
 
@@ -107,7 +107,7 @@ func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 
 	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX  or p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
 		return null
 	
-	@warning_ignore(assert_always_false)
+	@warning_ignore("assert_always_false")
 	assert(false, "No default shape for this shape type")
 
 static func shape_name(p_shape_type : TestCollisionShape) -> String:
@@ -123,7 +123,7 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 #		TestCollisionShape.WORLD_BOUNDARY: return "World Boundary"
 		TestCollisionShape.SPHERE: return "Sphere"
 		_:
-			@warning_ignore(assert_always_false)
+			@warning_ignore("assert_always_false")
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
 			

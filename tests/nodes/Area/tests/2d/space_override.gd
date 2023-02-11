@@ -44,7 +44,7 @@ func test_start() -> void:
 	rigid_body_outside.gravity_scale = 0.0
 	
 	var dt := 1.0/60.0
-	var default_gravity := ProjectSettings.get_setting("physics/2d/default_gravity_vector")
+	var default_gravity : Vector2 = ProjectSettings.get_setting("physics/2d/default_gravity_vector")
 	default_gravity *= ProjectSettings.get_setting("physics/2d/default_gravity")
 	
 	var custom_gravity := area_custom_gravity.gravity_direction

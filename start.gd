@@ -78,7 +78,7 @@ func find_test(result: Dictionary, folder: String) -> void:
 					result[file_name] = test_scene_list
 			else:
 				print_rich("[color:red]Failed to open the directory: [/color] % [dir_path]")
-				@warning_ignore(assert_always_false)
+				@warning_ignore("assert_always_false")
 				assert(false, "Failed to read the directory")
 			file_name = dir.get_next()
 
