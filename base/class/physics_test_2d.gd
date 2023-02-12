@@ -31,6 +31,7 @@ enum TestCollisionShape {
 
 func _ready() -> void:
 	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
+		Global.print_engine()
 		test_start()
 	var center_layout = CenterContainer.new()
 	center_layout.size = Vector2(Global.WINDOW_SIZE.x, 40)

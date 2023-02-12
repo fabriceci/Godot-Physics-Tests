@@ -26,7 +26,6 @@ func _init(p_scene: Node, p_is_3d = true) -> void:
 	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	
 	container = HFlowContainer.new()
-	container.layout_mode=1
 	container.size = Global.WINDOW_SIZE
 	container.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	container.size_flags_vertical=Control.SIZE_EXPAND_FILL

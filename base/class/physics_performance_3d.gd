@@ -1,12 +1,14 @@
 class_name PhysicsPerformanceTest3D
 extends PhysicsTest3D
 
+var NB_FRAME_SMOOTHING = 5
+var WARMING_SKIPPED_FRAMES = 20
+
+var _total_frame := 0
+var _fps_label : Label
+
 var _current_fps := 60.0
 var _prev_tick_ms := -1.0
-
-var NB_FRAME_SMOOTHING = 4
-var WARMING_SKIPPED_FRAMES = 180
-var _fps_label : Label
 
 var _max_fps := 0.0
 var _min_fps := 9999.0
@@ -27,6 +29,7 @@ func _init() -> void:
 func _process(_delta: float) -> void:
 	
 	_frame_cpt += 1
+	_total_frame += 1
 		
 	# Skip Frames
 	if _warming and _frame_cpt == WARMING_SKIPPED_FRAMES:
@@ -60,11 +63,14 @@ func _process(_delta: float) -> void:
 		if _smoothed_fps < _min_fps:
 			_min_fps = _smoothed_fps
 
-	if _fps_label:
-		_fps_label.text = "%d FPS" % [_current_fps] 
+	if _total_frame % 30 ==0 and _fps_label:
+		_fps_label.text = "%d FPS" % [_smoothed_fps] 
 
-func get_fps():
+func get_smoothed_fps():
 	return _smoothed_fps
+	
+func get_fps():
+	return _current_fps
 
 func test_start() -> void:
 	super()
@@ -76,7 +82,7 @@ func test_start() -> void:
 	
 	process_mode = Node.PROCESS_MODE_INHERIT
 
-func register_result(p_name: String, result: float):
+func register_result(p_name: String, result: String):
 	if not Global.PERFORMANCE_RESULT.has(get_name()):
 		Global.PERFORMANCE_RESULT[get_name()] = []
 	Global.PERFORMANCE_RESULT[get_name()].append([p_name, _min_fps, _max_fps, _average_fps / _average_record, result])
@@ -88,7 +94,7 @@ func test_completed(delay := 0) -> void:
 			output += "[indent][indent][color=green]%s[/color][/indent][/indent]\n" % [s]
 	if Global.PERFORMANCE_RESULT.has(get_name()):
 		for result in Global.PERFORMANCE_RESULT[get_name()]:
-			output += "[indent][indent][color=orange] → %s : [b]%d[/b][/color] | [color=purple](Min FPS: [b]%d[/b] | Max FPS: [b]%d[/b] | Average FPS: [b]%d[/b])[/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
+			output += "[indent][indent][color=orange] → %s : [b]%s[/b][/color] - [color=purple][b]FPS[/b] | min: [b]%d[/b] max: [b]%d[/b] avg: [b]%d[/b][/color][/indent][/indent]\n" % [result[0], result[4], result[1], result[2], result[3]]
 	else:
 			output += "[indent][indent][color=orange] Simulation completed[/color][/indent][/indent]\n"
 	print_rich(output)
@@ -101,4 +107,3 @@ func test_completed(delay := 0) -> void:
 
 	completed.emit()
 	queue_free()
-

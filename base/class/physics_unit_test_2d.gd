@@ -8,8 +8,6 @@ var start_time := 0.0
 func _ready() -> void:
 	super()
 	start_time = Time.get_unix_time_from_system()
-	if get_tree().get_root() == get_parent(): # autostart is the scene is alone
-		Global.print_engine()
 
 func register_monitors(p_monitors: Array[Monitor], p_owner: Node, p_start:= true):
 	for monitor in p_monitors:

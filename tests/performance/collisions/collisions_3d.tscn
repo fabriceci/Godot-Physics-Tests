@@ -12,14 +12,12 @@ script = SubResource("GDScript_n4cxb")
 [node name="convex 1026v" parent="." instance=ExtResource("1_myy22")]
 shape1 = 100
 shape2 = 100
-number_bodies_per_step = 1
-delay_for_new_bodies = 2.0
-step_recording = 1
+NB_BODY_FOR_ONE_STEP = 50
 
 [node name="convex 8v plus convex 8v" parent="." instance=ExtResource("1_myy22")]
 shape2 = 6
-step_recording = 25
+NB_BODY_FOR_ONE_STEP = 25
 
 [node name="convex 8v plus convex 24v" parent="." instance=ExtResource("1_myy22")]
-number_bodies_per_step = 2
-step_recording = 10
+NB_BODY_FOR_ONE_STEP = 10
+NUMBER_BODIES_PER_SPAWN = 2
