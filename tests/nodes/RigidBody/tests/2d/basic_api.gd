@@ -209,7 +209,7 @@ func test_start() -> void:
 				var travel = p_target.position - p_monitor.data["position"]
 				var expected := 0.5 *  Vector2(200, 0) * pow((dt * 20), 2)  # x(t) = (1/2)at2 + v0t + x0
 				p_monitor.add_test("Apply force at specific position is applied")
-				var success:= Utils.f_equals(travel.x, expected.x, 1) and p_target.rotation != 0
+				var success:= Utils.f_equals(travel.x, expected.x, 0.6) and p_target.rotation != 0
 				if not success:
 					p_monitor.add_test_error("apply force at specific position is not applied correctly: expected %f, get %f, rotation %f" % [expected.x, travel.x, p_target.rotation])
 				p_monitor.add_test_result(success)
