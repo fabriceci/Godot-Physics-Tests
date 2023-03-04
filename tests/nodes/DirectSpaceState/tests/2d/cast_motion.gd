@@ -39,7 +39,7 @@ func test_start() -> void:
 			body_query.transform = Transform2D(0, CENTER)
 			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			var result = d_space.cast_motion(body_query)
-			p_monitor.add_test_result(is_between(result, 0.0126, 0.016))
+			p_monitor.add_test_result(!result.is_empty() and is_between(result, 0.0126, 0.016))
 			
 		if true: # limit the scope
 			p_monitor.add_test("Return [1,1] when shape is inside a Body")
@@ -49,7 +49,7 @@ func test_start() -> void:
 			body_query.transform = Transform2D(0, CENTER_RIGHT)
 			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			var result = d_space.cast_motion(body_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 			
 		if true: # limit the scope
 			p_monitor.add_test("Can not collide with Body")
@@ -59,7 +59,7 @@ func test_start() -> void:
 			body_query.transform = Transform2D(0, CENTER)
 			body_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			var result = d_space.cast_motion(body_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		if true:
 			p_monitor.add_test("Can collide with Area")
@@ -69,7 +69,7 @@ func test_start() -> void:
 			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = true
 			var result = d_space.cast_motion(area_query)
-			p_monitor.add_test_result(is_between(result, 0.0126, 0.016))
+			p_monitor.add_test_result(!result.is_empty() and is_between(result, 0.0126, 0.016))
 		
 		if true:
 			p_monitor.add_test("Can not collide with Area")
@@ -79,7 +79,7 @@ func test_start() -> void:
 			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			area_query.collide_with_areas = false
 			var result = d_space.cast_motion(area_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		# Can exclude a RID
 		if true:
@@ -91,7 +91,7 @@ func test_start() -> void:
 			exclude_rid_query.motion = Vector2(mid_screen_width / 0.016, 0)
 			exclude_rid_query.exclude = [body.get_rid()]
 			var result = d_space.cast_motion(exclude_rid_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		if true:
 			p_monitor.add_test("Can exclude an Area by RID")
@@ -102,7 +102,7 @@ func test_start() -> void:
 			area_query.exclude = [area.get_rid()]
 			area_query.motion = Vector2(-mid_screen_width / 0.016, 0)
 			var result = d_space.cast_motion(area_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		if true:
 			p_monitor.add_test("Can exclude multiple RID")
@@ -113,7 +113,7 @@ func test_start() -> void:
 			exclude_rid_query.motion = Vector2(0 ,mid_screen_width / 0.016)
 			exclude_rid_query.exclude = [body.get_rid(), body2.get_rid()]
 			var result = d_space.cast_motion(exclude_rid_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		if true:
 			p_monitor.add_test("Don't report collision in the wrong collision layer")
@@ -124,7 +124,7 @@ func test_start() -> void:
 			area_query.collide_with_areas = true
 			area_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var result = d_space.cast_motion(area_query)
-			p_monitor.add_test_result(is_eq(result, [1,1]))
+			p_monitor.add_test_result(!result.is_empty() and is_eq(result, [1,1]))
 
 		if true:
 			p_monitor.add_test("Report collision in good collision layer")
@@ -135,7 +135,7 @@ func test_start() -> void:
 			body_query.collide_with_bodies = true
 			body_query.collision_mask = int(pow(2, 2-1)) # second layer
 			var result = d_space.cast_motion(body_query)
-			p_monitor.add_test_result(is_between(result, 0.0126, 0.016))
+			p_monitor.add_test_result(!result.is_empty() and is_between(result, 0.0126, 0.016))
 		
 		# Rotation
 		if true:
@@ -154,7 +154,7 @@ func test_start() -> void:
 			body_query_rot.motion = Vector2(mid_screen_width / 0.016, 0)
 			body_query_rot.collide_with_bodies = true
 			var result2 = d_space.cast_motion(body_query_rot)
-			p_monitor.add_test_result(is_eq(result1, [1,1]) and is_between(result2, 0.0126, 0.016))
+			p_monitor.add_test_result(!result1.is_empty() and !result2.is_empty() and is_eq(result1, [1,1]) and is_between(result2, 0.0126, 0.016))
 		
 		PhysicsServer2D.free_rid(shape_rid)
 		p_monitor.monitor_completed()
