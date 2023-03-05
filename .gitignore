@@ -20,3 +20,6 @@ mono_crash.*.json
 .directory
 .DS_Store
 *~
+
+# Exclude bin folder for GDExtension
+/bin/
