@@ -50,7 +50,7 @@ func test_description() -> String:
 
 func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.BOX) -> StaticBody3D:
 	var body = StaticBody3D.new()
-	body.position = Vector2(0, 0)
+	body.position = Vector3(0, 0, 0)
 	var body_col = get_collision_shape(p_shape_definition, p_shape_type)
 	body.add_child(body_col)
 	return body
