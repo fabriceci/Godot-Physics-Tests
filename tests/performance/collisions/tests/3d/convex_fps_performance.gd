@@ -132,7 +132,7 @@ func spawn_body() -> void:
 		var even = index % 2 == 0
 		var offset = index if even else -index
 		var body = RigidBody3D.new()
-		body.add_child(get_default_collision_shape(shape))
+		body.add_child(PhysicsTest3D.get_default_collision_shape(shape))
 		body.position = Vector3(offset, 20, 0)
 		bodies.append(body)
 		add_child(body)

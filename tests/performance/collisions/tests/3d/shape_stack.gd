@@ -37,7 +37,7 @@ func test_start() -> void:
 	var bodies_array : Array[RigidBody3D] = []
 	for i in range(stack_height):
 		var body := RigidBody3D.new()
-		var body_col: Node3D = get_default_collision_shape(shape)
+		var body_col: Node3D = PhysicsTest3D.get_default_collision_shape(shape)
 		body.add_child(body_col)
 		
 		# Spawn the body
