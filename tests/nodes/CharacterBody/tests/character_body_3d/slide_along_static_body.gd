@@ -89,7 +89,7 @@ func create_character(p_layer: int, p_position: Vector3, p_body_shape := Physics
 	character.collision_mask = 0
 	character.set_collision_layer_value(p_layer, true)
 	character.set_collision_mask_value(p_layer, true)
-	var body_col: Node3D = get_default_collision_shape(p_body_shape, 2)
+	var body_col: Node3D = PhysicsTest3D.get_default_collision_shape(p_body_shape, 2)
 	character.add_child(body_col)
 	return character
 
@@ -100,6 +100,6 @@ func create_static(p_layer: int, p_position: Vector3, p_body_shape := PhysicsTes
 	static_body.collision_mask = 0
 	static_body.set_collision_layer_value(p_layer, true)
 	static_body.set_collision_mask_value(p_layer, true)
-	var body_col: Node3D = get_default_collision_shape(p_body_shape, static_body_scale)
+	var body_col: Node3D = PhysicsTest3D.get_default_collision_shape(p_body_shape, static_body_scale)
 	static_body.add_child(body_col)
 	return static_body

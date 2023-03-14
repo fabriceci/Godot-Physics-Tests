@@ -4,10 +4,11 @@ extends Node3D
 signal completed
 
 var output := ""
-var cached_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_8v_box_polygon_shape_3d.tres")
-var cached_medium_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_32v_box_polygon_shape_3d.tres")
-var cached_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_146v_sphere_polygon_3d.tres")
-var cached_ultra_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_2050v_sphere_polygon_3d.tres")
+
+const cached_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_8v_box_polygon_shape_3d.tres")
+const cached_medium_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_32v_box_polygon_shape_3d.tres")
+const cached_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_146v_sphere_polygon_3d.tres")
+const cached_ultra_high_poly_convex: ConvexPolygonShape3D = preload("res://base/mesh/convex_2050v_sphere_polygon_3d.tres")
 
 enum TestCollisionShape {
 	CAPSULE = PhysicsServer3D.SHAPE_CAPSULE,
@@ -48,14 +49,14 @@ func test_completed() -> void:
 func test_description() -> String:
 	return ""
 
-func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.BOX) -> StaticBody3D:
+static func get_static_body_with_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.BOX) -> StaticBody3D:
 	var body = StaticBody3D.new()
 	body.position = Vector3(0, 0, 0)
 	var body_col = get_collision_shape(p_shape_definition, p_shape_type)
 	body.add_child(body_col)
 	return body
 
-func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.BOX) -> Node3D:
+static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.BOX) -> Node3D:
 	var col = null
 	if p_shape_type == TestCollisionShape.CAPSULE:
 		assert(p_shape_definition is Vector2, "Shape definition for a Capsule must be a Vector2")
@@ -93,10 +94,10 @@ func get_collision_shape(p_shape_definition, p_shape_type := TestCollisionShape.
 		col.shape = cached_poly_convex
 	return col
 
-func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0):
+static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	return get_collision_shape(get_default_shape_definition(p_shape_type, p_scale), p_shape_type)
 	
-func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
+static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	if p_shape_type == TestCollisionShape.BOX:
 		return Vector3(1 * p_scale, 1 * p_scale, 1 * p_scale)
 	if p_shape_type == TestCollisionShape.SPHERE:

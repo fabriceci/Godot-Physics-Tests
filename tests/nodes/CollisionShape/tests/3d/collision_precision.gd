@@ -62,7 +62,7 @@ func test_start() -> void:
 		static_body.add_child(giant_sphere_col)
 		static_body.position.x = 500
 	else:
-		static_body.add_child(get_default_collision_shape(static_shape))
+		static_body.add_child(PhysicsTest3D.get_default_collision_shape(static_shape))
 	add_child(static_body)
 
 	for body in [tested_body, reference_body]:
@@ -160,7 +160,7 @@ func test_start() -> void:
 
 func create_body(p_layer: int, p_shape: PhysicsTest3D.TestCollisionShape):
 	var _body := CharacterBody3D.new()
-	var _shape = get_default_collision_shape(p_shape)
+	var _shape = PhysicsTest3D.get_default_collision_shape(p_shape)
 	_body.add_child(_shape)
 	for i in range(1, 17):
 		_body.set_collision_layer_value(i, false)

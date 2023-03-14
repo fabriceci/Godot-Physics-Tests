@@ -15,11 +15,11 @@ var detect_x_collision := false
 var detect_y_collision := false
 
 func test_start() -> void:
-	var vertical_wall = get_static_body_with_collision_shape(Vector3(5000, 0.1, 5000), PhysicsTest3D.TestCollisionShape.BOX)
+	var vertical_wall = PhysicsTest3D.get_static_body_with_collision_shape(Vector3(5000, 0.1, 5000), PhysicsTest3D.TestCollisionShape.BOX)
 	vertical_wall.position = Vector3(8, -5, 0)
 	add_child(vertical_wall)
 
-	var horizontal_wall = get_static_body_with_collision_shape(Vector3(0.1, 5000, 5000), PhysicsTest3D.TestCollisionShape.BOX)
+	var horizontal_wall = PhysicsTest3D.get_static_body_with_collision_shape(Vector3(0.1, 5000, 5000), PhysicsTest3D.TestCollisionShape.BOX)
 	horizontal_wall.position = Vector3(0, 2, 0)
 	add_child(horizontal_wall)
 
@@ -60,7 +60,7 @@ func test_start() -> void:
 
 func create_rigid_body(p_horizontal := true) -> RigidBody3D:
 	var player = RigidBody3D.new()
-	player.add_child(get_default_collision_shape(PhysicsTest3D.TestCollisionShape.BOX))
+	player.add_child(PhysicsTest3D.get_default_collision_shape(PhysicsTest3D.TestCollisionShape.BOX))
 	player.gravity_scale = 0
 	player.continuous_cd = true
 	player.contact_monitor = true
