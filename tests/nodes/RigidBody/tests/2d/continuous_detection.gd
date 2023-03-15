@@ -1,7 +1,13 @@
 extends PhysicsUnitTest2D
 
-var speed := 25000
-var simulation_duration := .1
+enum WallType {
+	BOX,
+	CONCAVE_BOX
+}
+
+@export var wall_type: WallType = WallType.BOX
+@export var speed: float = 25000
+@export var simulation_duration : float = 0.1
 
 func test_description() -> String:
 	return """Checks if the Continuous Collision Detection (CCD) is working, it must ensure that moving
@@ -15,15 +21,28 @@ var detect_x_collision := false
 var detect_y_collision := false
 
 func test_start() -> void:
-	
-	var vertical_wall = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+	var vertical_wall := StaticBody2D.new()
+	var vertical_wall_shape: Node2D = null
+	if wall_type == WallType.BOX:
+		vertical_wall_shape = PhysicsTest2D.get_collision_shape(Rect2(Vector2(0,0), Vector2(2, Global.WINDOW_SIZE.y)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+	elif wall_type == WallType.CONCAVE_BOX:
+		vertical_wall_shape = PhysicsTest2D.get_collision_shape(PhysicsTest2D.get_box_segments(2, Global.WINDOW_SIZE.y), PhysicsTest2D.TestCollisionShape.CONCAVE_POLYGON)
+		vertical_wall_shape.position += Vector2(1, 0.5 * Global.WINDOW_SIZE.y)
+	vertical_wall.add_child(vertical_wall_shape)
 	vertical_wall.position = Vector2(TOP_RIGHT.x - Global.WINDOW_SIZE.y/2 -1, 0)
 	add_child(vertical_wall)
-	
-	var horizontal_wall = PhysicsTest2D.get_static_body_with_collision_shape(Rect2(Vector2(0,0), Vector2(Global.WINDOW_SIZE.y/2, 2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+
+	var horizontal_wall := StaticBody2D.new()
+	var horizontal_wall_shape: Node2D = null
+	if wall_type == WallType.BOX:
+		horizontal_wall_shape = PhysicsTest2D.get_collision_shape(Rect2(Vector2(0,0), Vector2(0.5 * Global.WINDOW_SIZE.y, 2)), PhysicsTest2D.TestCollisionShape.RECTANGLE, true)
+	elif wall_type == WallType.CONCAVE_BOX:
+		horizontal_wall_shape = PhysicsTest2D.get_collision_shape(PhysicsTest2D.get_box_segments(0.5 * Global.WINDOW_SIZE.y, 2), PhysicsTest2D.TestCollisionShape.CONCAVE_POLYGON)
+		horizontal_wall_shape.position += Vector2(0.25 * Global.WINDOW_SIZE.y, 1)
+	horizontal_wall.add_child(horizontal_wall_shape)
 	horizontal_wall.position = Vector2(BOTTOM_RIGHT.x - Global.WINDOW_SIZE.y/2, BOTTOM_RIGHT.y -50)
 	add_child(horizontal_wall)
-	
+
 	var rigid_x_ccd_ray := create_rigid_body(RigidBody2D.CCD_MODE_CAST_RAY)
 	rigid_x_ccd_ray.position = Vector2(50, 150)
 	rigid_x_ccd_ray.body_entered.connect(x_collide.bind(rigid_x_ccd_ray))

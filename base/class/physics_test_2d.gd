@@ -169,6 +169,12 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
 
+static func get_box_segments(width: float, height: float) -> PackedVector2Array:
+	return [Vector2(+0.5 * width, +0.5 * height),
+			Vector2(-0.5 * width, +0.5 * height),
+			Vector2(-0.5 * width, -0.5 * height),
+			Vector2(+0.5 * width, -0.5 * height)]
+
 static func concave_array():
 	return [
 		Vector2(6.0, -10.0),
