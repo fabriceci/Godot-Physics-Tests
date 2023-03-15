@@ -15,7 +15,10 @@ script = ExtResource("1_6eclx")
 
 [node name="maximum_rectangle" parent="." instance=ExtResource("2_p0tuo")]
 
-[node name="continuous_detection" parent="." instance=ExtResource("3_2mxd6")]
+[node name="continuous_detection_box" parent="." instance=ExtResource("3_2mxd6")]
+
+[node name="continuous_detection_concave" parent="." instance=ExtResource("3_2mxd6")]
+wall_type = 1
 
 [node name="contact_monitor" parent="." instance=ExtResource("4_n6ed2")]
 

@@ -80,6 +80,11 @@ static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisio
 		col = CollisionShape3D.new()
 		col.shape = BoxShape3D.new()
 		col.shape.size = p_shape_definition
+	elif p_shape_type == TestCollisionShape.CONCAVE_POLYGON:
+		assert(p_shape_definition is PackedVector3Array, "Shape definition for a Concave Polygon must be a PackedVector3Array")
+		col = CollisionShape3D.new()
+		col.shape = ConcavePolygonShape3D.new()
+		col.shape.set_faces(p_shape_definition)
 	elif p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX:
 		col = CollisionShape3D.new()
 		col.shape = cached_medium_poly_convex
@@ -96,7 +101,7 @@ static func get_collision_shape(p_shape_definition, p_shape_type := TestCollisio
 
 static func get_default_collision_shape(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	return get_collision_shape(get_default_shape_definition(p_shape_type, p_scale), p_shape_type)
-	
+
 static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_scale := 1.0):
 	if p_shape_type == TestCollisionShape.BOX:
 		return Vector3(1 * p_scale, 1 * p_scale, 1 * p_scale)
@@ -106,6 +111,8 @@ static func get_default_shape_definition(p_shape_type : TestCollisionShape, p_sc
 		return Vector2(1,2) * p_scale
 	if p_shape_type == TestCollisionShape.CYLINDER:
 		return Vector2(.5, 1.0) * p_scale
+	if p_shape_type == TestCollisionShape.CONCAVE_POLYGON:
+		return get_trimesh_box_faces(p_scale, p_scale, p_scale)
 	if p_shape_type == TestCollisionShape.CONVEX_POLYGON_MEDIUM_VERTEX  or p_shape_type == TestCollisionShape.CONVEX_POLYGON_HIGH_VERTEX or p_shape_type == TestCollisionShape.CONVEX_POLYGON or p_shape_type == TestCollisionShape.CONVEX_POLYGON_ULTRA_HIGH_VERTEX:
 		return null
 	
@@ -128,7 +135,21 @@ static func shape_name(p_shape_type : TestCollisionShape) -> String:
 			@warning_ignore("assert_always_false")
 			assert(false, "TestCollisionShape %d name is not implemented")
 			return "Not implemented"
-			
+
+static func get_trimesh_box_faces(width: float, height: float, depth: float) -> PackedVector3Array:
+	return [Vector3(-0.5 * width, +0.5 * height, +0.5 * depth), Vector3(+0.5 * width, +0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, +0.5 * depth),
+			Vector3(+0.5 * width, +0.5 * height, +0.5 * depth), Vector3(+0.5 * width, -0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, +0.5 * depth),
+			Vector3(+0.5 * width, +0.5 * height, -0.5 * depth), Vector3(-0.5 * width, +0.5 * height, -0.5 * depth), Vector3(+0.5 * width, -0.5 * height, -0.5 * depth),
+			Vector3(-0.5 * width, +0.5 * height, -0.5 * depth), Vector3(-0.5 * width, -0.5 * height, -0.5 * depth), Vector3(+0.5 * width, -0.5 * height, -0.5 * depth),
+			Vector3(+0.5 * width, +0.5 * height, +0.5 * depth), Vector3(+0.5 * width, +0.5 * height, -0.5 * depth), Vector3(+0.5 * width, -0.5 * height, +0.5 * depth),
+			Vector3(+0.5 * width, +0.5 * height, -0.5 * depth), Vector3(+0.5 * width, -0.5 * height, -0.5 * depth), Vector3(+0.5 * width, -0.5 * height, +0.5 * depth),
+			Vector3(-0.5 * width, +0.5 * height, -0.5 * depth), Vector3(-0.5 * width, +0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, -0.5 * depth),
+			Vector3(-0.5 * width, +0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, -0.5 * depth),
+			Vector3(+0.5 * width, +0.5 * height, +0.5 * depth), Vector3(-0.5 * width, +0.5 * height, +0.5 * depth), Vector3(+0.5 * width, +0.5 * height, -0.5 * depth),
+			Vector3(-0.5 * width, +0.5 * height, +0.5 * depth), Vector3(-0.5 * width, +0.5 * height, -0.5 * depth), Vector3(+0.5 * width, +0.5 * height, -0.5 * depth),
+			Vector3(-0.5 * width, -0.5 * height, +0.5 * depth), Vector3(+0.5 * width, -0.5 * height, +0.5 * depth), Vector3(-0.5 * width, -0.5 * height, -0.5 * depth),
+			Vector3(+0.5 * width, -0.5 * height, +0.5 * depth), Vector3(+0.5 * width, -0.5 * height, -0.5 * depth), Vector3(-0.5 * width, -0.5 * height, -0.5 * depth)]
+
 var zoom_factor := 5
 var dragging = false
 func _unhandled_input(event):

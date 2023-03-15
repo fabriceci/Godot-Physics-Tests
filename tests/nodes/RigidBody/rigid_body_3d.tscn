@@ -21,4 +21,9 @@ shape = 2
 stack_height = 42
 simulation_duration = 6
 
-[node name="continuous_detection" parent="." instance=ExtResource("2_ek4cl")]
+[node name="continuous_detection_box" parent="." instance=ExtResource("2_ek4cl")]
+expected_to_fail = Array[int]([0])
+
+[node name="continuous_detection_concave" parent="." instance=ExtResource("2_ek4cl")]
+wall_type = 1
+expected_to_fail = Array[int]([1, 3])
