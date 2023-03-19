@@ -46,10 +46,10 @@ func test_start() -> void:
 			var rigid = RigidBody2D.new()
 			rigid.add_child(PhysicsTest2D.get_default_collision_shape(body_shape, 0.5))
 			rigid.gravity_scale = 0
-			rigid.add_constant_force(Vector2(speed, 0))
 			rigid.position = center + Vector2(-20, 0)
 			bodies.append(rigid)
 			add_child(rigid)
+			rigid.add_constant_force(Vector2(speed, 0))
 			
 			wall_on_way.collision_layer = 0
 			wall_on_way.collision_mask = 0

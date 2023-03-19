@@ -103,8 +103,8 @@ func create_rigid_body(p_ccd_mode: RigidBody2D.CCDMode, p_horizontal := true, p_
 	player.max_contacts_reported = 2
 	player.rotation = 90 # Case where the movement vector was not properly being transformed into local space, see #69934
 	var force = Vector2(speed, 0) if p_horizontal else Vector2(0, speed)
-	player.apply_central_impulse(force)
 	add_child(player)
+	player.apply_central_impulse(force)
 	return player
 
 func x_collide(_body, _player):
