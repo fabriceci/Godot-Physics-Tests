@@ -60,6 +60,6 @@ func create_rigid_body(p_layer := 1, p_report_contact := 20) -> RigidBody2D:
 	player.collision_mask = 0
 	player.collision_layer = 0
 	player.set_collision_mask_value(p_layer, true)
-	player.apply_force(Vector2(speed, 0))
 	add_child(player)
+	player.apply_force(Vector2(speed, 0))
 	return player
