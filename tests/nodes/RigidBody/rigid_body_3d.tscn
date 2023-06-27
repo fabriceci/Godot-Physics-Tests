@@ -26,4 +26,4 @@ expected_to_fail = Array[int]([0])
 
 [node name="continuous_detection_concave" parent="." instance=ExtResource("2_ek4cl")]
 wall_type = 1
-expected_to_fail = Array[int]([1, 3])
+expected_to_fail = Array[int]([0])
